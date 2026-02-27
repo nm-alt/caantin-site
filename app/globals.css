@@ -211,3 +211,44 @@ body {
 ::selection {
   background: rgba(255, 255, 255, 0.15);
 }
+
+/* ─── Blog post prose ────────────────────────────────────────────── */
+.prose-caantin p {
+  font-family: var(--font-barlow), sans-serif;
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  line-height: 1.85;
+  color: #3d3b38;
+  margin-bottom: 1.6em;
+}
+
+.prose-caantin h2 {
+  font-family: var(--font-barlow-condensed), sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #0f0e0d;
+  margin-top: 3em;
+  margin-bottom: 0.8em;
+  line-height: 1.0;
+}
+
+.prose-caantin blockquote {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-style: italic;
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  line-height: 1.55;
+  color: #0f0e0d;
+  border-left: 2px solid #0f0e0d;
+  padding-left: 1.5rem;
+  margin: 2.5em 0;
+}
+
+.prose-caantin blockquote p {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-style: italic;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  margin-bottom: 0;
+}

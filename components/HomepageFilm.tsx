@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
+import { TESTIMONIALS } from '@/lib/testimonials'
 
 // ─── Hammurabi Stele SVG ─────────────────────────────────────────────────────
 // Placeholder: CSS/SVG rendering of the stele — arch shape, stone gradient,
@@ -158,26 +159,7 @@ function SteleSVG({ className }: { className?: string }) {
   )
 }
 
-// ─── Testimonial data ────────────────────────────────────────────────────────
-const TESTIMONIALS = [
-  {
-    quote:
-      '"FairMoney paid before the product was finished. That is how certain they were."',
-    name: 'Njavwa Mutambo',
-    title: 'Founder & CEO',
-    company: 'Caantin',
-    // Visual artifact: a ledger / contract placeholder
-    artifact: 'ledger',
-  },
-  {
-    quote:
-      '"[OxygenX testimonial — full quote to be confirmed before launch.]"',
-    name: '[Name]',
-    title: '[Title]',
-    company: 'OxygenX',
-    artifact: 'coin',
-  },
-]
+// TESTIMONIALS imported from lib/testimonials.ts
 
 // ─── Compliance data ─────────────────────────────────────────────────────────
 const REGULATORS = {
