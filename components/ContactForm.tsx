@@ -30,6 +30,12 @@ export default function ContactForm() {
 
     // Simulate network delay until endpoint is wired in
     await new Promise((r) => setTimeout(r, 700))
+
+    // LinkedIn conversion event — fires when confirmation appears
+    if (typeof window !== 'undefined' && typeof window.lintrk === 'function') {
+      window.lintrk('track', { conversion_id: 7385908 })
+    }
+
     setSubmitted(true)
   }
 
