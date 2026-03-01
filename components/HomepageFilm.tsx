@@ -183,7 +183,7 @@ export default function HomepageFilm() {
   const cursorRingRef = useRef<HTMLDivElement>(null)
 
   const [activeTestimonial, setActiveTestimonial] = useState(0)
-  const [videoHover, setVideoHover] = useState(false)
+
 
   // ── Custom cursor ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -418,7 +418,7 @@ export default function HomepageFilm() {
       <div ref={cursorDotRef} className="cursor-dot" />
       <div
         ref={cursorRingRef}
-        className={`cursor-ring ${videoHover ? 'is-playing' : ''}`}
+        className="cursor-ring"
       />
 
       <div ref={containerRef}>
@@ -768,50 +768,17 @@ export default function HomepageFilm() {
               </p>
             </div>
 
-            {/* Video placeholder */}
-            <div
-              className="relative w-full aspect-video bg-ancient overflow-hidden"
-              onMouseEnter={() => setVideoHover(true)}
-              onMouseLeave={() => setVideoHover(false)}
-              style={{ cursor: 'none' }}
-              role="button"
-              tabIndex={0}
-              aria-label="Play product demo video"
-            >
-              {/* Placeholder: black and white archival treatment */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'radial-gradient(ellipse 60% 70% at 50% 50%, #1e1c1a 0%, #0a0908 100%)',
-                }}
+            {/* Product demo video */}
+            <div className="relative w-full aspect-video bg-ancient overflow-hidden">
+              <video
+                className="absolute inset-0 w-full h-full object-cover"
+                src="/demo.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
               />
-
-              <div
-                className="absolute inset-0 opacity-[0.06]"
-                style={{
-                  backgroundImage:
-                    'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.3) 3px, rgba(255,255,255,0.3) 4px)',
-                }}
-              />
-
-              {/* Centre label — no UI play button, cursor becomes the action */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <p className="type-label text-white/20 text-xs tracking-widest">
-                  — Video placeholder —
-                </p>
-                <p className="type-mono text-white/10 text-xs mt-2">
-                  1920 × 1080 · black and white · 60–90 seconds
-                </p>
-              </div>
-
-              {/* Hover reveal hint */}
-              <div
-                className="absolute inset-0 pointer-events-none transition-opacity duration-500"
-                style={{ opacity: videoHover ? 0.06 : 0 }}
-              >
-                <div className="absolute inset-0 bg-white" />
-              </div>
 
               {/* Corner marks — film frame aesthetic */}
               {(['top-3 left-3', 'top-3 right-3', 'bottom-3 left-3', 'bottom-3 right-3'] as const).map((pos, i) => (

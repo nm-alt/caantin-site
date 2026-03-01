@@ -13,9 +13,17 @@ export default function MinimalNav() {
         >
           Caantin
         </Link>
-        <Link href="/contact" className="btn-cta btn-cta-light text-xs">
-          Talk to us →
-        </Link>
+        <div className="flex items-center gap-6">
+          <a
+            href="https://collect.caantin.ai/login"
+            className="type-body text-sm text-silver hover:text-white transition-colors duration-300 tracking-wide"
+          >
+            Log in
+          </a>
+          <Link href="/contact" className="btn-cta btn-cta-light text-xs">
+            Talk to us →
+          </Link>
+        </div>
       </div>
     </nav>
   )

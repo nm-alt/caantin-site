@@ -54,6 +54,12 @@ export default function Nav() {
             >
               Results
             </Link>
+            <a
+              href="https://collect.caantin.ai/login"
+              className="type-body text-sm text-silver hover:text-white transition-colors duration-300 tracking-wide"
+            >
+              Log in
+            </a>
             <Link href="/contact" className="btn-cta btn-cta-light text-xs">
               Talk to us →
             </Link>
@@ -109,6 +115,13 @@ export default function Nav() {
           >
             Results
           </Link>
+          <a
+            href="https://collect.caantin.ai/login"
+            className="type-headline text-white text-4xl"
+            onClick={() => setMenuOpen(false)}
+          >
+            Log in
+          </a>
           <Link
             href="/contact"
             className="btn-cta btn-cta-light self-start mt-4"

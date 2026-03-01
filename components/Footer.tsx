@@ -32,6 +32,12 @@ export default function Footer() {
             >
               Blog
             </Link>
+            <a
+              href="https://collect.caantin.ai/login"
+              className="type-body text-sm text-silver hover:text-white transition-colors duration-300"
+            >
+              Log in
+            </a>
           </div>
 
           {/* Contact */}
