@@ -5,7 +5,7 @@ import Link from 'next/link'
 // Not in sitemap. Not in navigation. Not indexed.
 // LinkedIn ad destination only.
 export const metadata: Metadata = {
-  title: 'Caantin · For Heads of Risk at Digital Lenders',
+  title: 'Shylock · For Heads of Risk at Digital Lenders',
   robots: { index: false, follow: false },
 }
 
@@ -17,7 +17,6 @@ export default function ForRisk() {
         className="grain-heavy relative min-h-screen flex items-center justify-center overflow-hidden"
         style={{ backgroundColor: '#080807' }}
       >
-        {/* Ancient texture, barely visible */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -26,7 +25,6 @@ export default function ForRisk() {
           }}
         />
 
-        {/* Faint diagonal lines */}
         <div
           className="absolute inset-0 pointer-events-none opacity-[0.025]"
           style={{
@@ -36,10 +34,6 @@ export default function ForRisk() {
         />
 
         <div className="relative z-10 max-w-xl mx-auto px-8 py-32 text-center flex flex-col items-center">
-          <p className="type-label text-white/25 text-xs tracking-[0.2em] mb-10">
-            Head of Risk · Digital Lender
-          </p>
-
           <h1
             className="type-headline text-white mb-10"
             style={{
@@ -56,7 +50,7 @@ export default function ForRisk() {
           </h1>
 
           <p className="type-body text-silver text-base md:text-lg mb-4 leading-relaxed max-w-md">
-            Caantin deploys AI agents that recover delinquent debt —
+            Shylock deploys AI agents that recover delinquent debt —
             compliantly, autonomously, at the scale your team cannot reach
             alone.
           </p>

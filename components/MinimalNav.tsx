@@ -9,17 +9,11 @@ export default function MinimalNav() {
         <Link
           href="/"
           className="type-headline text-white text-xl md:text-2xl tracking-widest hover:opacity-70 transition-opacity duration-300"
-          aria-label="Caantin — home"
+          aria-label="Shylock — home"
         >
-          Caantin
+          Shylock
         </Link>
         <div className="flex items-center gap-6">
-          <a
-            href="https://collect.caantin.ai/login"
-            className="type-body text-sm text-silver hover:text-white transition-colors duration-300 tracking-wide"
-          >
-            Log in
-          </a>
           <Link href="/contact" className="btn-cta btn-cta-light text-xs">
             Talk to us →
           </Link>

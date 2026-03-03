@@ -10,7 +10,6 @@ import { TESTIMONIALS } from '@/lib/testimonials'
 import { useInView } from '@/hooks/useInView'
 import { useEffect, useRef } from 'react'
 
-// Count-up number component
 function CountUp({
   target,
   suffix = '',
@@ -51,7 +50,6 @@ function CountUp({
   )
 }
 
-// Testimonial artifact
 function Artifact({ type }: { type: 'ledger' | 'coin' }) {
   if (type === 'ledger') {
     return (
@@ -90,7 +88,7 @@ function Artifact({ type }: { type: 'ledger' | 'coin' }) {
         >
           <circle cx="60" cy="60" r="55" />
           <circle cx="60" cy="60" r="48" />
-          <text x="60" y="56" textAnchor="middle" fontSize="7" fill="white" stroke="none" fontFamily="monospace" letterSpacing="2">CAANTIN</text>
+          <text x="60" y="56" textAnchor="middle" fontSize="7" fill="white" stroke="none" fontFamily="monospace" letterSpacing="2">SHYLOCK</text>
           <text x="60" y="68" textAnchor="middle" fontSize="6" fill="white" stroke="none" fontFamily="monospace" letterSpacing="1">MMXXVI</text>
         </svg>
       </div>
@@ -106,7 +104,6 @@ export default function Results() {
     <>
       <Nav />
       <main>
-        {/* Hero */}
         <PageHero
           eyebrow="Results"
           headline={
@@ -118,7 +115,6 @@ export default function Results() {
           }
         />
 
-        {/* Testimonials */}
         <section className="bg-white py-28 md:py-40">
           <div className="max-w-[1440px] mx-auto px-6 md:px-12">
             <Reveal>
@@ -129,13 +125,12 @@ export default function Results() {
                   letterSpacing: '-0.03em',
                 }}
               >
-                Lenders trust Caantin.
+                Lenders trust Shylock.
               </h2>
             </Reveal>
 
             <Reveal delay={0.2}>
               <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-start">
-                {/* Artifact */}
                 <div
                   className="relative aspect-[4/5] md:aspect-square max-w-sm overflow-hidden"
                   style={{ background: '#0f0e0d' }}
@@ -151,7 +146,6 @@ export default function Results() {
                   />
                 </div>
 
-                {/* Quote */}
                 <div className="flex flex-col justify-between py-4 md:py-8">
                   <blockquote className="type-serif text-stone-black text-xl md:text-2xl lg:text-3xl leading-snug mb-10">
                     {t.quote}
@@ -167,7 +161,6 @@ export default function Results() {
                 </div>
               </div>
 
-              {/* Controls */}
               {TESTIMONIALS.length > 1 && (
                 <div className="flex items-center gap-5 mt-12">
                   <button
@@ -208,7 +201,6 @@ export default function Results() {
           </div>
         </section>
 
-        {/* Metrics */}
         <section className="bg-off-white py-28 md:py-40">
           <div className="max-w-[1440px] mx-auto px-6 md:px-12">
             <div className="grid md:grid-cols-3 gap-16 md:gap-8">
@@ -243,7 +235,7 @@ export default function Results() {
                       }}
                     >
                       {placeholder ? (
-                        <span className="text-stone/30">—</span>
+                        <span className="text-stone/30">&mdash;</span>
                       ) : (
                         <CountUp target={value} suffix={suffix} />
                       )}
@@ -262,7 +254,6 @@ export default function Results() {
           </div>
         </section>
 
-        {/* Closing */}
         <section
           className="grain relative py-28 md:py-40 overflow-hidden"
           style={{ backgroundColor: '#0d0c0a' }}
@@ -284,7 +275,7 @@ export default function Results() {
                   lineHeight: '0.93',
                 }}
               >
-                See what Caantin does
+                See what Shylock does
                 <br />
                 with your portfolio.
               </h2>

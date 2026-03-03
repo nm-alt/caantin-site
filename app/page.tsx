@@ -4,11 +4,11 @@ import HomepageFilm from '@/components/HomepageFilm'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'Caantin · The New Era of Collections',
+  title: 'Shylock · The Most Compliant AI for Collections',
   description:
-    'AI agents built specifically for collections. Autonomous. Compliant. Infinite. We succeed when you do — no recovery, no fee.',
+    'The world vilified lenders for 500 years. Introducing Shylock — the world\'s most compliant and effective AI for collections.',
   alternates: {
-    canonical: 'https://caantin.ai',
+    canonical: 'https://shylock.ai',
   },
 }
 

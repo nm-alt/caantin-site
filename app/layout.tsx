@@ -37,29 +37,29 @@ const spaceMono = Space_Mono({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://caantin.ai'),
-  title: 'Caantin · The New Era of Collections',
+  metadataBase: new URL('https://shylock.ai'),
+  title: 'Shylock · The Most Compliant AI for Collections',
   description:
-    'AI agents built specifically for collections. Autonomous. Compliant. Infinite. No recovery, no fee.',
+    'The world vilified lenders for 500 years. Introducing Shylock — the world\'s most compliant and effective AI for collections.',
   openGraph: {
-    title: 'Caantin · The New Era of Collections',
+    title: 'Shylock · The Most Compliant AI for Collections',
     description:
-      'AI agents built specifically for collections. Autonomous. Compliant. Infinite. No recovery, no fee.',
+      'The world vilified lenders for 500 years. Introducing Shylock — the world\'s most compliant and effective AI for collections.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Caantin — The New Era of Collections',
+        alt: 'Shylock — The Most Compliant AI for Collections',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Caantin · The New Era of Collections',
+    title: 'Shylock · The Most Compliant AI for Collections',
     description:
-      'AI agents built specifically for collections. Autonomous. Compliant. Infinite. No recovery, no fee.',
+      'The world vilified lenders for 500 years. Introducing Shylock — the world\'s most compliant and effective AI for collections.',
   },
 }
 
@@ -103,6 +103,20 @@ export default function RootLayout({
             src="https://px.ads.linkedin.com/collect/?pid=7385908&fmt=gif"
           />
         </noscript>
+
+        {/* Google Analytics 4 — fires on every page */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XXXXXXXXXX');
+          `}
+        </Script>
       </body>
     </html>
   )

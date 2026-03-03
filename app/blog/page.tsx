@@ -6,10 +6,10 @@ import Link from 'next/link'
 import { posts } from '@/lib/posts'
 
 export const metadata: Metadata = {
-  title: 'Intelligence · Caantin',
+  title: 'Intelligence · Shylock',
   description:
     'Perspectives on collections, compliance, and the unit economics of debt recovery for digital lenders.',
-  alternates: { canonical: 'https://caantin.ai/blog' },
+  alternates: { canonical: 'https://shylock.ai/blog' },
 }
 
 export default function Blog() {

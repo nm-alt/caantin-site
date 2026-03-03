@@ -2,170 +2,14 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { TESTIMONIALS } from '@/lib/testimonials'
-
-// ─── Hammurabi Stele SVG ─────────────────────────────────────────────────────
-// Placeholder: CSS/SVG rendering of the stele — arch shape, stone gradient,
-// cuneiform column texture, single-source side lighting, grain filter.
-// Drop in the real 3D render by replacing this component.
-function SteleSVG({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 200 680"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden="true"
-      role="presentation"
-    >
-      <defs>
-        {/* Stone grain filter */}
-        <filter id="stone-grain" x="-5%" y="-5%" width="110%" height="110%">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.72"
-            numOctaves="4"
-            stitchTiles="stitch"
-            result="noise"
-          />
-          <feColorMatrix type="saturate" values="0" in="noise" result="gray" />
-          <feBlend in="SourceGraphic" in2="gray" mode="multiply" result="blend" />
-          <feComposite in="blend" in2="SourceGraphic" operator="in" />
-        </filter>
-
-        {/* Stone base gradient — slight variation top to bottom */}
-        <linearGradient id="stone-base" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#1c1a17" />
-          <stop offset="40%" stopColor="#111009" />
-          <stop offset="100%" stopColor="#0d0c0a" />
-        </linearGradient>
-
-        {/* Side lighting — brighter from left, deeper on right */}
-        <linearGradient id="stone-light" x1="0%" y1="50%" x2="100%" y2="50%">
-          <stop offset="0%" stopColor="#2e2b26" stopOpacity="0.55" />
-          <stop offset="25%" stopColor="#1a1816" stopOpacity="0.1" />
-          <stop offset="75%" stopColor="#0a0908" stopOpacity="0.1" />
-          <stop offset="100%" stopColor="#060504" stopOpacity="0.7" />
-        </linearGradient>
-
-        {/* Cuneiform-like row pattern */}
-        <pattern
-          id="cunei"
-          x="0"
-          y="0"
-          width="32"
-          height="11"
-          patternUnits="userSpaceOnUse"
-        >
-          {/* Horizontal base stroke */}
-          <line x1="2" y1="5.5" x2="30" y2="5.5" stroke="#2d2a25" strokeWidth="0.55" opacity="0.8" />
-          {/* Wedge marks — vertical strokes at character positions */}
-          <line x1="3"  y1="3.5" x2="3"  y2="7.5" stroke="#2d2a25" strokeWidth="0.45" opacity="0.65" />
-          <line x1="8"  y1="3.5" x2="8"  y2="7.5" stroke="#2d2a25" strokeWidth="0.45" opacity="0.6"  />
-          <line x1="13" y1="3.5" x2="13" y2="7.5" stroke="#2d2a25" strokeWidth="0.45" opacity="0.7"  />
-          <line x1="19" y1="3.5" x2="19" y2="7.5" stroke="#2d2a25" strokeWidth="0.45" opacity="0.55" />
-          <line x1="24" y1="3.5" x2="24" y2="7.5" stroke="#2d2a25" strokeWidth="0.45" opacity="0.65" />
-          <line x1="29" y1="3.5" x2="29" y2="7.5" stroke="#2d2a25" strokeWidth="0.45" opacity="0.6"  />
-        </pattern>
-
-        {/* Clip path for stele shape */}
-        <clipPath id="stele-clip">
-          <path d="M4,170 C4,4 196,4 196,170 L196,664 Q196,676 184,676 L16,676 Q4,676 4,664 Z" />
-        </clipPath>
-      </defs>
-
-      {/* Main stone body */}
-      <path
-        d="M4,170 C4,4 196,4 196,170 L196,664 Q196,676 184,676 L16,676 Q4,676 4,664 Z"
-        fill="url(#stone-base)"
-      />
-
-      {/* Grain texture */}
-      <path
-        d="M4,170 C4,4 196,4 196,170 L196,664 Q196,676 184,676 L16,676 Q4,676 4,664 Z"
-        fill="url(#stone-grain)"
-        opacity="0.12"
-      />
-
-      {/* Side lighting overlay */}
-      <path
-        d="M4,170 C4,4 196,4 196,170 L196,664 Q196,676 184,676 L16,676 Q4,676 4,664 Z"
-        fill="url(#stone-light)"
-      />
-
-      {/* Relief carving zone — top arch area, slightly different dark tone */}
-      <path
-        d="M4,170 C4,4 196,4 196,170 L196,240 L4,240 Z"
-        fill="#0c0b09"
-        opacity="0.6"
-        clipPath="url(#stele-clip)"
-      />
-
-      {/* Cuneiform text columns — 4 columns separated by gutters */}
-      {/* Column 1 */}
-      <rect
-        x="14" y="252" width="38" height="412"
-        fill="url(#cunei)"
-        clipPath="url(#stele-clip)"
-        opacity="0.9"
-      />
-      {/* Column 2 */}
-      <rect
-        x="58" y="252" width="38" height="412"
-        fill="url(#cunei)"
-        clipPath="url(#stele-clip)"
-        opacity="0.85"
-      />
-      {/* Column 3 */}
-      <rect
-        x="104" y="252" width="38" height="412"
-        fill="url(#cunei)"
-        clipPath="url(#stele-clip)"
-        opacity="0.9"
-      />
-      {/* Column 4 */}
-      <rect
-        x="150" y="252" width="38" height="412"
-        fill="url(#cunei)"
-        clipPath="url(#stele-clip)"
-        opacity="0.8"
-      />
-
-      {/* Simplified relief silhouettes — top arch area */}
-      {/* Hammurabi (left figure, standing) */}
-      <g opacity="0.22" fill="#2a2620" clipPath="url(#stele-clip)">
-        <ellipse cx="62" cy="102" rx="11" ry="13" />
-        <path d="M51 115 Q48 150 50 200 Q60 208 72 205 Q84 200 85 155 Q84 118 73 115 Z" />
-        <rect x="56" y="89" width="14" height="14" rx="1" />
-        <path d="M85 140 Q115 132 140 138" stroke="#2a2620" strokeWidth="5" fill="none" strokeLinecap="round" />
-      </g>
-      {/* Shamash seated (right figure) */}
-      <g opacity="0.2" fill="#2a2620" clipPath="url(#stele-clip)">
-        <ellipse cx="152" cy="100" rx="10" ry="12" />
-        <path d="M142 112 Q140 148 142 195 Q152 202 163 198 Q172 192 172 148 Q170 115 162 112 Z" />
-        <rect x="148" y="87" width="12" height="14" rx="1" />
-        {/* Throne suggestion */}
-        <rect x="136" y="160" width="40" height="35" rx="2" opacity="0.6" />
-      </g>
-
-      {/* Top highlight edge — slight lighter rim */}
-      <path
-        d="M4,170 C4,4 196,4 196,170"
-        fill="none"
-        stroke="#3a3630"
-        strokeWidth="1.2"
-        opacity="0.4"
-      />
-    </svg>
-  )
-}
-
-// TESTIMONIALS imported from lib/testimonials.ts
 
 // ─── Compliance data ─────────────────────────────────────────────────────────
 const REGULATORS = {
   AFRICA: ['CBN', 'FCCPC', 'CBK', 'NCR', 'CBE', 'BoG'],
-  EUROPE: ['FCA', 'ACPR', 'BaFin', 'Finansinspektionen'],
-  'ASIA PACIFIC': ['RBI', 'OJK', 'BSP', 'MAS', 'SBV'],
+  EUROPE: ['FCA', 'ACPR', 'BaFin'],
+  'ASIA PACIFIC': ['RBI', 'OJK', 'BSP', 'MAS', 'CBUAE'],
   AMERICAS: ['CFPB', 'BCB', 'CNBV'],
   'MIDDLE EAST': ['SAMA', 'CBUAE'],
 }
@@ -173,17 +17,211 @@ const REGULATORS = {
 // ─── HomepageFilm ────────────────────────────────────────────────────────────
 export default function HomepageFilm() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const crack1Ref = useRef<SVGPathElement>(null)
-  const crack2Ref = useRef<SVGPathElement>(null)
-  const crack3Ref = useRef<SVGPathElement>(null)
-  const crack4Ref = useRef<SVGPathElement>(null)
-  const lightBleedRef = useRef<HTMLDivElement>(null)
+  const heroCanvasRef = useRef<HTMLCanvasElement>(null)
+  const heroImageRef = useRef<HTMLImageElement | null>(null)
   const timelineLineRef = useRef<HTMLDivElement>(null)
   const cursorDotRef = useRef<HTMLDivElement>(null)
   const cursorRingRef = useRef<HTMLDivElement>(null)
+  const closingCanvasRef = useRef<HTMLCanvasElement>(null)
 
   const [activeTestimonial, setActiveTestimonial] = useState(0)
+  const [heroImageLoaded, setHeroImageLoaded] = useState(false)
 
+  // ── Load hero portrait image ─────────────────────────────────────────────
+  useEffect(() => {
+    const img = new window.Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      heroImageRef.current = img
+      setHeroImageLoaded(true)
+    }
+    img.src = '/irving-shylock.jpg'
+  }, [])
+
+  // ── Hero canvas: cursor-reveal interaction ───────────────────────────────
+  useEffect(() => {
+    const canvas = heroCanvasRef.current
+    if (!canvas || !heroImageLoaded || !heroImageRef.current) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const img = heroImageRef.current
+    let animId: number
+    let mouseX = -9999
+    let mouseY = -9999
+    let isMouseInside = false
+
+    // Mask canvas for the reveal effect
+    const maskCanvas = document.createElement('canvas')
+    const maskCtx = maskCanvas.getContext('2d')!
+
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1
+      const rect = canvas.getBoundingClientRect()
+      canvas.width = rect.width * dpr
+      canvas.height = rect.height * dpr
+      maskCanvas.width = canvas.width
+      maskCanvas.height = canvas.height
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      maskCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    }
+
+    const drawCover = (
+      target: CanvasRenderingContext2D,
+      w: number,
+      h: number
+    ) => {
+      const imgAspect = img.width / img.height
+      const canvasAspect = w / h
+      let dw: number, dh: number, dx: number, dy: number
+
+      if (imgAspect > canvasAspect) {
+        dh = h
+        dw = h * imgAspect
+        dx = (w - dw) / 2
+        dy = 0
+      } else {
+        dw = w
+        dh = w / imgAspect
+        dx = 0
+        dy = (h - dh) / 2
+      }
+
+      target.drawImage(img, dx, dy, dw, dh)
+    }
+
+    const draw = () => {
+      const rect = canvas.getBoundingClientRect()
+      const w = rect.width
+      const h = rect.height
+
+      ctx.clearRect(0, 0, w, h)
+
+      // Draw portrait very dark (barely visible base layer)
+      ctx.save()
+      ctx.filter = 'grayscale(100%) contrast(1.3) brightness(0.08)'
+      drawCover(ctx, w, h)
+      ctx.restore()
+
+      // If cursor is inside, draw a brighter version clipped to a radial mask
+      if (isMouseInside) {
+        // Create the mask
+        maskCtx.clearRect(0, 0, w, h)
+        const gradient = maskCtx.createRadialGradient(
+          mouseX, mouseY, 0,
+          mouseX, mouseY, 180
+        )
+        gradient.addColorStop(0, 'rgba(255,255,255,0.85)')
+        gradient.addColorStop(0.4, 'rgba(255,255,255,0.4)')
+        gradient.addColorStop(0.7, 'rgba(255,255,255,0.1)')
+        gradient.addColorStop(1, 'rgba(255,255,255,0)')
+        maskCtx.fillStyle = gradient
+        maskCtx.fillRect(0, 0, w, h)
+
+        // Draw brighter portrait
+        ctx.save()
+        ctx.globalCompositeOperation = 'lighter'
+        ctx.filter = 'grayscale(100%) contrast(1.4) brightness(0.45)'
+        drawCover(ctx, w, h)
+
+        // Apply the mask
+        ctx.globalCompositeOperation = 'destination-in'
+        ctx.drawImage(maskCanvas, 0, 0, w, h)
+        ctx.restore()
+
+        // Re-draw the dark base underneath
+        ctx.save()
+        ctx.globalCompositeOperation = 'destination-over'
+        ctx.filter = 'grayscale(100%) contrast(1.3) brightness(0.08)'
+        drawCover(ctx, w, h)
+        ctx.restore()
+      }
+    }
+
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      mouseX = e.clientX - rect.left
+      mouseY = e.clientY - rect.top
+      isMouseInside = true
+    }
+
+    const onMouseLeave = () => {
+      isMouseInside = false
+    }
+
+    const loop = () => {
+      draw()
+      animId = requestAnimationFrame(loop)
+    }
+
+    resize()
+    animId = requestAnimationFrame(loop)
+
+    canvas.addEventListener('mousemove', onMouseMove)
+    canvas.addEventListener('mouseleave', onMouseLeave)
+    window.addEventListener('resize', resize)
+
+    return () => {
+      cancelAnimationFrame(animId)
+      canvas.removeEventListener('mousemove', onMouseMove)
+      canvas.removeEventListener('mouseleave', onMouseLeave)
+      window.removeEventListener('resize', resize)
+    }
+  }, [heroImageLoaded])
+
+  // ── Closing canvas: same portrait, barely visible ────────────────────────
+  useEffect(() => {
+    const canvas = closingCanvasRef.current
+    if (!canvas || !heroImageLoaded || !heroImageRef.current) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const img = heroImageRef.current
+
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1
+      const rect = canvas.getBoundingClientRect()
+      canvas.width = rect.width * dpr
+      canvas.height = rect.height * dpr
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      draw()
+    }
+
+    const draw = () => {
+      const rect = canvas.getBoundingClientRect()
+      const w = rect.width
+      const h = rect.height
+
+      ctx.clearRect(0, 0, w, h)
+
+      const imgAspect = img.width / img.height
+      const canvasAspect = w / h
+      let dw: number, dh: number, dx: number, dy: number
+
+      if (imgAspect > canvasAspect) {
+        dh = h
+        dw = h * imgAspect
+        dx = (w - dw) / 2
+        dy = 0
+      } else {
+        dw = w
+        dh = w / imgAspect
+        dx = 0
+        dy = (h - dh) / 2
+      }
+
+      ctx.save()
+      ctx.filter = 'grayscale(100%) contrast(1.3) brightness(0.06)'
+      ctx.drawImage(img, dx, dy, dw, dh)
+      ctx.restore()
+    }
+
+    resize()
+    window.addEventListener('resize', resize)
+    return () => window.removeEventListener('resize', resize)
+  }, [heroImageLoaded])
 
   // ── Custom cursor ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -219,7 +257,7 @@ export default function HomepageFilm() {
     }
   }, [])
 
-  // ── GSAP film animations ───────────────────────────────────────────────────
+  // ── GSAP animations ──────────────────────────────────────────────────────
   useEffect(() => {
     let ScrollTrigger: typeof import('gsap/ScrollTrigger').ScrollTrigger
 
@@ -230,75 +268,35 @@ export default function HomepageFilm() {
       ScrollTrigger = ST
 
       const ctx = gsap.context(() => {
-        // ── Stele breathing ──────────────────────────────────────────────────
-        const steleEl = containerRef.current?.querySelector('.stele-svg')
-        if (steleEl) {
-          gsap.to(steleEl, {
-            scaleY: 1.014,
-            scaleX: 1.006,
-            duration: 5,
-            ease: 'sine.inOut',
-            yoyo: true,
-            repeat: -1,
-            transformOrigin: 'bottom center',
-          })
-        }
-
-        // ── Hero text sequence ───────────────────────────────────────────────
-        const heroLines = containerRef.current?.querySelectorAll('.hero-whisper-line')
-        if (heroLines?.length) {
+        // ── Hero text sequence ─────────────────────────────────────────────
+        const heroText = containerRef.current?.querySelector('.hero-text')
+        if (heroText) {
           gsap.fromTo(
-            heroLines,
-            { opacity: 0, y: 14 },
-            { opacity: 1, y: 0, duration: 1.1, stagger: 0.55, ease: 'power2.out', delay: 1.0 }
-          )
-        }
-
-        const heroTag = containerRef.current?.querySelector('.hero-tagline')
-        if (heroTag) {
-          gsap.fromTo(
-            heroTag,
+            heroText,
             { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 1.3, ease: 'power2.out', delay: 3.2 }
+            { opacity: 1, y: 0, duration: 1.8, ease: 'power2.out', delay: 0.8 }
           )
         }
 
-        // ── Crack animation — scroll through scene 1 ────────────────────────
-        const crackEls = [
-          crack1Ref.current,
-          crack2Ref.current,
-          crack3Ref.current,
-          crack4Ref.current,
-        ].filter(Boolean) as SVGPathElement[]
-
-        if (crackEls.length > 0) {
-          crackEls.forEach((el) => {
-            const len = el.getTotalLength()
-            el.dataset.pathLen = String(len)
-            gsap.set(el, { strokeDasharray: len, strokeDashoffset: len })
-          })
-
-          ST.create({
-            trigger: '.scene-one',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 2,
-            onUpdate: ({ progress }) => {
-              crackEls.forEach((el) => {
-                const len = parseFloat(el.dataset.pathLen ?? '0')
-                const offset = len * Math.max(0, 1 - progress * 1.6)
-                gsap.set(el, { strokeDashoffset: offset })
-              })
-              if (lightBleedRef.current) {
-                gsap.set(lightBleedRef.current, {
-                  opacity: Math.min(progress * 2, 0.75),
-                })
-              }
-            },
-          })
+        const heroCta = containerRef.current?.querySelector('.hero-cta')
+        if (heroCta) {
+          gsap.fromTo(
+            heroCta,
+            { opacity: 0, y: 14 },
+            { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out', delay: 2.0 }
+          )
         }
 
-        // ── Scroll-reveal for all .fade-up elements ──────────────────────────
+        const heroCompliance = containerRef.current?.querySelector('.hero-compliance')
+        if (heroCompliance) {
+          gsap.fromTo(
+            heroCompliance,
+            { opacity: 0 },
+            { opacity: 1, duration: 1.0, ease: 'power2.out', delay: 2.6 }
+          )
+        }
+
+        // ── Scroll-reveal for all .fade-up elements ────────────────────────
         const fadeEls = containerRef.current?.querySelectorAll('.fade-up')
         if (fadeEls?.length) {
           fadeEls.forEach((el) => {
@@ -318,28 +316,11 @@ export default function HomepageFilm() {
           })
         }
 
-        // ── Scene 4 white reveal ─────────────────────────────────────────────
-        ST.create({
-          trigger: '.scene-four',
-          start: 'top 60%',
-          once: true,
-          onEnter: () => {
-            const els = containerRef.current?.querySelectorAll('.scene-four .fade-in')
-            if (els?.length) {
-              gsap.fromTo(
-                els,
-                { opacity: 0 },
-                { opacity: 1, duration: 1.4, stagger: 0.45, ease: 'power2.out' }
-              )
-            }
-          },
-        })
-
-        // ── Timeline line drawing — scale a div from top ─────────────────────
+        // ── Timeline line drawing ──────────────────────────────────────────
         if (timelineLineRef.current) {
           gsap.set(timelineLineRef.current, { scaleY: 0, transformOrigin: 'top center' })
           ST.create({
-            trigger: '.scene-six',
+            trigger: '.scene-timeline',
             start: 'top 65%',
             end: 'bottom 55%',
             scrub: 1.8,
@@ -351,31 +332,9 @@ export default function HomepageFilm() {
           })
         }
 
-        // ── Count-up numbers ─────────────────────────────────────────────────
-        const countEls = containerRef.current?.querySelectorAll('[data-count-to]')
-        countEls?.forEach((el) => {
-          const target = parseInt(el.getAttribute('data-count-to') ?? '0', 10)
-          const obj = { val: 0 }
-          ST.create({
-            trigger: el,
-            start: 'top 80%',
-            once: true,
-            onEnter: () => {
-              gsap.to(obj, {
-                val: target,
-                duration: 1.5,
-                ease: 'power2.out',
-                onUpdate: () => {
-                  el.textContent = Math.round(obj.val).toLocaleString()
-                },
-              })
-            },
-          })
-        })
-
-        // ── Closing scene subtle parallax ────────────────────────────────────
+        // ── Closing scene parallax ─────────────────────────────────────────
         ST.create({
-          trigger: '.scene-nine',
+          trigger: '.scene-closing',
           start: 'top bottom',
           end: 'bottom top',
           scrub: 1,
@@ -400,7 +359,7 @@ export default function HomepageFilm() {
     }
   }, [])
 
-  // ── Testimonial carousel ───────────────────────────────────────────────────
+  // ── Testimonial carousel ─────────────────────────────────────────────────
   const nextTestimonial = useCallback(() => {
     setActiveTestimonial((i) => (i + 1) % TESTIMONIALS.length)
   }, [])
@@ -411,364 +370,142 @@ export default function HomepageFilm() {
 
   const t = TESTIMONIALS[activeTestimonial]
 
-  // ─────────────────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
   return (
     <>
       {/* Custom cursor */}
       <div ref={cursorDotRef} className="cursor-dot" />
-      <div
-        ref={cursorRingRef}
-        className="cursor-ring"
-      />
+      <div ref={cursorRingRef} className="cursor-ring" />
 
       <div ref={containerRef}>
         {/* ═══════════════════════════════════════════════════════════════════
-            SCENE ONE — ACT ONE — THE ANCIENT WORLD
-            1750 BC. Babylon. The world's first collections law. Carved in stone.
+            HERO — THE PORTRAIT
+            Full viewport. Near black. Irving as Shylock.
+            Cursor reveals the portrait. Darkness returns when cursor leaves.
         ════════════════════════════════════════════════════════════════════ */}
         <section
-          className="scene-one grain relative min-h-screen flex items-center justify-center overflow-hidden bg-stone-black"
-          aria-label="Act One — The Ancient World"
+          className="scene-hero grain relative min-h-screen flex items-center justify-center overflow-hidden bg-stone-black"
+          aria-label="Hero — Shylock"
         >
-          {/* Stele container */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-            <div className="relative" style={{ width: 'min(42vw, 340px)', maxHeight: '85vh' }}>
-              <SteleSVG className="stele-svg w-full h-full object-contain" />
-
-              {/* Crack overlay SVG — positioned over the stele */}
-              <svg
-                className="absolute inset-0 w-full h-full pointer-events-none"
-                viewBox="0 0 200 680"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                {/* Crack 1 — main, downward right */}
-                <path
-                  ref={crack1Ref}
-                  d="M100 230 C108 262 104 298 115 332 C122 358 118 385 128 414 C133 430 144 445 142 468"
-                  stroke="rgba(255,255,255,0.42)"
-                  strokeWidth="0.7"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-                {/* Crack 2 — downward left */}
-                <path
-                  ref={crack2Ref}
-                  d="M100 230 C90 258 86 292 78 322 C72 346 78 372 68 398 C63 414 55 426 58 448"
-                  stroke="rgba(255,255,255,0.32)"
-                  strokeWidth="0.55"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-                {/* Crack 3 — upward, toward arch top */}
-                <path
-                  ref={crack3Ref}
-                  d="M100 230 C97 208 110 192 105 174 C100 158 114 148 109 132"
-                  stroke="rgba(255,255,255,0.28)"
-                  strokeWidth="0.5"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-                {/* Crack 4 — small branch right */}
-                <path
-                  ref={crack4Ref}
-                  d="M115 332 C128 322 144 318 158 324"
-                  stroke="rgba(255,255,255,0.22)"
-                  strokeWidth="0.4"
-                  fill="none"
-                  strokeLinecap="round"
-                />
-              </svg>
-
-              {/* Light bleed — radiates from crack origin */}
-              <div
-                ref={lightBleedRef}
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background:
-                    'radial-gradient(ellipse 35% 40% at 50% 34%, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.12) 40%, transparent 70%)',
-                  opacity: 0,
-                  mixBlendMode: 'screen',
-                }}
-              />
-            </div>
-          </div>
+          {/* Portrait canvas — full viewport */}
+          <canvas
+            ref={heroCanvasRef}
+            className="absolute inset-0 w-full h-full"
+            style={{ zIndex: 1 }}
+          />
 
           {/* Vignette */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(8,8,7,0.7) 100%)',
+                'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, rgba(8,8,7,0.6) 100%)',
+              zIndex: 2,
             }}
           />
 
           {/* Hero text */}
-          <div className="relative z-10 text-center px-6 max-w-2xl mx-auto">
-            {/* Whisper lines */}
-            <div className="mb-8 space-y-2">
-              {['1750 BC. Babylon.', "The world's first collections law.", 'Carved in stone.'].map(
-                (line, i) => (
-                  <p
-                    key={i}
-                    className="hero-whisper-line type-mono text-white/70 text-xs md:text-sm tracking-widest"
-                    style={{ opacity: 0 }}
-                  >
-                    {line}
-                  </p>
-                )
-              )}
-            </div>
-
-            {/* Main tagline */}
-            <p
-              className="hero-tagline type-serif text-white text-2xl md:text-3xl lg:text-4xl"
-              style={{ opacity: 0 }}
-            >
-              The problem is older than you think.
-            </p>
-          </div>
-
-          {/* Scroll cue */}
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
-            <div className="w-px h-10 bg-white/50 animate-pulse" />
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════════════════════════════
-            SCENE TWO — ACT TWO — SHYLOCK'S WORLD
-            Venice. 1596. He was right. The world made him the villain.
-        ════════════════════════════════════════════════════════════════════ */}
-        <section
-          className="scene-two grain-heavy relative min-h-screen flex items-center justify-center overflow-hidden"
-          style={{ backgroundColor: '#0e0d0b' }}
-          aria-label="Act Two — Shylock's World"
-        >
-          {/* Archival background texture — suggests a Renaissance painting */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                'radial-gradient(ellipse 70% 60% at 50% 45%, #1a1714 0%, #0a0908 60%, #070605 100%)',
-            }}
-          />
-
-          {/* Horizontal ruled lines — parchment / ledger feeling */}
-          <div
-            className="absolute inset-0 pointer-events-none opacity-[0.04]"
-            style={{
-              backgroundImage:
-                'repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(255,255,255,0.6) 28px, rgba(255,255,255,0.6) 29px)',
-            }}
-          />
-
-          {/* Vignette — heavy corners */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                'radial-gradient(ellipse 65% 65% at 50% 50%, transparent 30%, rgba(5,4,3,0.82) 100%)',
-            }}
-          />
-
-          <div className="relative z-10 text-center px-6 max-w-2xl mx-auto">
-            {/* Scene timestamp */}
-            <p className="fade-up type-label text-white/25 mb-14 tracking-[0.2em]" data-delay="0">
-              Venice · 1596
-            </p>
-
-            {/* Italic serif — the weight of literature */}
-            <div className="space-y-6 mb-12">
-              {[
-                'He was right.',
-                'The debt was real.',
-                'The contract was legal.',
-              ].map((line, i) => (
-                <p
-                  key={i}
-                  className="fade-up type-serif text-white text-2xl md:text-3xl lg:text-4xl"
-                  data-delay={String(i * 0.25)}
-                  style={{ opacity: 0 }}
-                >
-                  {line}
-                </p>
-              ))}
-            </div>
-
-            <p
-              className="fade-up type-serif text-white/55 text-xl md:text-2xl lg:text-3xl mb-16"
-              data-delay="0.9"
-              style={{ opacity: 0 }}
-            >
-              And still — the world made him the villain.
-            </p>
-
-            <p
-              className="fade-up type-body text-white/40 text-sm md:text-base max-w-md mx-auto leading-relaxed"
-              data-delay="1.2"
-              style={{ opacity: 0 }}
-            >
-              Every lender since has inherited that story.
-            </p>
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════════════════════════════
-            SCENE THREE — ACT THREE — THE MODERN PROBLEM
-            A COO. 80,000 accounts. 3,000 touched this month.
-        ════════════════════════════════════════════════════════════════════ */}
-        <section
-          className="scene-three grain relative min-h-screen flex items-center justify-center overflow-hidden"
-          style={{ backgroundColor: '#0c0c0a' }}
-          aria-label="Act Three — The Modern Problem"
-        >
-          <div
-            className="absolute inset-0 pointer-events-none opacity-5"
-            style={{
-              backgroundImage:
-                'repeating-linear-gradient(90deg, rgba(255,255,255,0.4) 0px, rgba(255,255,255,0.4) 1px, transparent 1px, transparent 80px)',
-            }}
-          />
-
-          <div className="relative z-10 w-full max-w-2xl mx-auto px-6 md:px-10">
-            {/* Dashboard-like monospace presentation */}
-            <div className="space-y-1 mb-16">
-              {[
-                { text: '> Your book grew.', delay: 0 },
-                { text: '> Your collections infrastructure didn\'t.', delay: 0.2 },
-              ].map(({ text, delay }, i) => (
-                <p
-                  key={i}
-                  className="fade-up type-mono text-white/50 text-sm md:text-base"
-                  data-delay={String(delay)}
-                  style={{ opacity: 0 }}
-                >
-                  {text}
-                </p>
-              ))}
-            </div>
-
-            {/* The numbers — the brief's exact spec */}
-            <div className="space-y-8 mb-16">
-              <div className="fade-up" data-delay="0.5" style={{ opacity: 0 }}>
-                <p className="type-headline text-white text-6xl md:text-8xl lg:text-9xl tracking-tight">
-                  80,000
-                </p>
-                <p className="type-mono text-white/35 text-xs mt-2 tracking-widest">
-                  delinquent accounts
-                </p>
-              </div>
-
-              <div className="fade-up" data-delay="0.8" style={{ opacity: 0 }}>
-                <p className="type-headline text-white/45 text-4xl md:text-5xl tracking-tight">
-                  A team that can touch 3,000 this month.
-                </p>
-              </div>
-            </div>
-
+          <div className="relative text-center px-6 max-w-3xl mx-auto" style={{ zIndex: 3 }}>
             <div
-              className="fade-up type-mono text-white/35 text-sm leading-loose border-l border-white/10 pl-4"
-              data-delay="1.1"
+              className="hero-text mb-10"
               style={{ opacity: 0 }}
             >
-              <p>The board presentation is in three weeks.</p>
-            </div>
-
-            {/* Connecting to history */}
-            <div className="mt-20 space-y-2 fade-up" data-delay="1.4" style={{ opacity: 0 }}>
-              <p className="type-serif text-white/30 text-lg md:text-xl">
-                Hammurabi tried to solve this in 1750 BC.
+              <p className="type-body text-white text-lg md:text-xl lg:text-2xl leading-relaxed mb-2">
+                The world vilified lenders for 500 years.
               </p>
-              <p className="type-serif text-white/30 text-lg md:text-xl">
-                Shylock tried in 1596.
+              <p className="type-body text-white text-lg md:text-xl lg:text-2xl leading-relaxed mb-6">
+                Digital lenders today face the same mischaracterisation.
               </p>
-              <p className="type-serif text-white/55 text-xl md:text-2xl mt-4">
-                The problem is still here.
+              <p className="type-body text-white text-lg md:text-xl lg:text-2xl leading-relaxed">
+                Introducing <span className="font-medium">Shylock</span> — the world&apos;s most compliant
+              </p>
+              <p className="type-body text-white text-lg md:text-xl lg:text-2xl leading-relaxed">
+                and effective AI for collections.
               </p>
             </div>
-          </div>
-        </section>
 
-        {/* ═══════════════════════════════════════════════════════════════════
-            SCENE FOUR — ACT FOUR — THE RESOLUTION
-            Pure white emerges. The new era of collections.
-        ════════════════════════════════════════════════════════════════════ */}
-        <section
-          className="scene-four relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-white"
-          aria-label="Act Four — The Resolution"
-        >
-          {/* Subtle top gradient — light emerging from above */}
-          <div
-            className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
-            style={{
-              background: 'linear-gradient(to bottom, rgba(244,242,240,0.4), transparent)',
-            }}
-          />
-
-          <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-            {/* The most important sentence on the site */}
-            <h1
-              className="fade-in type-headline text-stone-black leading-none mb-8"
-              style={{
-                fontSize: 'clamp(3.5rem, 9vw, 9.5rem)',
-                letterSpacing: '-0.03em',
-                opacity: 0,
-              }}
-            >
-              The new era<br />of collections.
-            </h1>
-
-            <p
-              className="fade-in type-body text-mid text-lg md:text-xl mb-14 max-w-lg mx-auto"
-              style={{ opacity: 0 }}
-            >
-              AI agents built specifically for collections.
-            </p>
-
-            <div className="fade-in" style={{ opacity: 0 }}>
-              <Link href="/contact" className="btn-cta btn-cta-dark">
+            <div className="hero-cta" style={{ opacity: 0 }}>
+              <Link href="/contact" className="btn-cta btn-cta-light">
                 Talk to us →
               </Link>
             </div>
 
             {/* Compliance bar */}
-            <div className="fade-in mt-16" style={{ opacity: 0 }}>
-              <p className="type-label text-mid/60 text-xs tracking-widest leading-loose">
+            <div className="hero-compliance mt-12" style={{ opacity: 0 }}>
+              <p className="type-label text-white/30 text-xs tracking-widest leading-loose">
                 FCA · CBN · RBI · CFPB · OJK · NCR · CBK · SAMA · CBE · BSP · MAS · BCB
               </p>
             </div>
           </div>
+
+          {/* Scroll cue */}
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-20" style={{ zIndex: 3 }}>
+            <div className="w-px h-10 bg-white/50 animate-pulse" />
+          </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════
-            SCENE FIVE — PRODUCT IN ACTION
-            Dark returns briefly. See Caantin in action.
+            SECTION 2 — LET HIM LOOK TO HIS BOND
+            Full bleed dark. Renaissance courtroom. One line of text.
         ════════════════════════════════════════════════════════════════════ */}
         <section
-          className="scene-five grain relative py-24 md:py-32 overflow-hidden"
-          style={{ backgroundColor: '#0e0d0b' }}
-          aria-label="Product in action"
+          className="scene-bond grain-heavy relative min-h-screen flex items-center justify-center overflow-hidden"
+          style={{ backgroundColor: '#080807' }}
+          aria-label="Let him look to his bond"
         >
-          {/* Faint ancient texture returning */}
+          {/* Courtroom image — full bleed, heavily darkened */}
+          <div className="absolute inset-0">
+            <Image
+              src="/courtroom.jpg"
+              alt=""
+              fill
+              className="object-cover"
+              style={{
+                filter: 'grayscale(100%) contrast(1.2) brightness(0.15)',
+              }}
+              priority={false}
+            />
+          </div>
+
+          {/* Heavy vignette */}
           <div
-            className="absolute inset-0 pointer-events-none opacity-[0.03]"
+            className="absolute inset-0 pointer-events-none"
             style={{
-              backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E\")",
-              backgroundSize: '200px',
+              background:
+                'radial-gradient(ellipse 60% 60% at 50% 50%, transparent 20%, rgba(8,8,7,0.85) 100%)',
             }}
           />
 
+          <div className="relative z-10 text-center px-6">
+            <p
+              className="fade-up type-serif text-white text-3xl md:text-5xl lg:text-6xl"
+              style={{ opacity: 0 }}
+            >
+              &ldquo;Let him look to his bond.&rdquo;
+            </p>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════════
+            SECTION 3 — SEE SHYLOCK WORK
+            Dark background. Video placeholder.
+        ════════════════════════════════════════════════════════════════════ */}
+        <section
+          className="scene-video grain relative py-24 md:py-32 overflow-hidden"
+          style={{ backgroundColor: '#0e0d0b' }}
+          aria-label="Product demo"
+        >
           <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12">
             <div className="mb-10 md:mb-14">
-              <h2 className="fade-up type-headline-lg text-white text-3xl md:text-5xl mb-3" style={{ opacity: 0 }}>
-                See Caantin in action.
+              <h2
+                className="fade-up type-headline-lg text-white text-3xl md:text-5xl"
+                style={{ opacity: 0 }}
+              >
+                See Shylock work.
               </h2>
-              <p className="fade-up type-body text-silver text-sm md:text-base" data-delay="0.2" style={{ opacity: 0 }}>
-                One example of a collections workflow on Caantin.
-              </p>
             </div>
 
-            {/* Product demo video */}
+            {/* Video placeholder */}
             <div className="relative w-full aspect-video bg-ancient overflow-hidden">
               <video
                 className="absolute inset-0 w-full h-full object-cover"
@@ -780,7 +517,7 @@ export default function HomepageFilm() {
                 preload="metadata"
               />
 
-              {/* Corner marks — film frame aesthetic */}
+              {/* Corner marks */}
               {(['top-3 left-3', 'top-3 right-3', 'bottom-3 left-3', 'bottom-3 right-3'] as const).map((pos, i) => (
                 <div
                   key={i}
@@ -794,15 +531,15 @@ export default function HomepageFilm() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════
-            SCENE SIX — WHAT IT DOES
-            White. One agent. Every account. Timeline draws itself on scroll.
+            SECTION 4 — ONE AGENT. EVERY ACCOUNT.
+            White background. Vertical timeline. Scroll-animated.
         ════════════════════════════════════════════════════════════════════ */}
         <section
-          className="scene-six relative py-28 md:py-40 bg-white overflow-hidden"
-          aria-label="What Caantin does"
+          className="scene-timeline relative py-28 md:py-40 bg-white overflow-hidden"
+          aria-label="What Shylock does"
         >
           <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-            {/* Section headline */}
+            {/* Headline */}
             <h2
               className="fade-up type-headline text-stone-black mb-20 md:mb-28"
               style={{
@@ -816,53 +553,43 @@ export default function HomepageFilm() {
 
             {/* Timeline */}
             <div className="relative max-w-2xl">
-              {/* Track line (static, faint) */}
               <div className="absolute top-0 bottom-0 left-0 w-px bg-stone/15" />
 
-              {/* Animated fill — scaleY from 0 → 1 on scroll */}
               <div
                 ref={timelineLineRef}
                 className="absolute top-0 bottom-0 left-0 w-px bg-stone-black origin-top"
               />
 
-              {/* Steps — padded left to clear the line */}
               <div className="pl-10 md:pl-14 flex flex-col gap-16 md:gap-24">
                 {[
                   {
                     num: '01',
-                    title: 'Agents that do the work.',
                     body: 'Contact. Negotiate. Collect.\nAutonomously. At any scale.',
                   },
                   {
                     num: '02',
-                    title: 'Works within your regulatory environment.',
-                    body: 'Every conversation logged.\nEvery interaction auditable.\nCompliant in every market we operate in.',
+                    body: 'Compliant in every market we operate in.\nEvery conversation logged.\nEvery interaction auditable.',
                   },
                   {
                     num: '03',
-                    title: 'You only pay when money moves.',
-                    body: 'No recovery. No fee.',
+                    body: 'You pay when money moves.\nNot before. Not ever before.',
                   },
-                ].map(({ num, title, body }, i) => (
+                ].map(({ num, body }, i) => (
                   <div
                     key={i}
                     className="relative fade-up"
                     data-delay={String(i * 0.2)}
                     style={{ opacity: 0 }}
                   >
-                    {/* Node — sits on the line */}
                     <div className="absolute -left-10 md:-left-14 top-1 w-2.5 h-2.5 rounded-full bg-stone-black border-[2px] border-white ring-1 ring-stone/20 translate-x-[-4px]" />
                     <p className="type-label text-mid text-xs mb-3 tracking-[0.15em]">{num}</p>
-                    <h3 className="type-headline-lg text-stone-black text-xl md:text-3xl mb-3 leading-snug">
-                      {title}
-                    </h3>
                     <p className="type-body text-mid text-sm md:text-base whitespace-pre-line leading-relaxed">
                       {body}
                     </p>
                   </div>
                 ))}
 
-                {/* Terminal node + closing statement */}
+                {/* Terminal node */}
                 <div
                   className="relative fade-up flex items-center gap-5"
                   data-delay="0.6"
@@ -879,15 +606,14 @@ export default function HomepageFilm() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════
-            SCENE SEVEN — COMPLIANCE
-            Dark. Ordered. Governed. Compliant everywhere we operate.
+            SECTION 5 — COMPLIANCE
+            Dark. "The law allows it. The court awards it."
         ════════════════════════════════════════════════════════════════════ */}
         <section
-          className="scene-seven grain relative py-28 md:py-40 overflow-hidden"
+          className="scene-compliance grain relative py-28 md:py-40 overflow-hidden"
           style={{ backgroundColor: '#0d0c0a' }}
           aria-label="Compliance"
         >
-          {/* Faint grid lines — structured, governed */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
@@ -898,22 +624,17 @@ export default function HomepageFilm() {
           />
 
           <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12">
-            {/* Header */}
-            <div className="mb-16 md:mb-24 max-w-2xl">
-              <h2
-                className="fade-up type-headline text-white mb-6"
-                style={{ fontSize: 'clamp(2rem, 5vw, 5.5rem)', letterSpacing: '-0.03em', opacity: 0 }}
+            <div className="mb-16 md:mb-24 text-center">
+              <p
+                className="fade-up type-serif text-white text-2xl md:text-4xl lg:text-5xl leading-snug"
+                style={{ opacity: 0 }}
               >
-                Compliant everywhere<br />we operate.
-              </h2>
-              <p className="fade-up type-body text-silver text-sm md:text-base leading-relaxed" data-delay="0.2" style={{ opacity: 0 }}>
-                We don&apos;t work around your regulator.
+                &ldquo;The law allows it.
                 <br />
-                We work within them. Always.
+                The court awards it.&rdquo;
               </p>
             </div>
 
-            {/* Regulator grid */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-10 gap-y-10 mb-20">
               {Object.entries(REGULATORS).map(([region, regs], i) => (
                 <div
@@ -936,15 +657,11 @@ export default function HomepageFilm() {
               ))}
             </div>
 
-            {/* Footer note */}
             <div
-              className="fade-up border-t border-white/10 pt-10 grid md:grid-cols-2 gap-6"
+              className="fade-up border-t border-white/10 pt-10"
               data-delay="0.5"
               style={{ opacity: 0 }}
             >
-              <p className="type-body text-silver text-sm leading-relaxed">
-                New market. Same standards.
-              </p>
               <div className="space-y-1">
                 {[
                   'Every conversation logged.',
@@ -961,11 +678,11 @@ export default function HomepageFilm() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════
-            SCENE EIGHT — TESTIMONIALS
-            White. Lenders trust Caantin.
+            SECTION 6 — TESTIMONIALS
+            White. Lenders trust Shylock.
         ════════════════════════════════════════════════════════════════════ */}
         <section
-          className="scene-eight relative py-28 md:py-40 bg-white overflow-hidden"
+          className="scene-testimonials relative py-28 md:py-40 bg-white overflow-hidden"
           aria-label="Client testimonials"
         >
           <div className="max-w-[1440px] mx-auto px-6 md:px-12">
@@ -973,28 +690,21 @@ export default function HomepageFilm() {
               className="fade-up type-headline text-stone-black mb-16 md:mb-20"
               style={{ fontSize: 'clamp(1.8rem, 4vw, 4rem)', letterSpacing: '-0.03em', opacity: 0 }}
             >
-              Lenders trust Caantin.
+              Lenders trust Shylock.
             </h2>
 
-            {/* Carousel */}
             <div className="fade-up relative" data-delay="0.2" style={{ opacity: 0 }}>
               <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-start">
-                {/* Left — visual artifact */}
                 <div
                   className="relative aspect-[4/5] md:aspect-square max-w-sm overflow-hidden"
                   style={{ background: '#0f0e0d' }}
                 >
-                  {/* Archival artifact placeholder */}
                   {t.artifact === 'ledger' ? (
                     <div className="absolute inset-0 flex flex-col justify-end p-8">
-                      {/* Ledger lines */}
                       <div className="space-y-2 opacity-20">
                         {Array.from({ length: 12 }).map((_, i) => (
                           <div key={i} className="flex gap-4 items-center">
-                            <div
-                              className="h-px bg-white flex-1"
-                              style={{ opacity: 0.3 + (i % 3) * 0.15 }}
-                            />
+                            <div className="h-px bg-white flex-1" style={{ opacity: 0.3 + (i % 3) * 0.15 }} />
                             <div className="type-mono text-white text-xs opacity-60">
                               {String(1000 + i * 47).padStart(6, '0')}
                             </div>
@@ -1007,61 +717,29 @@ export default function HomepageFilm() {
                     </div>
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      {/* Ancient coin / seal */}
                       <div
                         className="w-48 h-48 rounded-full border border-white/10 flex items-center justify-center"
                         style={{ background: 'rgba(255,255,255,0.03)' }}
                       >
-                        <svg
-                          viewBox="0 0 120 120"
-                          className="w-36 h-36 opacity-15"
-                          fill="none"
-                          stroke="white"
-                          strokeWidth="0.5"
-                        >
+                        <svg viewBox="0 0 120 120" className="w-36 h-36 opacity-15" fill="none" stroke="white" strokeWidth="0.5">
                           <circle cx="60" cy="60" r="55" />
                           <circle cx="60" cy="60" r="48" />
-                          <text
-                            x="60"
-                            y="56"
-                            textAnchor="middle"
-                            fontSize="7"
-                            fill="white"
-                            stroke="none"
-                            fontFamily="monospace"
-                            letterSpacing="2"
-                          >
-                            CAANTIN
-                          </text>
-                          <text
-                            x="60"
-                            y="68"
-                            textAnchor="middle"
-                            fontSize="6"
-                            fill="white"
-                            stroke="none"
-                            fontFamily="monospace"
-                            letterSpacing="1"
-                          >
-                            MMXXVI
-                          </text>
+                          <text x="60" y="56" textAnchor="middle" fontSize="7" fill="white" stroke="none" fontFamily="monospace" letterSpacing="2">SHYLOCK</text>
+                          <text x="60" y="68" textAnchor="middle" fontSize="6" fill="white" stroke="none" fontFamily="monospace" letterSpacing="1">MMXXVI</text>
                         </svg>
                       </div>
                     </div>
                   )}
 
-                  {/* Grain over artifact */}
                   <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                      backgroundImage:
-                        "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E\")",
+                      backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E\")",
                       backgroundSize: '200px',
                     }}
                   />
                 </div>
 
-                {/* Right — quote */}
                 <div className="flex flex-col justify-between py-4 md:py-8">
                   <blockquote
                     className="type-serif text-stone-black text-xl md:text-2xl lg:text-3xl leading-snug mb-10"
@@ -1081,7 +759,6 @@ export default function HomepageFilm() {
                 </div>
               </div>
 
-              {/* Carousel controls */}
               {TESTIMONIALS.length > 1 && (
                 <div className="flex items-center gap-5 mt-12">
                   <button
@@ -1094,7 +771,6 @@ export default function HomepageFilm() {
                     </svg>
                   </button>
 
-                  {/* Dots */}
                   <div className="flex gap-2">
                     {TESTIMONIALS.map((_, i) => (
                       <button
@@ -1124,64 +800,51 @@ export default function HomepageFilm() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════
-            SCENE NINE — CLOSING
-            Dark. Full bleed. One last time. Put Caantin to work.
+            CLOSING — PORTRAIT RETURNS
+            Full bleed. Dark. Portrait barely visible. Waiting.
         ════════════════════════════════════════════════════════════════════ */}
         <section
-          className="scene-nine grain-heavy relative min-h-screen flex items-center justify-center overflow-hidden"
+          className="scene-closing grain-heavy relative min-h-screen flex items-center justify-center overflow-hidden"
           style={{ backgroundColor: '#080807' }}
-          aria-label="Closing — Put Caantin to work"
+          aria-label="Closing — Put Shylock to work"
         >
-          {/* Ancient texture — final time, quiet and still */}
+          <canvas
+            ref={closingCanvasRef}
+            className="absolute inset-0 w-full h-full"
+            style={{ zIndex: 1 }}
+          />
+
+          <div className="closing-grain absolute inset-0 pointer-events-none" style={{ zIndex: 2 }} />
+
           <div
-            className="closing-grain absolute inset-0 pointer-events-none"
+            className="absolute inset-0 pointer-events-none"
             style={{
-              background:
-                'radial-gradient(ellipse 80% 80% at 50% 50%, #111009 0%, #080807 70%, #040403 100%)',
+              background: 'radial-gradient(ellipse 70% 70% at 50% 50%, transparent 20%, rgba(8,8,7,0.7) 100%)',
+              zIndex: 2,
             }}
           />
 
-          {/* Barely-stirring texture on hover handled by CSS */}
-          <div
-            className="absolute inset-0 pointer-events-none opacity-[0.04]"
-            style={{
-              backgroundImage:
-                'repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(255,255,255,0.2) 40px, rgba(255,255,255,0.2) 41px)',
-            }}
-          />
-
-          <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
-            <p
-              className="fade-up type-label text-white/20 text-xs tracking-[0.2em] mb-10"
-              style={{ opacity: 0 }}
-            >
-              Collections · Compliance · Scale
-            </p>
-
-            <h2
-              className="fade-up type-headline text-white mb-12"
-              style={{
-                fontSize: 'clamp(3rem, 8vw, 8rem)',
-                letterSpacing: '-0.03em',
-                lineHeight: '0.92',
-                opacity: 0,
-              }}
-              data-delay="0.2"
-            >
-              Put Caantin<br />to work.
-            </h2>
+          <div className="relative text-center px-6 max-w-3xl mx-auto" style={{ zIndex: 3 }}>
+            <div className="space-y-2 mb-12">
+              <p
+                className="fade-up type-body text-white text-xl md:text-2xl lg:text-3xl"
+                style={{ opacity: 0 }}
+              >
+                Shylock needed better tools.
+              </p>
+              <p
+                className="fade-up type-body text-white text-xl md:text-2xl lg:text-3xl"
+                data-delay="0.2"
+                style={{ opacity: 0 }}
+              >
+                Now they exist.
+              </p>
+            </div>
 
             <div className="fade-up" data-delay="0.5" style={{ opacity: 0 }}>
               <Link href="/contact" className="btn-cta btn-cta-light text-sm">
-                Talk to us →
+                Put Shylock to work →
               </Link>
-            </div>
-
-            {/* Compliance bar — closing echo */}
-            <div className="fade-up mt-16" data-delay="0.7" style={{ opacity: 0 }}>
-              <p className="type-label text-white/15 text-xs tracking-widest leading-loose">
-                We succeed when you do. No recovery. No fee.
-              </p>
             </div>
           </div>
         </section>

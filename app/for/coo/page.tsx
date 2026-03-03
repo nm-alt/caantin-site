@@ -5,7 +5,7 @@ import Link from 'next/link'
 // Not in sitemap. Not in navigation. Not indexed.
 // LinkedIn ad destination only.
 export const metadata: Metadata = {
-  title: 'Caantin · For COOs at Digital Lenders',
+  title: 'Shylock · For COOs at Digital Lenders',
   robots: { index: false, follow: false },
 }
 
@@ -17,7 +17,6 @@ export default function ForCOO() {
         className="grain-heavy relative min-h-screen flex items-center justify-center overflow-hidden"
         style={{ backgroundColor: '#080807' }}
       >
-        {/* Ancient texture, barely visible */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -26,7 +25,6 @@ export default function ForCOO() {
           }}
         />
 
-        {/* Faint horizontal rules */}
         <div
           className="absolute inset-0 pointer-events-none opacity-[0.025]"
           style={{
@@ -36,10 +34,6 @@ export default function ForCOO() {
         />
 
         <div className="relative z-10 max-w-xl mx-auto px-8 py-32 text-center flex flex-col items-center">
-          <p className="type-label text-white/25 text-xs tracking-[0.2em] mb-10">
-            COO · Digital Lender
-          </p>
-
           <h1
             className="type-headline text-white mb-10"
             style={{
@@ -54,7 +48,7 @@ export default function ForCOO() {
           </h1>
 
           <p className="type-body text-silver text-base md:text-lg mb-4 leading-relaxed max-w-md">
-            Caantin gives COOs at digital lenders an autonomous collections
+            Shylock gives COOs at digital lenders an autonomous collections
             infrastructure — without the headcount.
           </p>
 

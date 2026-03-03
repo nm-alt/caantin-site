@@ -19,9 +19,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getPost(slug)
   if (!post) return {}
   return {
-    title: `${post.title} · Caantin`,
+    title: `${post.title} · Shylock`,
     description: post.description,
-    alternates: { canonical: `https://caantin.ai/blog/${post.slug}` },
+    alternates: { canonical: `https://shylock.ai/blog/${post.slug}` },
   }
 }
 
@@ -81,7 +81,7 @@ export default async function BlogPost({ params }: Props) {
         <section className="bg-white py-16 md:py-24">
           <div className="max-w-[900px] mx-auto px-6 md:px-12">
             <div
-              className="prose-caantin"
+              className="prose-shylock"
               style={{
                 // Typography styles applied via CSS class below
               }}

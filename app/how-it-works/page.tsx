@@ -6,10 +6,10 @@ import Reveal from '@/components/Reveal'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'How It Works · Caantin',
+  title: 'How It Works · Shylock',
   description:
     'Five steps from portfolio upload to full audit trail. Simple by design. Powerful by architecture.',
-  alternates: { canonical: 'https://caantin.ai/how-it-works' },
+  alternates: { canonical: 'https://shylock.ai/how-it-works' },
 }
 
 const STEPS = [
@@ -45,7 +45,6 @@ export default function HowItWorks() {
     <>
       <Nav />
       <main>
-        {/* Hero */}
         <PageHero
           eyebrow="How it works"
           headline={
@@ -57,11 +56,9 @@ export default function HowItWorks() {
           }
         />
 
-        {/* Five steps */}
         <section className="bg-white py-28 md:py-40">
           <div className="max-w-[1440px] mx-auto px-6 md:px-12">
             <div className="relative max-w-2xl">
-              {/* Track line */}
               <div className="absolute top-0 bottom-0 left-0 w-px bg-stone/15" />
 
               <div className="pl-10 md:pl-14 flex flex-col gap-16 md:gap-24">
@@ -71,7 +68,6 @@ export default function HowItWorks() {
                     delay={i * 0.1}
                     className="relative"
                   >
-                    {/* Node */}
                     <div className="absolute -left-10 md:-left-14 top-1 w-2.5 h-2.5 rounded-full bg-stone-black border-[2px] border-white ring-1 ring-stone/20 -translate-x-[4px]" />
 
                     <p className="type-label text-mid text-xs mb-3 tracking-[0.15em]">
@@ -86,7 +82,6 @@ export default function HowItWorks() {
                   </Reveal>
                 ))}
 
-                {/* Terminal */}
                 <Reveal delay={0.5} className="relative flex items-center gap-5">
                   <div className="absolute -left-10 md:-left-14 top-1/2 -translate-y-1/2 -translate-x-[5px] w-3.5 h-3.5 rounded-full bg-stone-black flex-shrink-0" />
                   <p
@@ -104,7 +99,6 @@ export default function HowItWorks() {
           </div>
         </section>
 
-        {/* The model */}
         <section
           className="grain relative py-28 md:py-40 overflow-hidden"
           style={{ backgroundColor: '#0d0c0a' }}

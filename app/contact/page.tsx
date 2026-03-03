@@ -5,10 +5,10 @@ import ContactForm from '@/components/ContactForm'
 import Reveal from '@/components/Reveal'
 
 export const metadata: Metadata = {
-  title: 'Contact · Caantin',
+  title: 'Contact · Shylock',
   description:
     'Tell us about your portfolio. We respond within one business day.',
-  alternates: { canonical: 'https://caantin.ai/contact' },
+  alternates: { canonical: 'https://shylock.ai/contact' },
 }
 
 export default function Contact() {
@@ -20,7 +20,6 @@ export default function Contact() {
           className="grain-heavy relative min-h-screen flex items-center justify-center overflow-hidden py-32"
           style={{ backgroundColor: '#080807' }}
         >
-          {/* Background */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
@@ -30,13 +29,7 @@ export default function Contact() {
           />
 
           <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12">
-            <div className="max-w-lg">
-              <Reveal>
-                <p className="type-label text-white/25 text-xs tracking-[0.2em] mb-8">
-                  Contact
-                </p>
-              </Reveal>
-
+            <div className="max-w-lg mx-auto text-center">
               <Reveal delay={0.1}>
                 <h1
                   className="type-headline text-white mb-14"

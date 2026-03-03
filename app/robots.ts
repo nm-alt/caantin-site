@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: '/for/',
       },
     ],
-    sitemap: 'https://caantin.ai/sitemap.xml',
+    sitemap: 'https://shylock.ai/sitemap.xml',
   }
 }

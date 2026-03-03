@@ -8,7 +8,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <p className="type-headline text-white text-2xl tracking-widest mb-4">
-              Caantin
+              Shylock
             </p>
           </div>
 
@@ -32,21 +32,15 @@ export default function Footer() {
             >
               Blog
             </Link>
-            <a
-              href="https://collect.caantin.ai/login"
-              className="type-body text-sm text-silver hover:text-white transition-colors duration-300"
-            >
-              Log in
-            </a>
           </div>
 
           {/* Contact */}
           <div>
             <a
-              href="mailto:nm@caantin.ai"
+              href="mailto:hello@shylock.ai"
               className="type-body text-sm text-silver hover:text-white transition-colors duration-300"
             >
-              nm@caantin.ai
+              hello@shylock.ai
             </a>
           </div>
         </div>
@@ -54,7 +48,7 @@ export default function Footer() {
         {/* Bottom row */}
         <div className="mt-16 pt-8 border-t border-stone/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <p className="type-label text-stone-mid text-xs">
-            © Caantin 2026
+            &copy; Shylock 2026
           </p>
           <Link
             href="/privacy"

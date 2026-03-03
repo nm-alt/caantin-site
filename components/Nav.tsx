@@ -14,7 +14,6 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -31,16 +30,14 @@ export default function Nav() {
         }`}
       >
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
           <Link
             href="/"
             className="type-headline text-white text-xl md:text-2xl tracking-widest hover:opacity-70 transition-opacity duration-300"
-            aria-label="Caantin — home"
+            aria-label="Shylock — home"
           >
-            Caantin
+            Shylock
           </Link>
 
-          {/* Desktop links */}
           <div className="hidden md:flex items-center gap-10">
             <Link
               href="/how-it-works"
@@ -54,18 +51,11 @@ export default function Nav() {
             >
               Results
             </Link>
-            <a
-              href="https://collect.caantin.ai/login"
-              className="type-body text-sm text-silver hover:text-white transition-colors duration-300 tracking-wide"
-            >
-              Log in
-            </a>
             <Link href="/contact" className="btn-cta btn-cta-light text-xs">
               Talk to us →
             </Link>
           </div>
 
-          {/* Mobile menu toggle */}
           <button
             className="md:hidden flex flex-col gap-[5px] p-2 focus:outline-none"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -91,7 +81,6 @@ export default function Nav() {
         </div>
       </nav>
 
-      {/* Mobile full-screen overlay */}
       <div
         className={`fixed inset-0 z-40 bg-stone-black flex flex-col justify-center px-8 transition-all duration-500 md:hidden ${
           menuOpen
@@ -115,13 +104,6 @@ export default function Nav() {
           >
             Results
           </Link>
-          <a
-            href="https://collect.caantin.ai/login"
-            className="type-headline text-white text-4xl"
-            onClick={() => setMenuOpen(false)}
-          >
-            Log in
-          </a>
           <Link
             href="/contact"
             className="btn-cta btn-cta-light self-start mt-4"

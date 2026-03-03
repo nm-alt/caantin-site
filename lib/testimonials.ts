@@ -11,18 +11,18 @@ export interface Testimonial {
 export const TESTIMONIALS: Testimonial[] = [
   {
     quote:
-      '"FairMoney paid before the product was finished. That is how certain they were."',
-    name: 'Njavwa Mutambo',
-    title: 'Founder & CEO',
-    company: 'Caantin',
+      '"[OxygenX testimonial]"',
+    name: '[Name]',
+    title: '[Title]',
+    company: 'OxygenX',
     artifact: 'ledger',
   },
   {
     quote:
-      '"[OxygenX testimonial — full quote to be confirmed before launch.]"',
+      '"Paid before the product was finished."',
     name: '[Name]',
-    title: '[Title]',
-    company: 'OxygenX',
+    title: 'Digital lender, West Africa',
+    company: 'Backed by Tiger Global',
     artifact: 'coin',
   },
 ]
