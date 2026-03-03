@@ -47,79 +47,73 @@ export default function HomepageFilm() {
     h: number,
     brightness: number,
     contrast: number,
-    mode: 'dark' | 'light' = 'dark'
+    mode: 'dark' | 'light' = 'dark',
+    verticalBias: number = 0.5 // 0 = show top, 0.5 = center, 1 = show bottom
   ): HTMLCanvasElement => {
-    const scale = 0.3
-    const tw = Math.floor(w * scale)
-    const th = Math.floor(h * scale)
+    // Process at 1:1 — no upscaling, no pixel artifacts
+    // Each dithered dot = exactly 1 CSS pixel
+    const out = document.createElement('canvas')
+    out.width = w
+    out.height = h
+    const ctx = out.getContext('2d')!
+    ctx.filter = `grayscale(100%) contrast(${contrast}) brightness(${brightness})`
 
-    const temp = document.createElement('canvas')
-    temp.width = tw
-    temp.height = th
-    const tCtx = temp.getContext('2d')!
-    tCtx.filter = `grayscale(100%) contrast(${contrast}) brightness(${brightness})`
-
-    // Cover-fit the image
+    // Cover-fit the image with vertical bias control
     const imgAspect = img.width / img.height
-    const canvasAspect = tw / th
+    const canvasAspect = w / h
     let dw: number, dh: number, dx: number, dy: number
     if (imgAspect > canvasAspect) {
-      dh = th; dw = th * imgAspect; dx = (tw - dw) / 2; dy = 0
+      dh = h; dw = h * imgAspect; dx = (w - dw) / 2; dy = 0
     } else {
-      dw = tw; dh = tw / imgAspect; dx = 0; dy = (th - dh) / 2
+      dw = w; dh = w / imgAspect
+      dx = 0
+      // verticalBias: 0 = top-aligned, 0.5 = centered, 1 = bottom-aligned
+      dy = (h - dh) * verticalBias
     }
-    tCtx.drawImage(img, dx, dy, dw, dh)
+    ctx.drawImage(img, dx, dy, dw, dh)
 
-    const imageData = tCtx.getImageData(0, 0, tw, th)
+    const imageData = ctx.getImageData(0, 0, w, h)
     const d = imageData.data
 
-    for (let y = 0; y < th; y++) {
-      for (let x = 0; x < tw; x++) {
-        const i = (y * tw + x) * 4
+    // Floyd-Steinberg dithering at full resolution
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const i = (y * w + x) * 4
         const oldVal = d[i]
         const newVal = oldVal > 127 ? 255 : 0
         const err = oldVal - newVal
 
         if (mode === 'dark') {
-          // White dots on transparent
           d[i] = d[i + 1] = d[i + 2] = 255
           d[i + 3] = newVal === 255 ? 255 : 0
         } else {
-          // Black dots on transparent
           d[i] = d[i + 1] = d[i + 2] = 0
           d[i + 3] = newVal === 0 ? 255 : 0
         }
 
-        // Distribute error to neighbors
-        if (x + 1 < tw) {
+        if (x + 1 < w) {
           const ni = i + 4
           d[ni] = Math.max(0, Math.min(255, d[ni] + err * 7 / 16))
         }
-        if (y + 1 < th) {
+        if (y + 1 < h) {
           if (x > 0) {
-            const ni = ((y + 1) * tw + (x - 1)) * 4
+            const ni = ((y + 1) * w + (x - 1)) * 4
             d[ni] = Math.max(0, Math.min(255, d[ni] + err * 3 / 16))
           }
           {
-            const ni = ((y + 1) * tw + x) * 4
+            const ni = ((y + 1) * w + x) * 4
             d[ni] = Math.max(0, Math.min(255, d[ni] + err * 5 / 16))
           }
-          if (x + 1 < tw) {
-            const ni = ((y + 1) * tw + (x + 1)) * 4
+          if (x + 1 < w) {
+            const ni = ((y + 1) * w + (x + 1)) * 4
             d[ni] = Math.max(0, Math.min(255, d[ni] + err * 1 / 16))
           }
         }
       }
     }
 
-    tCtx.putImageData(imageData, 0, 0)
-
-    const out = document.createElement('canvas')
-    out.width = w
-    out.height = h
-    const oCtx = out.getContext('2d')!
-    oCtx.imageSmoothingEnabled = false
-    oCtx.drawImage(temp, 0, 0, tw, th, 0, 0, w, h)
+    ctx.filter = 'none'
+    ctx.putImageData(imageData, 0, 0)
 
     return out
   }, [])
@@ -136,30 +130,44 @@ export default function HomepageFilm() {
     let buffer: HTMLCanvasElement | null = null
 
     const resize = () => {
-      const dpr = window.devicePixelRatio || 1
       const rect = canvas.getBoundingClientRect()
-      canvas.width = rect.width * dpr
-      canvas.height = rect.height * dpr
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-
+      // Use CSS pixel dimensions directly — 1:1 dithering, no DPR scaling
+      // This keeps dots at exactly 1 CSS pixel (crisp on all displays)
       const w = Math.floor(rect.width)
       const h = Math.floor(rect.height)
-      // Black dots on white background
-      buffer = ditherImage(img, w, h, 0.65, 1.5, 'light')
+      canvas.width = w
+      canvas.height = h
+
+      // verticalBias 0.15 = show face/upper portion of portrait
+      buffer = ditherImage(img, w, h, 0.75, 1.5, 'light', 0.15)
       draw()
     }
 
     const draw = () => {
-      const rect = canvas.getBoundingClientRect()
-      const w = rect.width
-      const h = rect.height
       if (!buffer) return
+      const w = canvas.width
+      const h = canvas.height
 
-      // White background
       ctx.fillStyle = '#ffffff'
       ctx.fillRect(0, 0, w, h)
-      // Draw black stippled portrait
       ctx.drawImage(buffer, 0, 0, w, h)
+
+      // Fade left edge into white so portrait bleeds softly into text area
+      const fadeW = Math.floor(w * 0.35)
+      const grad = ctx.createLinearGradient(0, 0, fadeW, 0)
+      grad.addColorStop(0, 'rgba(255,255,255,1)')
+      grad.addColorStop(0.6, 'rgba(255,255,255,0.4)')
+      grad.addColorStop(1, 'rgba(255,255,255,0)')
+      ctx.fillStyle = grad
+      ctx.fillRect(0, 0, fadeW, h)
+
+      // Fade bottom edge into white
+      const fadeH = Math.floor(h * 0.15)
+      const gradB = ctx.createLinearGradient(0, h - fadeH, 0, h)
+      gradB.addColorStop(0, 'rgba(255,255,255,0)')
+      gradB.addColorStop(1, 'rgba(255,255,255,1)')
+      ctx.fillStyle = gradB
+      ctx.fillRect(0, h - fadeH, w, fadeH)
     }
 
     resize()
@@ -182,23 +190,20 @@ export default function HomepageFilm() {
     let closingBuffer: HTMLCanvasElement | null = null
 
     const resize = () => {
-      const dpr = window.devicePixelRatio || 1
       const rect = canvas.getBoundingClientRect()
-      canvas.width = rect.width * dpr
-      canvas.height = rect.height * dpr
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-
       const w = Math.floor(rect.width)
       const h = Math.floor(rect.height)
-      closingBuffer = ditherImage(img, w, h, 0.08, 1.3, 'dark')
+      canvas.width = w
+      canvas.height = h
+
+      closingBuffer = ditherImage(img, w, h, 0.08, 1.3, 'dark', 0.15)
       draw()
     }
 
     const draw = () => {
-      const rect = canvas.getBoundingClientRect()
-      const w = rect.width
-      const h = rect.height
       if (!closingBuffer) return
+      const w = canvas.width
+      const h = canvas.height
 
       ctx.fillStyle = '#080807'
       ctx.fillRect(0, 0, w, h)
