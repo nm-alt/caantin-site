@@ -206,9 +206,9 @@ export default function Results() {
             <div className="grid md:grid-cols-3 gap-16 md:gap-8">
               {[
                 {
-                  value: 41726,
+                  value: 124000,
                   suffix: '',
-                  label: 'AI conversations conducted.',
+                  label: 'Portfolio collected.',
                 },
                 {
                   value: 19,
@@ -216,12 +216,11 @@ export default function Results() {
                   label: 'Live deployments.',
                 },
                 {
-                  value: 0,
+                  value: 23,
                   suffix: '%',
-                  label: '[Third metric — most compelling available]',
-                  placeholder: true,
+                  label: 'Average recovery lift.',
                 },
-              ].map(({ value, suffix, label, placeholder }, i) => (
+              ].map(({ value, suffix, label }, i) => (
                 <Reveal key={i} delay={i * 0.15}>
                   <div className="text-center md:text-left">
                     <div
@@ -234,17 +233,9 @@ export default function Results() {
                         lineHeight: 1,
                       }}
                     >
-                      {placeholder ? (
-                        <span className="text-stone/30">&mdash;</span>
-                      ) : (
-                        <CountUp target={value} suffix={suffix} />
-                      )}
+                      <CountUp target={value} suffix={suffix} />
                     </div>
-                    <p
-                      className={`type-body text-base ${
-                        placeholder ? 'text-stone/30 italic' : 'text-mid'
-                      }`}
-                    >
+                    <p className="type-body text-base text-mid">
                       {label}
                     </p>
                   </div>

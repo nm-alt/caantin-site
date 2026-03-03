@@ -77,13 +77,13 @@ export default function HomepageFilm() {
   return (
     <div>
       {/* ─── HERO (Basis-style: one headline, one sub, one CTA) ─── */}
-      <section className="bg-white text-stone-black min-h-screen flex items-center" aria-label="Shylock hero">
+      <section className="bg-white text-stone-black min-h-screen flex items-center pt-24 md:pt-28" aria-label="Shylock hero">
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 w-full">
           <div className="grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] gap-12 md:gap-16 items-center">
             <div>
               <h1
-                className="type-headline text-3xl md:text-5xl lg:text-6xl mb-5"
-                style={{ letterSpacing: '-0.03em', lineHeight: 0.95 }}
+                className="type-serif text-stone-black text-3xl md:text-5xl lg:text-6xl mb-6 md:mb-8"
+                style={{ letterSpacing: '-0.02em', lineHeight: 1.12 }}
               >
                 The next era of collections.
               </h1>

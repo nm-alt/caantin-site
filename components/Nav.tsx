@@ -32,7 +32,7 @@ export default function Nav() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between h-16 md:h-20">
           <Link
             href="/"
-            className={`type-headline text-xl md:text-2xl tracking-widest hover:opacity-70 transition-all duration-500 ${
+            className={`type-brand text-lg md:text-xl tracking-normal hover:opacity-70 transition-all duration-500 ${
               scrolled ? 'text-white' : 'text-stone-black'
             }`}
             aria-label="Shylock — home"
@@ -57,6 +57,22 @@ export default function Nav() {
             >
               Results
             </Link>
+            <Link
+              href="/blog"
+              className={`type-body text-sm transition-colors duration-500 tracking-wide ${
+                scrolled ? 'text-silver hover:text-white' : 'text-mid hover:text-stone-black'
+              }`}
+            >
+              Blog
+            </Link>
+            <a
+              href="https://collect.caantin.ai"
+              className={`type-body text-sm transition-colors duration-500 tracking-wide ${
+                scrolled ? 'text-silver hover:text-white' : 'text-mid hover:text-stone-black'
+              }`}
+            >
+              Sign in
+            </a>
             <Link href="/contact" className={`btn-cta text-xs ${scrolled ? 'btn-cta-light' : 'btn-cta-dark'}`}>
               Talk to us →
             </Link>
@@ -98,18 +114,32 @@ export default function Nav() {
         <div className="flex flex-col gap-10">
           <Link
             href="/how-it-works"
-            className="type-headline text-white text-4xl"
+            className="type-headline text-white text-3xl"
             onClick={() => setMenuOpen(false)}
           >
             How it works
           </Link>
           <Link
             href="/results"
-            className="type-headline text-white text-4xl"
+            className="type-headline text-white text-3xl"
             onClick={() => setMenuOpen(false)}
           >
             Results
           </Link>
+          <Link
+            href="/blog"
+            className="type-headline text-white text-3xl"
+            onClick={() => setMenuOpen(false)}
+          >
+            Blog
+          </Link>
+          <a
+            href="https://collect.caantin.ai"
+            className="type-headline text-white text-3xl"
+            onClick={() => setMenuOpen(false)}
+          >
+            Sign in
+          </a>
           <Link
             href="/contact"
             className="btn-cta btn-cta-light self-start mt-4"

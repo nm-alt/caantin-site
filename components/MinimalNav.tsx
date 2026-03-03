@@ -8,7 +8,7 @@ export default function MinimalNav() {
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between h-16 md:h-20">
         <Link
           href="/"
-          className="type-headline text-white text-xl md:text-2xl tracking-widest hover:opacity-70 transition-opacity duration-300"
+          className="type-brand text-white text-lg md:text-xl tracking-normal hover:opacity-70 transition-opacity duration-300"
           aria-label="Shylock — home"
         >
           Shylock

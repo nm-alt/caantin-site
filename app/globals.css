@@ -83,9 +83,18 @@ body {
 }
 
 /* ─── Typography Utilities ───────────────────────────────────────── */
+/* Brand wordmark: restrained, like the man — dignified, not loud */
+.type-brand {
+  font-family: var(--font-condensed), sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  line-height: 1.2;
+}
+
 .type-headline {
   font-family: var(--font-condensed), sans-serif;
-  font-weight: 900;
+  font-weight: 700;
   line-height: 0.92;
   letter-spacing: -0.03em;
   text-transform: uppercase;
@@ -142,6 +151,62 @@ body {
   opacity: 1;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.14'/%3E%3C/svg%3E");
   background-size: 200px 200px;
+}
+
+/* ─── Halftone (dot) effect for footer portrait ──────────────────── */
+/* Screen + threshold → black dots on white; then invert for white dots on dark */
+.halftone-dots {
+  position: relative;
+  filter: brightness(0.85) blur(2px) contrast(999) invert(1);
+}
+
+.halftone-dots::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Blurry black dots → screen with image → then parent invert gives white dots on dark */
+  background-image: radial-gradient(
+    circle at 50% 50%,
+    black 0%,
+    transparent 50%
+  );
+  background-size: 14px 14px;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .halftone-dots::after {
+    /* Slightly larger dots on mobile so the effect stays visible */
+    background-size: 18px 18px;
+  }
+}
+
+/* ─── Footer art piece: finer halftone, print-like ───────────────── */
+.halftone-art {
+  position: relative;
+  filter: brightness(0.88) blur(1.5px) contrast(800) invert(1);
+  background: var(--stone-black);
+}
+
+.halftone-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 50% 50%,
+    black 0%,
+    transparent 45%
+  );
+  background-size: 10px 10px;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .halftone-art::after {
+    background-size: 12px 12px;
+  }
 }
 
 /* ─── Reveal Animations ──────────────────────────────────────────── */

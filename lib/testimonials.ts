@@ -11,18 +11,10 @@ export interface Testimonial {
 export const TESTIMONIALS: Testimonial[] = [
   {
     quote:
-      '"[OxygenX testimonial]"',
-    name: '[Name]',
-    title: '[Title]',
-    company: 'OxygenX',
+      'So far we\'re impressed with the performance.',
+    name: 'Dan',
+    title: 'CEO',
+    company: 'Digital Lender',
     artifact: 'ledger',
-  },
-  {
-    quote:
-      '"Paid before the product was finished."',
-    name: '[Name]',
-    title: 'Digital lender, West Africa',
-    company: 'Backed by Tiger Global',
-    artifact: 'coin',
   },
 ]
