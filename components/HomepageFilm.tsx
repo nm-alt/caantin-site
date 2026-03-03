@@ -35,7 +35,7 @@ export default function HomepageFilm() {
       heroImageRef.current = img
       setHeroImageLoaded(true)
     }
-    img.src = '/irving-shylock.jpg'
+    img.src = '/irving-shylock-hq.jpg'
   }, [])
 
   // ── Floyd-Steinberg dithering ────────────────────────────────────────────
@@ -118,7 +118,9 @@ export default function HomepageFilm() {
     return out
   }, [])
 
-  // ── Hero canvas: stippled portrait on white ──────────────────────────────
+  // ── Hero canvas: cursor-reveal stippled portrait ─────────────────────────
+  // Portrait is invisible by default. Moving cursor reveals dithered dots
+  // through a soft radial spotlight that follows the mouse.
   useEffect(() => {
     const canvas = heroCanvasRef.current
     if (!canvas || !heroImageLoaded || !heroImageRef.current) return
@@ -128,17 +130,21 @@ export default function HomepageFilm() {
 
     const img = heroImageRef.current
     let buffer: HTMLCanvasElement | null = null
+    let mouseX = -9999
+    let mouseY = -9999
+    let smoothX = -9999
+    let smoothY = -9999
+    let isHovering = false
+    let rafId: number
+    const RADIUS = 180 // spotlight radius in CSS px
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect()
-      // Use CSS pixel dimensions directly — 1:1 dithering, no DPR scaling
-      // This keeps dots at exactly 1 CSS pixel (crisp on all displays)
       const w = Math.floor(rect.width)
       const h = Math.floor(rect.height)
       canvas.width = w
       canvas.height = h
 
-      // verticalBias 0.15 = show face/upper portion of portrait
       buffer = ditherImage(img, w, h, 0.75, 1.5, 'light', 0.15)
       draw()
     }
@@ -148,33 +154,73 @@ export default function HomepageFilm() {
       const w = canvas.width
       const h = canvas.height
 
+      // Clear to white
       ctx.fillStyle = '#ffffff'
       ctx.fillRect(0, 0, w, h)
-      ctx.drawImage(buffer, 0, 0, w, h)
 
-      // Fade left edge into white so portrait bleeds softly into text area
-      const fadeW = Math.floor(w * 0.35)
-      const grad = ctx.createLinearGradient(0, 0, fadeW, 0)
-      grad.addColorStop(0, 'rgba(255,255,255,1)')
-      grad.addColorStop(0.6, 'rgba(255,255,255,0.4)')
-      grad.addColorStop(1, 'rgba(255,255,255,0)')
-      ctx.fillStyle = grad
-      ctx.fillRect(0, 0, fadeW, h)
+      if (isHovering && smoothX > -9000) {
+        // Draw dithered portrait clipped to radial spotlight
+        ctx.save()
+        ctx.beginPath()
+        const gradient = ctx.createRadialGradient(smoothX, smoothY, 0, smoothX, smoothY, RADIUS)
+        gradient.addColorStop(0, 'rgba(0,0,0,1)')
+        gradient.addColorStop(0.7, 'rgba(0,0,0,0.6)')
+        gradient.addColorStop(1, 'rgba(0,0,0,0)')
 
-      // Fade bottom edge into white
-      const fadeH = Math.floor(h * 0.15)
-      const gradB = ctx.createLinearGradient(0, h - fadeH, 0, h)
-      gradB.addColorStop(0, 'rgba(255,255,255,0)')
-      gradB.addColorStop(1, 'rgba(255,255,255,1)')
-      ctx.fillStyle = gradB
-      ctx.fillRect(0, h - fadeH, w, fadeH)
+        // Use compositing to create soft-edged reveal
+        ctx.drawImage(buffer, 0, 0, w, h)
+
+        // Mask: white overlay with radial hole cut out
+        ctx.globalCompositeOperation = 'destination-in'
+        ctx.fillStyle = gradient
+        ctx.fillRect(0, 0, w, h)
+
+        ctx.restore()
+      }
+    }
+
+    const loop = () => {
+      // Smooth cursor follow
+      smoothX += (mouseX - smoothX) * 0.1
+      smoothY += (mouseY - smoothY) * 0.1
+      draw()
+      rafId = requestAnimationFrame(loop)
+    }
+
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      mouseX = e.clientX - rect.left
+      mouseY = e.clientY - rect.top
+      if (!isHovering) {
+        smoothX = mouseX
+        smoothY = mouseY
+      }
+      isHovering = true
+    }
+
+    const onMouseLeave = () => {
+      isHovering = false
     }
 
     resize()
+
+    // Listen on the hero section (parent) so cursor works over text too
+    const heroSection = canvas.closest('.scene-hero')
+    if (heroSection) {
+      heroSection.addEventListener('mousemove', onMouseMove as EventListener)
+      heroSection.addEventListener('mouseleave', onMouseLeave as EventListener)
+    }
+
     window.addEventListener('resize', resize)
+    rafId = requestAnimationFrame(loop)
 
     return () => {
       window.removeEventListener('resize', resize)
+      cancelAnimationFrame(rafId)
+      if (heroSection) {
+        heroSection.removeEventListener('mousemove', onMouseMove as EventListener)
+        heroSection.removeEventListener('mouseleave', onMouseLeave as EventListener)
+      }
     }
   }, [heroImageLoaded, ditherImage])
 
@@ -371,49 +417,46 @@ export default function HomepageFilm() {
 
       <div ref={containerRef}>
         {/* ═══════════════════════════════════════════════════════════════════
-            HERO — WHITE BACKGROUND, PORTRAIT RIGHT
-            Stippled Irving portrait on right. Text on left.
+            HERO — CURSOR-REVEAL PORTRAIT
+            White canvas covers full hero. Stippled portrait hidden by default.
+            Moving cursor reveals dithered dots through a soft spotlight.
         ════════════════════════════════════════════════════════════════════ */}
         <section
           className="scene-hero relative min-h-screen bg-white overflow-hidden"
           aria-label="Hero — Shylock"
         >
-          {/* Portrait canvas — right side */}
+          {/* Full-bleed canvas — portrait revealed by cursor */}
           <canvas
             ref={heroCanvasRef}
-            className="absolute top-0 right-0 w-[60%] md:w-[55%] h-full"
+            className="absolute inset-0 w-full h-full"
           />
 
-          {/* Text — left side, vertically centered */}
-          <div className="relative z-10 flex items-end min-h-screen w-full">
+          {/* Text — centered, anchored to bottom */}
+          <div className="relative z-10 flex items-end min-h-screen w-full pointer-events-none">
             <div className="max-w-[1440px] mx-auto px-6 md:px-12 w-full pb-16 md:pb-24">
-              <div className="max-w-xl">
+              <div className="max-w-2xl">
                 <div
-                  className="hero-text mb-8"
+                  className="hero-text mb-10"
                   style={{ opacity: 0 }}
                 >
-                  <p className="type-body text-stone-black text-base md:text-lg lg:text-xl leading-relaxed mb-1">
-                    The world vilified lenders for 500 years.
+                  <p className="type-serif text-stone-black text-2xl md:text-4xl lg:text-5xl leading-tight mb-6" style={{ letterSpacing: '-0.02em' }}>
+                    The world vilified lenders<br />for 500 years.
                   </p>
-                  <p className="type-body text-stone-black text-base md:text-lg lg:text-xl leading-relaxed mb-5">
+                  <p className="type-body text-mid text-sm md:text-base lg:text-lg leading-relaxed">
                     Digital lenders today face the same mischaracterisation.
-                  </p>
-                  <p className="type-body text-stone-black text-base md:text-lg lg:text-xl leading-relaxed">
-                    Introducing <span className="font-medium">Shylock</span> — the world&apos;s most compliant
-                  </p>
-                  <p className="type-body text-stone-black text-base md:text-lg lg:text-xl leading-relaxed">
-                    and effective AI for collections.
+                    <br />
+                    Introducing <span className="text-stone-black font-medium">Shylock</span> — the world&apos;s most compliant and effective AI for collections.
                   </p>
                 </div>
 
-                <div className="hero-cta" style={{ opacity: 0 }}>
+                <div className="hero-cta pointer-events-auto" style={{ opacity: 0 }}>
                   <Link href="/contact" className="btn-cta btn-cta-dark">
                     Talk to us →
                   </Link>
                 </div>
 
-                <div className="hero-compliance mt-8" style={{ opacity: 0 }}>
-                  <p className="type-label text-mid/50 text-xs tracking-widest leading-loose">
+                <div className="hero-compliance mt-10" style={{ opacity: 0 }}>
+                  <p className="type-label text-mid/40 text-[10px] tracking-[0.2em] leading-loose">
                     FCA · CBN · RBI · CFPB · OJK · NCR · CBK · SAMA · CBE · BSP · MAS · BCB
                   </p>
                 </div>
