@@ -27,6 +27,10 @@ export default function HomepageFilm() {
   const [activeTestimonial, setActiveTestimonial] = useState(0)
   const [heroImageLoaded, setHeroImageLoaded] = useState(false)
 
+  // Pre-dithered image buffers (computed once on load/resize)
+  const darkBufferRef = useRef<HTMLCanvasElement | null>(null)
+  const brightBufferRef = useRef<HTMLCanvasElement | null>(null)
+
   // ── Load hero portrait image ─────────────────────────────────────────────
   useEffect(() => {
     const img = new window.Image()
@@ -36,6 +40,87 @@ export default function HomepageFilm() {
       setHeroImageLoaded(true)
     }
     img.src = '/irving-shylock.jpg'
+  }, [])
+
+  // ── Floyd-Steinberg dithering: pure black/white stipple ──────────────────
+  // Returns a canvas with white dots on transparent background
+  const ditherImage = useCallback((
+    img: HTMLImageElement,
+    w: number,
+    h: number,
+    brightness: number,
+    contrast: number
+  ): HTMLCanvasElement => {
+    // Work at reduced resolution for performance + visible dot size
+    const scale = 0.35
+    const tw = Math.floor(w * scale)
+    const th = Math.floor(h * scale)
+
+    // Step 1: Draw image with filters to temp canvas
+    const temp = document.createElement('canvas')
+    temp.width = tw
+    temp.height = th
+    const tCtx = temp.getContext('2d')!
+    tCtx.filter = `grayscale(100%) contrast(${contrast}) brightness(${brightness})`
+
+    // Cover-fit the image
+    const imgAspect = img.width / img.height
+    const canvasAspect = tw / th
+    let dw: number, dh: number, dx: number, dy: number
+    if (imgAspect > canvasAspect) {
+      dh = th; dw = th * imgAspect; dx = (tw - dw) / 2; dy = 0
+    } else {
+      dw = tw; dh = tw / imgAspect; dx = 0; dy = (th - dh) / 2
+    }
+    tCtx.drawImage(img, dx, dy, dw, dh)
+
+    // Step 2: Get pixel data and apply Floyd-Steinberg dithering
+    const imageData = tCtx.getImageData(0, 0, tw, th)
+    const d = imageData.data
+
+    for (let y = 0; y < th; y++) {
+      for (let x = 0; x < tw; x++) {
+        const i = (y * tw + x) * 4
+        const oldVal = d[i]
+        const newVal = oldVal > 127 ? 255 : 0
+        const err = oldVal - newVal
+
+        d[i] = d[i + 1] = d[i + 2] = newVal
+        d[i + 3] = newVal === 255 ? 255 : 0 // white dots on transparent
+
+        // Distribute error to neighbors
+        if (x + 1 < tw) {
+          const ni = i + 4
+          d[ni] = Math.max(0, Math.min(255, d[ni] + err * 7 / 16))
+        }
+        if (y + 1 < th) {
+          if (x > 0) {
+            const ni = ((y + 1) * tw + (x - 1)) * 4
+            d[ni] = Math.max(0, Math.min(255, d[ni] + err * 3 / 16))
+          }
+          {
+            const ni = ((y + 1) * tw + x) * 4
+            d[ni] = Math.max(0, Math.min(255, d[ni] + err * 5 / 16))
+          }
+          if (x + 1 < tw) {
+            const ni = ((y + 1) * tw + (x + 1)) * 4
+            d[ni] = Math.max(0, Math.min(255, d[ni] + err * 1 / 16))
+          }
+        }
+      }
+    }
+
+    tCtx.putImageData(imageData, 0, 0)
+
+    // Step 3: Scale up to output canvas (nearest-neighbor for crisp dots)
+    const out = document.createElement('canvas')
+    out.width = w
+    out.height = h
+    const oCtx = out.getContext('2d')!
+    oCtx.imageSmoothingEnabled = false
+    oCtx.drawImage(temp, 0, 0, tw, th, 0, 0, w, h)
+
+    return out
   }, [])
 
   // ── Hero canvas: cursor-reveal interaction ───────────────────────────────
@@ -52,90 +137,71 @@ export default function HomepageFilm() {
     let mouseY = -9999
     let isMouseInside = false
 
-    // Mask canvas for the reveal effect
-    const maskCanvas = document.createElement('canvas')
-    const maskCtx = maskCanvas.getContext('2d')!
+    // Compositing canvas for masked reveal
+    const compCanvas = document.createElement('canvas')
+    const compCtx = compCanvas.getContext('2d')!
+
+    const buildBuffers = () => {
+      const rect = canvas.getBoundingClientRect()
+      const w = Math.floor(rect.width)
+      const h = Math.floor(rect.height)
+
+      // Dark version: very few white dots (low brightness)
+      darkBufferRef.current = ditherImage(img, w, h, 0.12, 1.4)
+      // Bright version: many white dots (visible portrait)
+      brightBufferRef.current = ditherImage(img, w, h, 0.7, 1.5)
+    }
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1
       const rect = canvas.getBoundingClientRect()
       canvas.width = rect.width * dpr
       canvas.height = rect.height * dpr
-      maskCanvas.width = canvas.width
-      maskCanvas.height = canvas.height
+      compCanvas.width = canvas.width
+      compCanvas.height = canvas.height
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      maskCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
-    }
-
-    const drawCover = (
-      target: CanvasRenderingContext2D,
-      w: number,
-      h: number
-    ) => {
-      const imgAspect = img.width / img.height
-      const canvasAspect = w / h
-      let dw: number, dh: number, dx: number, dy: number
-
-      if (imgAspect > canvasAspect) {
-        dh = h
-        dw = h * imgAspect
-        dx = (w - dw) / 2
-        dy = 0
-      } else {
-        dw = w
-        dh = w / imgAspect
-        dx = 0
-        dy = (h - dh) / 2
-      }
-
-      target.drawImage(img, dx, dy, dw, dh)
+      compCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      buildBuffers()
     }
 
     const draw = () => {
       const rect = canvas.getBoundingClientRect()
       const w = rect.width
       const h = rect.height
+      const dark = darkBufferRef.current
+      const bright = brightBufferRef.current
+      if (!dark || !bright) return
 
-      ctx.clearRect(0, 0, w, h)
+      // Fill with black
+      ctx.fillStyle = '#080807'
+      ctx.fillRect(0, 0, w, h)
 
-      // Draw portrait very dark (barely visible base layer)
-      ctx.save()
-      ctx.filter = 'grayscale(100%) contrast(1.3) brightness(0.08)'
-      drawCover(ctx, w, h)
-      ctx.restore()
+      // Draw dark stippled base
+      ctx.drawImage(dark, 0, 0, w, h)
 
-      // If cursor is inside, draw a brighter version clipped to a radial mask
+      // If cursor is inside, composite bright version through radial mask
       if (isMouseInside) {
-        // Create the mask
-        maskCtx.clearRect(0, 0, w, h)
-        const gradient = maskCtx.createRadialGradient(
+        compCtx.clearRect(0, 0, w, h)
+
+        // Draw bright dithered portrait
+        compCtx.drawImage(bright, 0, 0, w, h)
+
+        // Mask it with radial gradient (keeps only the cursor area)
+        compCtx.globalCompositeOperation = 'destination-in'
+        const gradient = compCtx.createRadialGradient(
           mouseX, mouseY, 0,
-          mouseX, mouseY, 180
+          mouseX, mouseY, 200
         )
-        gradient.addColorStop(0, 'rgba(255,255,255,0.85)')
-        gradient.addColorStop(0.4, 'rgba(255,255,255,0.4)')
-        gradient.addColorStop(0.7, 'rgba(255,255,255,0.1)')
+        gradient.addColorStop(0, 'rgba(255,255,255,1)')
+        gradient.addColorStop(0.5, 'rgba(255,255,255,0.6)')
+        gradient.addColorStop(0.8, 'rgba(255,255,255,0.15)')
         gradient.addColorStop(1, 'rgba(255,255,255,0)')
-        maskCtx.fillStyle = gradient
-        maskCtx.fillRect(0, 0, w, h)
+        compCtx.fillStyle = gradient
+        compCtx.fillRect(0, 0, w, h)
+        compCtx.globalCompositeOperation = 'source-over'
 
-        // Draw brighter portrait
-        ctx.save()
-        ctx.globalCompositeOperation = 'lighter'
-        ctx.filter = 'grayscale(100%) contrast(1.4) brightness(0.45)'
-        drawCover(ctx, w, h)
-
-        // Apply the mask
-        ctx.globalCompositeOperation = 'destination-in'
-        ctx.drawImage(maskCanvas, 0, 0, w, h)
-        ctx.restore()
-
-        // Re-draw the dark base underneath
-        ctx.save()
-        ctx.globalCompositeOperation = 'destination-over'
-        ctx.filter = 'grayscale(100%) contrast(1.3) brightness(0.08)'
-        drawCover(ctx, w, h)
-        ctx.restore()
+        // Draw masked bright version on top of main canvas
+        ctx.drawImage(compCanvas, 0, 0, w, h)
       }
     }
 
@@ -168,9 +234,9 @@ export default function HomepageFilm() {
       canvas.removeEventListener('mouseleave', onMouseLeave)
       window.removeEventListener('resize', resize)
     }
-  }, [heroImageLoaded])
+  }, [heroImageLoaded, ditherImage])
 
-  // ── Closing canvas: same portrait, barely visible ────────────────────────
+  // ── Closing canvas: same portrait, barely visible stipple ────────────────
   useEffect(() => {
     const canvas = closingCanvasRef.current
     if (!canvas || !heroImageLoaded || !heroImageRef.current) return
@@ -179,6 +245,7 @@ export default function HomepageFilm() {
     if (!ctx) return
 
     const img = heroImageRef.current
+    let closingBuffer: HTMLCanvasElement | null = null
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1
@@ -186,6 +253,10 @@ export default function HomepageFilm() {
       canvas.width = rect.width * dpr
       canvas.height = rect.height * dpr
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
+      const w = Math.floor(rect.width)
+      const h = Math.floor(rect.height)
+      closingBuffer = ditherImage(img, w, h, 0.08, 1.3)
       draw()
     }
 
@@ -193,35 +264,17 @@ export default function HomepageFilm() {
       const rect = canvas.getBoundingClientRect()
       const w = rect.width
       const h = rect.height
+      if (!closingBuffer) return
 
-      ctx.clearRect(0, 0, w, h)
-
-      const imgAspect = img.width / img.height
-      const canvasAspect = w / h
-      let dw: number, dh: number, dx: number, dy: number
-
-      if (imgAspect > canvasAspect) {
-        dh = h
-        dw = h * imgAspect
-        dx = (w - dw) / 2
-        dy = 0
-      } else {
-        dw = w
-        dh = w / imgAspect
-        dx = 0
-        dy = (h - dh) / 2
-      }
-
-      ctx.save()
-      ctx.filter = 'grayscale(100%) contrast(1.3) brightness(0.06)'
-      ctx.drawImage(img, dx, dy, dw, dh)
-      ctx.restore()
+      ctx.fillStyle = '#080807'
+      ctx.fillRect(0, 0, w, h)
+      ctx.drawImage(closingBuffer, 0, 0, w, h)
     }
 
     resize()
     window.addEventListener('resize', resize)
     return () => window.removeEventListener('resize', resize)
-  }, [heroImageLoaded])
+  }, [heroImageLoaded, ditherImage])
 
   // ── Custom cursor ──────────────────────────────────────────────────────────
   useEffect(() => {
