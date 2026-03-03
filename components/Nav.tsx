@@ -32,7 +32,9 @@ export default function Nav() {
         <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between h-16 md:h-20">
           <Link
             href="/"
-            className="type-headline text-white text-xl md:text-2xl tracking-widest hover:opacity-70 transition-opacity duration-300"
+            className={`type-headline text-xl md:text-2xl tracking-widest hover:opacity-70 transition-all duration-500 ${
+              scrolled ? 'text-white' : 'text-stone-black'
+            }`}
             aria-label="Shylock — home"
           >
             Shylock
@@ -41,17 +43,21 @@ export default function Nav() {
           <div className="hidden md:flex items-center gap-10">
             <Link
               href="/how-it-works"
-              className="type-body text-sm text-silver hover:text-white transition-colors duration-300 tracking-wide"
+              className={`type-body text-sm transition-colors duration-500 tracking-wide ${
+                scrolled ? 'text-silver hover:text-white' : 'text-mid hover:text-stone-black'
+              }`}
             >
               How it works
             </Link>
             <Link
               href="/results"
-              className="type-body text-sm text-silver hover:text-white transition-colors duration-300 tracking-wide"
+              className={`type-body text-sm transition-colors duration-500 tracking-wide ${
+                scrolled ? 'text-silver hover:text-white' : 'text-mid hover:text-stone-black'
+              }`}
             >
               Results
             </Link>
-            <Link href="/contact" className="btn-cta btn-cta-light text-xs">
+            <Link href="/contact" className={`btn-cta text-xs ${scrolled ? 'btn-cta-light' : 'btn-cta-dark'}`}>
               Talk to us →
             </Link>
           </div>
@@ -63,18 +69,18 @@ export default function Nav() {
             aria-expanded={menuOpen}
           >
             <span
-              className={`block w-6 h-px bg-white transition-all duration-300 origin-center ${
-                menuOpen ? 'rotate-45 translate-y-[6px]' : ''
+              className={`block w-6 h-px transition-all duration-300 origin-center ${
+                menuOpen ? 'bg-white rotate-45 translate-y-[6px]' : scrolled ? 'bg-white' : 'bg-stone-black'
               }`}
             />
             <span
-              className={`block w-6 h-px bg-white transition-all duration-300 ${
-                menuOpen ? 'opacity-0' : ''
+              className={`block w-6 h-px transition-all duration-300 ${
+                menuOpen ? 'bg-white opacity-0' : scrolled ? 'bg-white' : 'bg-stone-black'
               }`}
             />
             <span
-              className={`block w-6 h-px bg-white transition-all duration-300 origin-center ${
-                menuOpen ? '-rotate-45 -translate-y-[6px]' : ''
+              className={`block w-6 h-px transition-all duration-300 origin-center ${
+                menuOpen ? 'bg-white -rotate-45 -translate-y-[6px]' : scrolled ? 'bg-white' : 'bg-stone-black'
               }`}
             />
           </button>

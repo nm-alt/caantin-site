@@ -27,10 +27,6 @@ export default function HomepageFilm() {
   const [activeTestimonial, setActiveTestimonial] = useState(0)
   const [heroImageLoaded, setHeroImageLoaded] = useState(false)
 
-  // Pre-dithered image buffers (computed once on load/resize)
-  const darkBufferRef = useRef<HTMLCanvasElement | null>(null)
-  const brightBufferRef = useRef<HTMLCanvasElement | null>(null)
-
   // ── Load hero portrait image ─────────────────────────────────────────────
   useEffect(() => {
     const img = new window.Image()
@@ -42,21 +38,21 @@ export default function HomepageFilm() {
     img.src = '/irving-shylock.jpg'
   }, [])
 
-  // ── Floyd-Steinberg dithering: pure black/white stipple ──────────────────
-  // Returns a canvas with white dots on transparent background
+  // ── Floyd-Steinberg dithering ────────────────────────────────────────────
+  // mode 'dark' = white dots on transparent (for dark bg)
+  // mode 'light' = black dots on transparent (for white bg)
   const ditherImage = useCallback((
     img: HTMLImageElement,
     w: number,
     h: number,
     brightness: number,
-    contrast: number
+    contrast: number,
+    mode: 'dark' | 'light' = 'dark'
   ): HTMLCanvasElement => {
-    // Work at reduced resolution for performance + visible dot size
-    const scale = 0.35
+    const scale = 0.3
     const tw = Math.floor(w * scale)
     const th = Math.floor(h * scale)
 
-    // Step 1: Draw image with filters to temp canvas
     const temp = document.createElement('canvas')
     temp.width = tw
     temp.height = th
@@ -74,7 +70,6 @@ export default function HomepageFilm() {
     }
     tCtx.drawImage(img, dx, dy, dw, dh)
 
-    // Step 2: Get pixel data and apply Floyd-Steinberg dithering
     const imageData = tCtx.getImageData(0, 0, tw, th)
     const d = imageData.data
 
@@ -85,8 +80,15 @@ export default function HomepageFilm() {
         const newVal = oldVal > 127 ? 255 : 0
         const err = oldVal - newVal
 
-        d[i] = d[i + 1] = d[i + 2] = newVal
-        d[i + 3] = newVal === 255 ? 255 : 0 // white dots on transparent
+        if (mode === 'dark') {
+          // White dots on transparent
+          d[i] = d[i + 1] = d[i + 2] = 255
+          d[i + 3] = newVal === 255 ? 255 : 0
+        } else {
+          // Black dots on transparent
+          d[i] = d[i + 1] = d[i + 2] = 0
+          d[i + 3] = newVal === 0 ? 255 : 0
+        }
 
         // Distribute error to neighbors
         if (x + 1 < tw) {
@@ -112,7 +114,6 @@ export default function HomepageFilm() {
 
     tCtx.putImageData(imageData, 0, 0)
 
-    // Step 3: Scale up to output canvas (nearest-neighbor for crisp dots)
     const out = document.createElement('canvas')
     out.width = w
     out.height = h
@@ -123,7 +124,7 @@ export default function HomepageFilm() {
     return out
   }, [])
 
-  // ── Hero canvas: cursor-reveal interaction ───────────────────────────────
+  // ── Hero canvas: stippled portrait on white ──────────────────────────────
   useEffect(() => {
     const canvas = heroCanvasRef.current
     if (!canvas || !heroImageLoaded || !heroImageRef.current) return
@@ -132,111 +133,44 @@ export default function HomepageFilm() {
     if (!ctx) return
 
     const img = heroImageRef.current
-    let animId: number
-    let mouseX = -9999
-    let mouseY = -9999
-    let isMouseInside = false
-
-    // Compositing canvas for masked reveal
-    const compCanvas = document.createElement('canvas')
-    const compCtx = compCanvas.getContext('2d')!
-
-    const buildBuffers = () => {
-      const rect = canvas.getBoundingClientRect()
-      const w = Math.floor(rect.width)
-      const h = Math.floor(rect.height)
-
-      // Dark version: very few white dots (low brightness)
-      darkBufferRef.current = ditherImage(img, w, h, 0.12, 1.4)
-      // Bright version: many white dots (visible portrait)
-      brightBufferRef.current = ditherImage(img, w, h, 0.7, 1.5)
-    }
+    let buffer: HTMLCanvasElement | null = null
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1
       const rect = canvas.getBoundingClientRect()
       canvas.width = rect.width * dpr
       canvas.height = rect.height * dpr
-      compCanvas.width = canvas.width
-      compCanvas.height = canvas.height
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      compCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      buildBuffers()
+
+      const w = Math.floor(rect.width)
+      const h = Math.floor(rect.height)
+      // Black dots on white background
+      buffer = ditherImage(img, w, h, 0.65, 1.5, 'light')
+      draw()
     }
 
     const draw = () => {
       const rect = canvas.getBoundingClientRect()
       const w = rect.width
       const h = rect.height
-      const dark = darkBufferRef.current
-      const bright = brightBufferRef.current
-      if (!dark || !bright) return
+      if (!buffer) return
 
-      // Fill with black
-      ctx.fillStyle = '#080807'
+      // White background
+      ctx.fillStyle = '#ffffff'
       ctx.fillRect(0, 0, w, h)
-
-      // Draw dark stippled base
-      ctx.drawImage(dark, 0, 0, w, h)
-
-      // If cursor is inside, composite bright version through radial mask
-      if (isMouseInside) {
-        compCtx.clearRect(0, 0, w, h)
-
-        // Draw bright dithered portrait
-        compCtx.drawImage(bright, 0, 0, w, h)
-
-        // Mask it with radial gradient (keeps only the cursor area)
-        compCtx.globalCompositeOperation = 'destination-in'
-        const gradient = compCtx.createRadialGradient(
-          mouseX, mouseY, 0,
-          mouseX, mouseY, 200
-        )
-        gradient.addColorStop(0, 'rgba(255,255,255,1)')
-        gradient.addColorStop(0.5, 'rgba(255,255,255,0.6)')
-        gradient.addColorStop(0.8, 'rgba(255,255,255,0.15)')
-        gradient.addColorStop(1, 'rgba(255,255,255,0)')
-        compCtx.fillStyle = gradient
-        compCtx.fillRect(0, 0, w, h)
-        compCtx.globalCompositeOperation = 'source-over'
-
-        // Draw masked bright version on top of main canvas
-        ctx.drawImage(compCanvas, 0, 0, w, h)
-      }
-    }
-
-    const onMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      mouseX = e.clientX - rect.left
-      mouseY = e.clientY - rect.top
-      isMouseInside = true
-    }
-
-    const onMouseLeave = () => {
-      isMouseInside = false
-    }
-
-    const loop = () => {
-      draw()
-      animId = requestAnimationFrame(loop)
+      // Draw black stippled portrait
+      ctx.drawImage(buffer, 0, 0, w, h)
     }
 
     resize()
-    animId = requestAnimationFrame(loop)
-
-    canvas.addEventListener('mousemove', onMouseMove)
-    canvas.addEventListener('mouseleave', onMouseLeave)
     window.addEventListener('resize', resize)
 
     return () => {
-      cancelAnimationFrame(animId)
-      canvas.removeEventListener('mousemove', onMouseMove)
-      canvas.removeEventListener('mouseleave', onMouseLeave)
       window.removeEventListener('resize', resize)
     }
   }, [heroImageLoaded, ditherImage])
 
-  // ── Closing canvas: same portrait, barely visible stipple ────────────────
+  // ── Closing canvas: white dots on dark, barely visible ───────────────────
   useEffect(() => {
     const canvas = closingCanvasRef.current
     if (!canvas || !heroImageLoaded || !heroImageRef.current) return
@@ -256,7 +190,7 @@ export default function HomepageFilm() {
 
       const w = Math.floor(rect.width)
       const h = Math.floor(rect.height)
-      closingBuffer = ditherImage(img, w, h, 0.08, 1.3)
+      closingBuffer = ditherImage(img, w, h, 0.08, 1.3, 'dark')
       draw()
     }
 
@@ -327,7 +261,7 @@ export default function HomepageFilm() {
           gsap.fromTo(
             heroText,
             { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 1.8, ease: 'power2.out', delay: 0.8 }
+            { opacity: 1, y: 0, duration: 1.8, ease: 'power2.out', delay: 0.6 }
           )
         }
 
@@ -336,7 +270,7 @@ export default function HomepageFilm() {
           gsap.fromTo(
             heroCta,
             { opacity: 0, y: 14 },
-            { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out', delay: 2.0 }
+            { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out', delay: 1.6 }
           )
         }
 
@@ -345,7 +279,7 @@ export default function HomepageFilm() {
           gsap.fromTo(
             heroCompliance,
             { opacity: 0 },
-            { opacity: 1, duration: 1.0, ease: 'power2.out', delay: 2.6 }
+            { opacity: 1, duration: 1.0, ease: 'power2.out', delay: 2.2 }
           )
         }
 
@@ -432,68 +366,54 @@ export default function HomepageFilm() {
 
       <div ref={containerRef}>
         {/* ═══════════════════════════════════════════════════════════════════
-            HERO — THE PORTRAIT
-            Full viewport. Near black. Irving as Shylock.
-            Cursor reveals the portrait. Darkness returns when cursor leaves.
+            HERO — WHITE BACKGROUND, PORTRAIT RIGHT
+            Stippled Irving portrait on right. Text on left.
         ════════════════════════════════════════════════════════════════════ */}
         <section
-          className="scene-hero grain relative min-h-screen flex items-center justify-center overflow-hidden bg-stone-black"
+          className="scene-hero relative min-h-screen bg-white overflow-hidden"
           aria-label="Hero — Shylock"
         >
-          {/* Portrait canvas — full viewport */}
+          {/* Portrait canvas — right side */}
           <canvas
             ref={heroCanvasRef}
-            className="absolute inset-0 w-full h-full"
-            style={{ zIndex: 1 }}
+            className="absolute top-0 right-0 w-[60%] md:w-[55%] h-full"
           />
 
-          {/* Vignette */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 30%, rgba(8,8,7,0.6) 100%)',
-              zIndex: 2,
-            }}
-          />
+          {/* Text — left side, vertically centered */}
+          <div className="relative z-10 flex items-end min-h-screen w-full">
+            <div className="max-w-[1440px] mx-auto px-6 md:px-12 w-full pb-16 md:pb-24">
+              <div className="max-w-xl">
+                <div
+                  className="hero-text mb-8"
+                  style={{ opacity: 0 }}
+                >
+                  <p className="type-body text-stone-black text-base md:text-lg lg:text-xl leading-relaxed mb-1">
+                    The world vilified lenders for 500 years.
+                  </p>
+                  <p className="type-body text-stone-black text-base md:text-lg lg:text-xl leading-relaxed mb-5">
+                    Digital lenders today face the same mischaracterisation.
+                  </p>
+                  <p className="type-body text-stone-black text-base md:text-lg lg:text-xl leading-relaxed">
+                    Introducing <span className="font-medium">Shylock</span> — the world&apos;s most compliant
+                  </p>
+                  <p className="type-body text-stone-black text-base md:text-lg lg:text-xl leading-relaxed">
+                    and effective AI for collections.
+                  </p>
+                </div>
 
-          {/* Hero text */}
-          <div className="relative text-center px-6 max-w-3xl mx-auto" style={{ zIndex: 3 }}>
-            <div
-              className="hero-text mb-10"
-              style={{ opacity: 0 }}
-            >
-              <p className="type-body text-white text-lg md:text-xl lg:text-2xl leading-relaxed mb-2">
-                The world vilified lenders for 500 years.
-              </p>
-              <p className="type-body text-white text-lg md:text-xl lg:text-2xl leading-relaxed mb-6">
-                Digital lenders today face the same mischaracterisation.
-              </p>
-              <p className="type-body text-white text-lg md:text-xl lg:text-2xl leading-relaxed">
-                Introducing <span className="font-medium">Shylock</span> — the world&apos;s most compliant
-              </p>
-              <p className="type-body text-white text-lg md:text-xl lg:text-2xl leading-relaxed">
-                and effective AI for collections.
-              </p>
+                <div className="hero-cta" style={{ opacity: 0 }}>
+                  <Link href="/contact" className="btn-cta btn-cta-dark">
+                    Talk to us →
+                  </Link>
+                </div>
+
+                <div className="hero-compliance mt-8" style={{ opacity: 0 }}>
+                  <p className="type-label text-mid/50 text-xs tracking-widest leading-loose">
+                    FCA · CBN · RBI · CFPB · OJK · NCR · CBK · SAMA · CBE · BSP · MAS · BCB
+                  </p>
+                </div>
+              </div>
             </div>
-
-            <div className="hero-cta" style={{ opacity: 0 }}>
-              <Link href="/contact" className="btn-cta btn-cta-light">
-                Talk to us →
-              </Link>
-            </div>
-
-            {/* Compliance bar */}
-            <div className="hero-compliance mt-12" style={{ opacity: 0 }}>
-              <p className="type-label text-white/30 text-xs tracking-widest leading-loose">
-                FCA · CBN · RBI · CFPB · OJK · NCR · CBK · SAMA · CBE · BSP · MAS · BCB
-              </p>
-            </div>
-          </div>
-
-          {/* Scroll cue */}
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-20" style={{ zIndex: 3 }}>
-            <div className="w-px h-10 bg-white/50 animate-pulse" />
           </div>
         </section>
 
@@ -506,7 +426,6 @@ export default function HomepageFilm() {
           style={{ backgroundColor: '#080807' }}
           aria-label="Let him look to his bond"
         >
-          {/* Courtroom image — full bleed, heavily darkened */}
           <div className="absolute inset-0">
             <Image
               src="/courtroom.jpg"
@@ -520,7 +439,6 @@ export default function HomepageFilm() {
             />
           </div>
 
-          {/* Heavy vignette */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
@@ -558,7 +476,6 @@ export default function HomepageFilm() {
               </h2>
             </div>
 
-            {/* Video placeholder */}
             <div className="relative w-full aspect-video bg-ancient overflow-hidden">
               <video
                 className="absolute inset-0 w-full h-full object-cover"
@@ -570,7 +487,6 @@ export default function HomepageFilm() {
                 preload="metadata"
               />
 
-              {/* Corner marks */}
               {(['top-3 left-3', 'top-3 right-3', 'bottom-3 left-3', 'bottom-3 right-3'] as const).map((pos, i) => (
                 <div
                   key={i}
@@ -592,7 +508,6 @@ export default function HomepageFilm() {
           aria-label="What Shylock does"
         >
           <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-            {/* Headline */}
             <h2
               className="fade-up type-headline text-stone-black mb-20 md:mb-28"
               style={{
@@ -604,7 +519,6 @@ export default function HomepageFilm() {
               One agent.<br />Every account.
             </h2>
 
-            {/* Timeline */}
             <div className="relative max-w-2xl">
               <div className="absolute top-0 bottom-0 left-0 w-px bg-stone/15" />
 
@@ -642,7 +556,6 @@ export default function HomepageFilm() {
                   </div>
                 ))}
 
-                {/* Terminal node */}
                 <div
                   className="relative fade-up flex items-center gap-5"
                   data-delay="0.6"
