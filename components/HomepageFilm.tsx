@@ -190,7 +190,7 @@ export default function HomepageFilm() {
           <div className="relative w-full aspect-video bg-black overflow-hidden rounded-sm">
             <video
               className="absolute inset-0 w-full h-full object-cover"
-              src="/demo.mp4"
+              src={process.env.NEXT_PUBLIC_HERO_VIDEO_URL || '/demo.mp4'}
               autoPlay
               muted
               loop
