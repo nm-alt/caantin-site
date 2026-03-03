@@ -439,13 +439,20 @@ export default function HomepageFilm() {
                   className="hero-text mb-10"
                   style={{ opacity: 0 }}
                 >
-                  <p className="type-serif text-stone-black text-2xl md:text-4xl lg:text-5xl leading-tight mb-6" style={{ letterSpacing: '-0.02em' }}>
-                    The world vilified lenders<br />for 500 years.
+                  <p
+                    className="type-serif text-stone-black text-2xl md:text-4xl lg:text-5xl leading-tight mb-6"
+                    style={{ letterSpacing: '-0.02em' }}
+                  >
+                    The world vilified lenders
+                    <br />
+                    for 500 years.
                   </p>
                   <p className="type-body text-mid text-sm md:text-base lg:text-lg leading-relaxed">
                     Digital lenders today face the same mischaracterisation.
                     <br />
-                    Introducing <span className="text-stone-black font-medium">Shylock</span> — the world&apos;s most compliant and effective AI for collections.
+                    Introducing <span className="text-stone-black font-medium">Shylock</span> — the next era of collections.
+                    <br />
+                    AI agents built specifically for the world&apos;s most compliant collections teams.
                   </p>
                 </div>
 
@@ -533,6 +540,7 @@ export default function HomepageFilm() {
                 loop
                 playsInline
                 preload="metadata"
+                style={{ filter: 'grayscale(100%) contrast(1.05)' }}
               />
 
               {(['top-3 left-3', 'top-3 right-3', 'bottom-3 left-3', 'bottom-3 right-3'] as const).map((pos, i) => (
