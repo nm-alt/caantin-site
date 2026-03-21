@@ -20,16 +20,20 @@ export default function ContactForm() {
     if (!form.name || !form.company || !form.bookSize) return
     setSubmitting(true)
 
-    // TODO: Replace with your form endpoint
-    // Options: Resend, Formspree, custom API route
-    // Example with Formspree: await fetch('https://formspree.io/f/YOUR_ID', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ name: form.name, company: form.company, bookSize: form.bookSize }),
-    // })
-
-    // Simulate network delay until endpoint is wired in
-    await new Promise((r) => setTimeout(r, 700))
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) {
+        setSubmitting(false)
+        return
+      }
+    } catch {
+      setSubmitting(false)
+      return
+    }
 
     // LinkedIn conversion event — fires when confirmation appears
     if (typeof window !== 'undefined' && typeof window.lintrk === 'function') {
