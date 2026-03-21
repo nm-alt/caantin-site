@@ -38,28 +38,46 @@ const spaceMono = Space_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://shylock.ai'),
-  title: 'Shylock · The Most Compliant AI for Collections',
+  title: 'Shylock · AI-Powered Debt Collection for Africa',
   description:
-    'The world vilified lenders for 500 years. Introducing Shylock — the world\'s most compliant and effective AI for collections.',
+    'AI voice agents that call borrowers in Pidgin, Swahili, Yoruba, French, English & Zulu — negotiate payment plans, and recover overdue loans automatically. Used by banks, fintechs, and MFIs across Africa.',
+  keywords: [
+    'AI debt collection',
+    'automated debt recovery',
+    'voice AI collections',
+    'AI collections software Africa',
+    'loan recovery automation',
+    'multilingual debt collection',
+    'AI call center collections',
+    'NPL management AI',
+    'fintech collections',
+    'microfinance collections',
+    'debt collection Nigeria',
+    'debt collection Kenya',
+    'Shylock AI',
+  ],
   openGraph: {
-    title: 'Shylock · The Most Compliant AI for Collections',
+    title: 'Shylock · AI-Powered Debt Collection for Africa',
     description:
-      'The world vilified lenders for 500 years. Introducing Shylock — the world\'s most compliant and effective AI for collections.',
+      'AI voice agents that call borrowers in their language, negotiate payment plans, and recover overdue loans. No headcount. No call centre. Pay only when we collect.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Shylock — The Most Compliant AI for Collections',
+        alt: 'Shylock — AI-Powered Debt Collection',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Shylock · The Most Compliant AI for Collections',
+    title: 'Shylock · AI-Powered Debt Collection for Africa',
     description:
-      'The world vilified lenders for 500 years. Introducing Shylock — the world\'s most compliant and effective AI for collections.',
+      'AI voice agents that call borrowers in their language, negotiate payment plans, and recover overdue loans. Used by banks, fintechs, and MFIs across Africa.',
+  },
+  alternates: {
+    canonical: 'https://shylock.ai',
   },
 }
 
@@ -74,6 +92,60 @@ export default function RootLayout({
       className={`${barlow.variable} ${barlowCondensed.variable} ${playfair.variable} ${spaceMono.variable}`}
     >
       <body className="bg-stone-black text-near-white antialiased overflow-x-hidden">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': 'Organization',
+                  '@id': 'https://shylock.ai/#organization',
+                  name: 'Shylock',
+                  url: 'https://shylock.ai',
+                  description:
+                    'AI-powered debt collections platform for banks, fintechs, and microfinance institutions in Africa.',
+                  email: 'hello@shylock.ai',
+                  areaServed: {
+                    '@type': 'Place',
+                    name: 'Africa',
+                  },
+                  knowsLanguage: ['en', 'sw', 'yo', 'fr', 'pcm', 'zu'],
+                },
+                {
+                  '@type': 'SoftwareApplication',
+                  '@id': 'https://shylock.ai/#product',
+                  name: 'Shylock',
+                  applicationCategory: 'FinanceApplication',
+                  operatingSystem: 'Web',
+                  url: 'https://app.shylock.ai',
+                  description:
+                    'AI voice agents that call borrowers in their language, negotiate payment plans, and recover overdue loans automatically. Supports Pidgin, Swahili, Yoruba, French, English, and Zulu.',
+                  offers: {
+                    '@type': 'Offer',
+                    description: 'Contingency pricing — no recovery, no fee',
+                  },
+                  featureList: [
+                    'Multi-language voice AI (8 languages)',
+                    'Automated call campaigns',
+                    'Real-time transcripts',
+                    'Payment tracking',
+                    'SMS, email, and voice outreach',
+                    'Full audit trail for compliance',
+                  ],
+                  provider: { '@id': 'https://shylock.ai/#organization' },
+                },
+                {
+                  '@type': 'WebSite',
+                  '@id': 'https://shylock.ai/#website',
+                  url: 'https://shylock.ai',
+                  name: 'Shylock',
+                  publisher: { '@id': 'https://shylock.ai/#organization' },
+                },
+              ],
+            }),
+          }}
+        />
         {children}
 
         {/* LinkedIn Insight Tag — fires on every page */}

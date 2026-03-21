@@ -1,0 +1,47 @@
+# Shylock
+
+> AI-powered debt collections platform for banks, fintechs, and microfinance institutions in Africa.
+
+Shylock automates loan recovery using voice AI agents that call borrowers in their language — Pidgin, Swahili, Yoruba, French, English, and Zulu — negotiate payment plans, and report results in real time. Every call is recorded, transcribed, and fully auditable.
+
+## Product
+
+- Upload a CSV of borrowers. Calls begin in 60 seconds.
+- AI agents call borrowers via voice, SMS, and email.
+- Agents negotiate repayment plans and capture promises to pay.
+- Real-time dashboard with transcripts, payment tracking, and audit trail.
+- 8 languages supported. 17 voice presets.
+- Contingency pricing: no recovery, no fee.
+
+## Use Cases
+
+### Fintech Collections
+Digital lenders use Shylock to recover overdue loans at scale. Upload your delinquent book and AI agents call every borrower — no headcount, no call centre.
+
+### Microfinance Collections
+MFIs use Shylock to scale collections without scaling cost. AI handles thousands of calls per day in the borrower's language while field agents focus on relationships.
+
+### Banking NPL Management
+Banks use Shylock to manage non-performing loans compliantly. Every call is recorded, transcribed, and logged with a full audit trail for regulators.
+
+## How It Works
+
+1. Upload your portfolio — names, phone numbers, amounts. Any size. Takes 60 seconds.
+2. AI agents call borrowers in their language. They negotiate payment plans, handle objections, and capture commitments.
+3. Track promises to pay, completed payments, and full transcripts. Real-time dashboard. Full audit trail.
+
+## Company
+
+- Website: https://shylock.ai
+- App: https://app.shylock.ai
+- Contact: hello@shylock.ai
+- Contact page: https://shylock.ai/contact
+
+## Links
+
+- How It Works: https://shylock.ai/how-it-works
+- Results: https://shylock.ai/results
+- Blog: https://shylock.ai/blog
+- Fintech Collections: https://shylock.ai/use-cases/fintech
+- Microfinance Collections: https://shylock.ai/use-cases/microfinance
+- Banking Collections: https://shylock.ai/use-cases/banking

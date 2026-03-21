@@ -5,9 +5,9 @@ import ContactForm from '@/components/ContactForm'
 import Reveal from '@/components/Reveal'
 
 export const metadata: Metadata = {
-  title: 'Contact · Shylock',
+  title: 'Contact Shylock · AI Debt Collection Demo',
   description:
-    'Tell us about your portfolio. We respond within one business day.',
+    'Talk to our AI sales agent or tell us about your portfolio. Get a demo of AI-powered debt collection that calls borrowers in their language and recovers overdue loans automatically.',
   alternates: { canonical: 'https://shylock.ai/contact' },
 }
 

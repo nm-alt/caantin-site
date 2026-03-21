@@ -6,9 +6,9 @@ import Reveal from '@/components/Reveal'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'How It Works · Shylock',
+  title: 'How AI Debt Collection Works · Shylock',
   description:
-    'Five steps from portfolio upload to full audit trail. Simple by design. Powerful by architecture.',
+    'Upload a CSV of borrowers, AI agents call them in their language, negotiate payment plans, and recover money — with full transcripts and audit trail. See how Shylock automates collections in 5 steps.',
   alternates: { canonical: 'https://shylock.ai/how-it-works' },
 }
 
