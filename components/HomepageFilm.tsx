@@ -76,7 +76,7 @@ export default function HomepageFilm() {
                 <Link href="/contact" className="btn-cta btn-cta-light">
                   Talk to us →
                 </Link>
-                <a href="https://collect.caantin.ai" className="btn-cta btn-cta-light" style={{ borderColor: 'rgba(255,255,255,0.25)' }}>
+                <a href="https://app.shylock.ai" className="btn-cta btn-cta-light" style={{ borderColor: 'rgba(255,255,255,0.25)' }}>
                   Sign in
                 </a>
               </div>
@@ -257,7 +257,7 @@ export default function HomepageFilm() {
             <Link href="/contact" className="btn-cta btn-cta-dark">
               Talk to us →
             </Link>
-            <a href="https://collect.caantin.ai" className="btn-cta btn-cta-dark" style={{ borderColor: 'rgba(8,8,7,0.3)' }}>
+            <a href="https://app.shylock.ai" className="btn-cta btn-cta-dark" style={{ borderColor: 'rgba(8,8,7,0.3)' }}>
               Sign up free →
             </a>
           </div>

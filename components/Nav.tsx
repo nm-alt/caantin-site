@@ -66,7 +66,7 @@ export default function Nav() {
               Blog
             </Link>
             <a
-              href="https://collect.caantin.ai"
+              href="https://app.shylock.ai"
               className={`type-body text-sm transition-colors duration-500 tracking-wide ${
                 scrolled ? 'text-silver hover:text-white' : 'text-mid hover:text-stone-black'
               }`}
@@ -134,7 +134,7 @@ export default function Nav() {
             Blog
           </Link>
           <a
-            href="https://collect.caantin.ai"
+            href="https://app.shylock.ai"
             className="type-headline text-white text-3xl"
             onClick={() => setMenuOpen(false)}
           >

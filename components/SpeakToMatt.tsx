@@ -146,10 +146,10 @@ export default function SpeakToMatt() {
         <p className="type-label text-white/25 text-xs tracking-widest pt-1">
           Or sign up directly at{' '}
           <a
-            href="https://collect.caantin.ai"
+            href="https://app.shylock.ai"
             className="text-white/40 hover:text-white/70 transition-colors duration-300 underline underline-offset-4"
           >
-            collect.caantin.ai
+            app.shylock.ai
           </a>
         </p>
       </form>

@@ -29,7 +29,7 @@ export default function Footer() {
               Results
             </Link>
             <a
-              href="https://collect.caantin.ai"
+              href="https://app.shylock.ai"
               className="type-body text-sm text-silver hover:text-white transition-colors duration-300 py-2 -my-1 sm:py-0 sm:my-0 min-h-[44px] flex items-center sm:min-h-0"
             >
               Sign in
