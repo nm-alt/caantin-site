@@ -18,30 +18,17 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // Redirect all caantin.ai traffic to shylock.ai
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'caantin.ai' }],
-        destination: 'https://shylock.ai/:path*',
-        permanent: true,
-      },
+      // Redirect www variants to bare domain
       {
         source: '/:path*',
         has: [{ type: 'host', value: 'www.caantin.ai' }],
-        destination: 'https://shylock.ai/:path*',
-        permanent: true,
-      },
-      // Redirect all caantin.com traffic to shylock.ai
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'caantin.com' }],
-        destination: 'https://shylock.ai/:path*',
+        destination: 'https://caantin.ai/:path*',
         permanent: true,
       },
       {
         source: '/:path*',
         has: [{ type: 'host', value: 'www.caantin.com' }],
-        destination: 'https://shylock.ai/:path*',
+        destination: 'https://caantin.com/:path*',
         permanent: true,
       },
     ]
