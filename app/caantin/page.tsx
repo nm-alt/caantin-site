@@ -71,7 +71,7 @@ export default function CaantinHome() {
             caantin
           </Link>
           <a
-            href="mailto:nm@caantin.ai"
+            href="mailto:matt@caantin.ai"
             className="rounded-full bg-neutral-900 text-white px-5 py-2 text-[13px] font-medium tracking-wide hover:bg-black transition-colors"
           >
             Get in touch
@@ -122,7 +122,7 @@ export default function CaantinHome() {
                 deployment&mdash;for the world&rsquo;s leading AI teams.
               </p>
               <a
-                href="mailto:nm@caantin.ai"
+                href="mailto:matt@caantin.ai"
                 className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-900 hover:gap-2.5 transition-all"
               >
                 Get in touch <ArrowRight />
@@ -133,7 +133,7 @@ export default function CaantinHome() {
           {/* CTA */}
           <div className="mt-14 md:mt-16 text-center">
             <a
-              href="mailto:nm@caantin.ai"
+              href="mailto:matt@caantin.ai"
               className="inline-block rounded-full bg-neutral-900 text-white px-7 py-3 text-[13px] font-medium tracking-wide hover:bg-black transition-colors"
             >
               Get in touch
@@ -149,8 +149,8 @@ export default function CaantinHome() {
               <span className="font-medium text-neutral-500">caantin</span>
             </div>
             <div className="flex items-center gap-6">
-              <a href="mailto:nm@caantin.ai" className="hover:text-neutral-600 transition-colors">
-                nm@caantin.ai
+              <a href="mailto:matt@caantin.ai" className="hover:text-neutral-600 transition-colors">
+                matt@caantin.ai
               </a>
               <span>&copy; {new Date().getFullYear()}</span>
             </div>
