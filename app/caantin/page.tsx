@@ -121,9 +121,12 @@ export default function CaantinHome() {
                 Training data for AI labs. Evaluation, acquisition, and
                 deployment&mdash;for the world&rsquo;s leading AI teams.
               </p>
-              <span className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-400">
-                Coming soon
-              </span>
+              <a
+                href="mailto:nm@caantin.ai"
+                className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-900 hover:gap-2.5 transition-all"
+              >
+                Get in touch <ArrowRight />
+              </a>
             </div>
           </div>
 
