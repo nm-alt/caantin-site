@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
 
 const SAUTI_API_KEY = process.env.SAUTI_API_KEY ?? ''
-const MATT_ASSISTANT_ID = process.env.MATT_LAWLER_ASSISTANT_ID ?? '70d3a7ea-5c15-4d35-a971-d69b26a7172d'
-const DEMO_PHONE_ID = process.env.DEMO_PHONE_NUMBER_ID ?? '88e39b2e-f02c-499b-8729-cd23b2fe16bd'
+const MATT_ASSISTANT_ID = process.env.MATT_LAWLER_ASSISTANT_ID ?? ''
+const DEMO_PHONE_ID = process.env.DEMO_PHONE_NUMBER_ID ?? ''
 const SAUTI_URL = 'https://sauti.shylock.ai/api/v1/calls'
+const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET_KEY ?? ''
 
 // Simple rate limiter: max 3 calls per IP per hour
 const callLog = new Map<string, number[]>()
@@ -28,15 +29,54 @@ function isValidPhone(phone: string): boolean {
   return /^\+[1-9]\d{6,14}$/.test(phone.replace(/\s/g, ''))
 }
 
+async function verifyRecaptcha(token: string): Promise<boolean> {
+  if (!RECAPTCHA_SECRET) {
+    // If reCAPTCHA not configured, skip verification (allow graceful rollout)
+    console.warn('RECAPTCHA_SECRET_KEY not set — skipping verification')
+    return true
+  }
+
+  try {
+    const res = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ secret: RECAPTCHA_SECRET, response: token }),
+    })
+    const data = await res.json()
+    // Require score >= 0.5 and correct action
+    return data.success && data.score >= 0.5 && data.action === 'demo_call'
+  } catch (err) {
+    console.error('reCAPTCHA verification failed:', err)
+    return false
+  }
+}
+
 export async function POST(req: Request) {
   try {
-    const { phoneNumber, name } = await req.json()
+    const { phoneNumber, name, recaptchaToken } = await req.json()
 
     if (!phoneNumber || !isValidPhone(phoneNumber)) {
       return NextResponse.json(
         { error: 'Please enter a valid phone number with country code (e.g. +234...)' },
         { status: 400 },
       )
+    }
+
+    // Verify reCAPTCHA token
+    if (RECAPTCHA_SECRET) {
+      if (!recaptchaToken) {
+        return NextResponse.json(
+          { error: 'reCAPTCHA verification required.' },
+          { status: 400 },
+        )
+      }
+      const isHuman = await verifyRecaptcha(recaptchaToken)
+      if (!isHuman) {
+        return NextResponse.json(
+          { error: 'reCAPTCHA verification failed. Please try again.' },
+          { status: 403 },
+        )
+      }
     }
 
     // Rate limit by IP

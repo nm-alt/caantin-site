@@ -7,6 +7,8 @@ import {
 } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
+import { PostHogProvider } from './providers'
+import PostHogPageView from './PostHogPageView'
 
 const barlow = Barlow({
   subsets: ['latin'],
@@ -92,61 +94,64 @@ export default function RootLayout({
       className={`${barlow.variable} ${barlowCondensed.variable} ${playfair.variable} ${spaceMono.variable}`}
     >
       <body className="bg-stone-black text-near-white antialiased overflow-x-hidden">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@graph': [
-                {
-                  '@type': 'Organization',
-                  '@id': 'https://shylock.ai/#organization',
-                  name: 'Shylock',
-                  url: 'https://shylock.ai',
-                  description:
-                    'AI-powered debt collections platform for banks, fintechs, and microfinance institutions in Africa.',
-                  email: 'hello@shylock.ai',
-                  areaServed: {
-                    '@type': 'Place',
-                    name: 'Africa',
+        <PostHogProvider>
+          <PostHogPageView />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                '@context': 'https://schema.org',
+                '@graph': [
+                  {
+                    '@type': 'Organization',
+                    '@id': 'https://shylock.ai/#organization',
+                    name: 'Shylock',
+                    url: 'https://shylock.ai',
+                    description:
+                      'AI-powered debt collections platform for banks, fintechs, and microfinance institutions in Africa.',
+                    email: 'hello@shylock.ai',
+                    areaServed: {
+                      '@type': 'Place',
+                      name: 'Africa',
+                    },
+                    knowsLanguage: ['en', 'sw', 'yo', 'fr', 'pcm', 'zu'],
                   },
-                  knowsLanguage: ['en', 'sw', 'yo', 'fr', 'pcm', 'zu'],
-                },
-                {
-                  '@type': 'SoftwareApplication',
-                  '@id': 'https://shylock.ai/#product',
-                  name: 'Shylock',
-                  applicationCategory: 'FinanceApplication',
-                  operatingSystem: 'Web',
-                  url: 'https://app.shylock.ai',
-                  description:
-                    'AI voice agents that call borrowers in their language, negotiate payment plans, and recover overdue loans automatically. Supports Pidgin, Swahili, Yoruba, French, English, and Zulu.',
-                  offers: {
-                    '@type': 'Offer',
-                    description: 'Contingency pricing — no recovery, no fee',
+                  {
+                    '@type': 'SoftwareApplication',
+                    '@id': 'https://shylock.ai/#product',
+                    name: 'Shylock',
+                    applicationCategory: 'FinanceApplication',
+                    operatingSystem: 'Web',
+                    url: 'https://app.shylock.ai',
+                    description:
+                      'AI voice agents that call borrowers in their language, negotiate payment plans, and recover overdue loans automatically. Supports Pidgin, Swahili, Yoruba, French, English, and Zulu.',
+                    offers: {
+                      '@type': 'Offer',
+                      description: 'Contingency pricing — no recovery, no fee',
+                    },
+                    featureList: [
+                      'Multi-language voice AI (8 languages)',
+                      'Automated call campaigns',
+                      'Real-time transcripts',
+                      'Payment tracking',
+                      'SMS, email, and voice outreach',
+                      'Full audit trail for compliance',
+                    ],
+                    provider: { '@id': 'https://shylock.ai/#organization' },
                   },
-                  featureList: [
-                    'Multi-language voice AI (8 languages)',
-                    'Automated call campaigns',
-                    'Real-time transcripts',
-                    'Payment tracking',
-                    'SMS, email, and voice outreach',
-                    'Full audit trail for compliance',
-                  ],
-                  provider: { '@id': 'https://shylock.ai/#organization' },
-                },
-                {
-                  '@type': 'WebSite',
-                  '@id': 'https://shylock.ai/#website',
-                  url: 'https://shylock.ai',
-                  name: 'Shylock',
-                  publisher: { '@id': 'https://shylock.ai/#organization' },
-                },
-              ],
-            }),
-          }}
-        />
-        {children}
+                  {
+                    '@type': 'WebSite',
+                    '@id': 'https://shylock.ai/#website',
+                    url: 'https://shylock.ai',
+                    name: 'Shylock',
+                    publisher: { '@id': 'https://shylock.ai/#organization' },
+                  },
+                ],
+              }),
+            }}
+          />
+          {children}
+        </PostHogProvider>
 
         {/* LinkedIn Insight Tag — fires on every page */}
         <Script id="linkedin-insight" strategy="afterInteractive">

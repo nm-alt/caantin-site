@@ -1,14 +1,16 @@
 'use client'
 
 import { useState } from 'react'
+import { GoogleReCaptchaProvider, useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 type Status = 'idle' | 'calling' | 'success' | 'error'
 
-export default function SpeakToMatt() {
+function SpeakToMattForm() {
   const [phone, setPhone] = useState('')
   const [name, setName] = useState('')
   const [status, setStatus] = useState<Status>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const { executeRecaptcha } = useGoogleReCaptcha()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -21,10 +23,18 @@ export default function SpeakToMatt() {
     setErrorMsg('')
 
     try {
+      // Get reCAPTCHA token
+      if (!executeRecaptcha) {
+        setStatus('error')
+        setErrorMsg('reCAPTCHA not ready. Please try again.')
+        return
+      }
+      const recaptchaToken = await executeRecaptcha('demo_call')
+
       const res = await fetch('/api/demo-call', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phoneNumber: normalized, name: name || undefined }),
+        body: JSON.stringify({ phoneNumber: normalized, name: name || undefined, recaptchaToken }),
       })
 
       const data = await res.json()
@@ -154,5 +164,20 @@ export default function SpeakToMatt() {
         </p>
       </form>
     </div>
+  )
+}
+
+export default function SpeakToMatt() {
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
+
+  if (!siteKey) {
+    // Fallback: render form without reCAPTCHA if key not configured yet
+    return <SpeakToMattForm />
+  }
+
+  return (
+    <GoogleReCaptchaProvider reCaptchaKey={siteKey}>
+      <SpeakToMattForm />
+    </GoogleReCaptchaProvider>
   )
 }

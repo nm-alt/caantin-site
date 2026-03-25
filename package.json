@@ -9,10 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "gsap": "^3.12.5",
     "next": "^15.1.0",
+    "posthog-js": "^1.363.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "gsap": "^3.12.5"
+    "react-google-recaptcha-v3": "^1.11.0"
   },
   "devDependencies": {
     "@types/node": "^20",
