@@ -31,9 +31,8 @@ function isValidPhone(phone: string): boolean {
 
 async function verifyRecaptcha(token: string): Promise<boolean> {
   if (!RECAPTCHA_SECRET) {
-    // If reCAPTCHA not configured, skip verification (allow graceful rollout)
-    console.warn('RECAPTCHA_SECRET_KEY not set — skipping verification')
-    return true
+    console.error('RECAPTCHA_SECRET_KEY not set — blocking call')
+    return false
   }
 
   try {
@@ -62,21 +61,19 @@ export async function POST(req: Request) {
       )
     }
 
-    // Verify reCAPTCHA token
-    if (RECAPTCHA_SECRET) {
-      if (!recaptchaToken) {
-        return NextResponse.json(
-          { error: 'reCAPTCHA verification required.' },
-          { status: 400 },
-        )
-      }
-      const isHuman = await verifyRecaptcha(recaptchaToken)
-      if (!isHuman) {
-        return NextResponse.json(
-          { error: 'reCAPTCHA verification failed. Please try again.' },
-          { status: 403 },
-        )
-      }
+    // Verify reCAPTCHA token — always enforced
+    if (!recaptchaToken) {
+      return NextResponse.json(
+        { error: 'reCAPTCHA verification required.' },
+        { status: 400 },
+      )
+    }
+    const isHuman = await verifyRecaptcha(recaptchaToken)
+    if (!isHuman) {
+      return NextResponse.json(
+        { error: 'reCAPTCHA verification failed. Please try again.' },
+        { status: 403 },
+      )
     }
 
     // Rate limit by IP

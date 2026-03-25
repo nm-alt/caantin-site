@@ -171,8 +171,16 @@ export default function SpeakToMatt() {
   const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
 
   if (!siteKey) {
-    // Fallback: render form without reCAPTCHA if key not configured yet
-    return <SpeakToMattForm />
+    return (
+      <div className="border border-white/15 rounded-sm p-6 md:p-8">
+        <p className="type-body text-white/75 text-sm">
+          Call feature temporarily unavailable. Please email{' '}
+          <a href="mailto:hello@shylock.ai" className="underline underline-offset-4 hover:text-white transition-colors duration-300">
+            hello@shylock.ai
+          </a>
+        </p>
+      </div>
+    )
   }
 
   return (
