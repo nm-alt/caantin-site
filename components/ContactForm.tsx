@@ -17,7 +17,7 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.name || !form.company || !form.bookSize) return
+    if (!form.name || !form.company) return
     setSubmitting(true)
 
     try {
@@ -35,7 +35,6 @@ export default function ContactForm() {
       return
     }
 
-    // LinkedIn conversion event — fires when confirmation appears
     if (typeof window !== 'undefined' && typeof window.lintrk === 'function') {
       window.lintrk('track', { conversion_id: 7385908 })
     }
@@ -46,7 +45,7 @@ export default function ContactForm() {
   if (submitted) {
     return (
       <div className="py-4">
-        <p className="type-serif text-white text-xl md:text-2xl italic">
+        <p className="text-white text-lg">
           We&apos;ll be in touch shortly.
         </p>
       </div>
@@ -56,18 +55,19 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
       {[
-        { name: 'name', label: 'Name', placeholder: 'Your name' },
-        { name: 'company', label: 'Company', placeholder: 'Your company' },
+        { name: 'name', label: 'Name', placeholder: 'Your name', required: true },
+        { name: 'company', label: 'Company', placeholder: 'Your company', required: true },
         {
           name: 'bookSize',
-          label: 'Size of delinquent book',
-          placeholder: 'e.g. 40,000 accounts or $2M',
+          label: 'What are you building?',
+          placeholder: 'e.g. collections, sales outreach, customer engagement',
+          required: false,
         },
-      ].map(({ name, label, placeholder }) => (
+      ].map(({ name, label, placeholder, required }) => (
         <div key={name} className="flex flex-col gap-2">
           <label
             htmlFor={name}
-            className="type-label text-white/40 text-xs tracking-[0.12em]"
+            className="type-label text-white/40 text-xs"
           >
             {label}
           </label>
@@ -75,13 +75,12 @@ export default function ContactForm() {
             id={name}
             name={name}
             type="text"
-            required
+            required={required}
             placeholder={placeholder}
             value={form[name as keyof typeof form]}
             onChange={handleChange}
             autoComplete="off"
-            className="bg-transparent border-b border-white/20 text-white text-sm md:text-base py-3 focus:outline-none focus:border-white/60 transition-colors duration-300 placeholder:text-white/20 font-sans"
-            style={{ fontFamily: 'var(--font-barlow)' }}
+            className="bg-transparent border-b border-white/20 text-white text-sm md:text-base py-3 focus:outline-none focus:border-white/60 transition-colors duration-200 placeholder:text-white/20"
           />
         </div>
       ))}
@@ -92,11 +91,11 @@ export default function ContactForm() {
           disabled={submitting}
           className="btn-cta btn-cta-light disabled:opacity-50"
         >
-          {submitting ? 'Sending...' : "Let's talk →"}
+          {submitting ? 'Sending...' : "Let's talk \u2192"}
         </button>
       </div>
 
-      <p className="type-label text-white/25 text-xs tracking-widest pt-2">
+      <p className="type-label text-white/20 text-xs pt-2">
         We respond within one business day.
       </p>
     </form>

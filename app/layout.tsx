@@ -1,82 +1,60 @@
 import type { Metadata } from 'next'
-import {
-  Barlow,
-  Barlow_Condensed,
-  Playfair_Display,
-  Space_Mono,
-} from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import { PostHogProvider } from './providers'
 import PostHogPageView from './PostHogPageView'
 
-const barlow = Barlow({
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '900'],
+  variable: '--font-inter',
+  display: 'swap',
+})
+
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   weight: ['400', '500'],
-  variable: '--font-barlow',
-  display: 'swap',
-})
-
-const barlowCondensed = Barlow_Condensed({
-  subsets: ['latin'],
-  weight: ['600', '700', '900'],
-  variable: '--font-barlow-condensed',
-  display: 'swap',
-})
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  style: ['normal', 'italic'],
-  variable: '--font-playfair',
-  display: 'swap',
-})
-
-const spaceMono = Space_Mono({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-space-mono',
+  variable: '--font-mono',
   display: 'swap',
 })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://shylock.ai'),
-  title: 'Shylock · AI-Powered Debt Collection for Africa',
+  title: 'Shylock — AI voice and messaging platform',
   description:
-    'AI voice agents that call borrowers in Pidgin, Swahili, Yoruba, French, English & Zulu — negotiate payment plans, and recover overdue loans automatically. Used by banks, fintechs, and MFIs across Africa.',
+    'Build AI agents that call, message, and collect across voice, WhatsApp, SMS, and email. One platform, every conversation.',
   keywords: [
-    'AI debt collection',
-    'automated debt recovery',
-    'voice AI collections',
-    'AI collections software Africa',
-    'loan recovery automation',
-    'multilingual debt collection',
-    'AI call center collections',
-    'NPL management AI',
-    'fintech collections',
-    'microfinance collections',
-    'debt collection Nigeria',
-    'debt collection Kenya',
+    'AI voice agents',
+    'voice AI platform',
+    'AI calling platform',
+    'AI WhatsApp agents',
+    'conversational AI',
+    'voice agent builder',
+    'AI outbound calls',
+    'AI collections',
+    'AI sales calls',
     'Shylock AI',
   ],
   openGraph: {
-    title: 'Shylock · AI-Powered Debt Collection for Africa',
+    title: 'Shylock — AI voice and messaging platform',
     description:
-      'AI voice agents that call borrowers in their language, negotiate payment plans, and recover overdue loans. No headcount. No call centre. Pay only when we collect.',
+      'Build AI agents that call, message, and collect across voice, WhatsApp, SMS, and email. One platform, every conversation.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Shylock — AI-Powered Debt Collection',
+        alt: 'Shylock — AI voice and messaging platform',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Shylock · AI-Powered Debt Collection for Africa',
+    title: 'Shylock — AI voice and messaging platform',
     description:
-      'AI voice agents that call borrowers in their language, negotiate payment plans, and recover overdue loans. Used by banks, fintechs, and MFIs across Africa.',
+      'Build AI agents that call, message, and collect across voice, WhatsApp, SMS, and email. One platform, every conversation.',
   },
   alternates: {
     canonical: 'https://shylock.ai',
@@ -89,11 +67,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html
-      lang="en"
-      className={`${barlow.variable} ${barlowCondensed.variable} ${playfair.variable} ${spaceMono.variable}`}
-    >
-      <body className="bg-stone-black text-near-white antialiased overflow-x-hidden">
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <body className="bg-near-white text-stone-black antialiased overflow-x-hidden">
         <PostHogProvider>
           <PostHogPageView />
           <script
@@ -108,34 +83,24 @@ export default function RootLayout({
                     name: 'Shylock',
                     url: 'https://shylock.ai',
                     description:
-                      'AI-powered debt collections platform for banks, fintechs, and microfinance institutions in Africa.',
+                      'AI voice and messaging platform. Build agents that call, message, and collect across every channel.',
                     email: 'hello@shylock.ai',
-                    areaServed: {
-                      '@type': 'Place',
-                      name: 'Africa',
-                    },
-                    knowsLanguage: ['en', 'sw', 'yo', 'fr', 'pcm', 'zu'],
                   },
                   {
                     '@type': 'SoftwareApplication',
                     '@id': 'https://shylock.ai/#product',
                     name: 'Shylock',
-                    applicationCategory: 'FinanceApplication',
+                    applicationCategory: 'BusinessApplication',
                     operatingSystem: 'Web',
                     url: 'https://app.shylock.ai',
                     description:
-                      'AI voice agents that call borrowers in their language, negotiate payment plans, and recover overdue loans automatically. Supports Pidgin, Swahili, Yoruba, French, English, and Zulu.',
-                    offers: {
-                      '@type': 'Offer',
-                      description: 'Contingency pricing — no recovery, no fee',
-                    },
+                      'AI voice and messaging platform. Build agents, launch campaigns, and manage conversations across voice, WhatsApp, SMS, and email.',
                     featureList: [
-                      'Multi-language voice AI (8 languages)',
-                      'Automated call campaigns',
-                      'Real-time transcripts',
-                      'Payment tracking',
-                      'SMS, email, and voice outreach',
-                      'Full audit trail for compliance',
+                      'AI agent studio',
+                      'Multi-channel campaigns (voice, WhatsApp, SMS, email)',
+                      'Real-time transcripts and recordings',
+                      'Automated contact strategies',
+                      'Outcome tracking and dashboards',
                     ],
                     provider: { '@id': 'https://shylock.ai/#organization' },
                   },
@@ -153,7 +118,7 @@ export default function RootLayout({
           {children}
         </PostHogProvider>
 
-        {/* LinkedIn Insight Tag — fires on every page */}
+        {/* LinkedIn Insight Tag */}
         <Script id="linkedin-insight" strategy="afterInteractive">
           {`
             _linkedin_partner_id = "7385908";
@@ -180,20 +145,6 @@ export default function RootLayout({
             src="https://px.ads.linkedin.com/collect/?pid=7385908&fmt=gif"
           />
         </noscript>
-
-        {/* Google Analytics 4 — fires on every page */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
-          strategy="afterInteractive"
-        />
-        <Script id="ga4" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-XXXXXXXXXX');
-          `}
-        </Script>
       </body>
     </html>
   )

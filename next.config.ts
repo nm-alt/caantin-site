@@ -18,7 +18,13 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // Redirect www variants to bare domain
+      // Old pages → homepage
+      { source: '/how-it-works', destination: '/', permanent: true },
+      { source: '/results', destination: '/', permanent: true },
+      { source: '/use-cases/:slug', destination: '/', permanent: true },
+      { source: '/for/:slug', destination: '/', permanent: true },
+      { source: '/caantin', destination: '/', permanent: true },
+      // Redirect www variants
       {
         source: '/:path*',
         has: [{ type: 'host', value: 'www.caantin.ai' }],

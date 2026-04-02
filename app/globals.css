@@ -11,10 +11,8 @@
   --near-white: #f4f2f0;
   --white: #ffffff;
 
-  --font-condensed: var(--font-barlow-condensed);
-  --font-serif: var(--font-playfair);
-  --font-sans: var(--font-barlow);
-  --font-mono: var(--font-space-mono);
+  --font-sans: var(--font-inter);
+  --font-code: var(--font-mono);
 }
 
 /* ─── Base ───────────────────────────────────────────────────────── */
@@ -24,94 +22,31 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: auto; /* GSAP handles scroll */
-}
-
 body {
-  background-color: var(--stone-black);
-  color: var(--near-white);
   font-family: var(--font-sans), system-ui, sans-serif;
   line-height: 1.6;
-  cursor: none;
 }
 
-/* ─── Custom Cursor ──────────────────────────────────────────────── */
-.cursor-dot {
-  position: fixed;
-  width: 6px;
-  height: 6px;
-  background: white;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
-  transition: opacity 0.3s;
-  will-change: transform;
-}
-
-.cursor-ring {
-  position: fixed;
-  width: 28px;
-  height: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: width 0.25s, height 0.25s, border-color 0.25s, opacity 0.3s;
-  will-change: transform;
-}
-
-.cursor-ring.is-hovering {
-  width: 48px;
-  height: 48px;
-  border-color: rgba(255, 255, 255, 0.6);
-}
-
-.cursor-ring.is-playing {
-  width: 72px;
-  height: 72px;
-  border-color: rgba(255, 255, 255, 0.8);
-  border-width: 2px;
-}
-
-@media (pointer: coarse) {
-  body { cursor: auto; }
-  .cursor-dot, .cursor-ring { display: none; }
-}
-
-/* ─── Typography Utilities ───────────────────────────────────────── */
-/* Brand wordmark: restrained, like the man — dignified, not loud */
+/* ─── Typography ────────────────────────────────────────────────── */
 .type-brand {
-  font-family: var(--font-condensed), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: none;
+  letter-spacing: -0.01em;
   line-height: 1.2;
 }
 
 .type-headline {
-  font-family: var(--font-condensed), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-weight: 700;
-  line-height: 0.92;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
 }
 
 .type-headline-lg {
-  font-family: var(--font-condensed), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-weight: 700;
-  line-height: 0.94;
+  line-height: 1.1;
   letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-
-.type-serif {
-  font-family: var(--font-serif), Georgia, serif;
-  font-style: italic;
-  line-height: 1.4;
 }
 
 .type-body {
@@ -121,127 +56,38 @@ body {
 }
 
 .type-mono {
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code), monospace;
 }
 
 .type-label {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
+  font-family: var(--font-code), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-}
-
-/* ─── Grain Texture ──────────────────────────────────────────────── */
-.grain {
-  position: relative;
-}
-
-.grain::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E");
-  background-size: 300px 300px;
-  pointer-events: none;
-  z-index: 2;
-  opacity: 1;
-}
-
-.grain-heavy::after {
-  opacity: 1;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.14'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
-}
-
-/* ─── Halftone (dot) effect for footer portrait ──────────────────── */
-/* Screen + threshold → black dots on white; then invert for white dots on dark */
-.halftone-dots {
-  position: relative;
-  filter: brightness(0.85) blur(2px) contrast(999) invert(1);
-}
-
-.halftone-dots::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  /* Blurry black dots → screen with image → then parent invert gives white dots on dark */
-  background-image: radial-gradient(
-    circle at 50% 50%,
-    black 0%,
-    transparent 50%
-  );
-  background-size: 14px 14px;
-  mix-blend-mode: screen;
-  pointer-events: none;
-}
-
-@media (max-width: 767px) {
-  .halftone-dots::after {
-    /* Slightly larger dots on mobile so the effect stays visible */
-    background-size: 18px 18px;
-  }
-}
-
-/* ─── Footer art piece: finer halftone, print-like ───────────────── */
-.halftone-art {
-  position: relative;
-  filter: brightness(0.88) blur(1.5px) contrast(800) invert(1);
-  background: var(--stone-black);
-}
-
-.halftone-art::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(
-    circle at 50% 50%,
-    black 0%,
-    transparent 45%
-  );
-  background-size: 10px 10px;
-  mix-blend-mode: screen;
-  pointer-events: none;
-}
-
-@media (max-width: 767px) {
-  .halftone-art::after {
-    background-size: 12px 12px;
-  }
-}
-
-/* ─── Reveal Animations ──────────────────────────────────────────── */
-.fade-up {
-  opacity: 0;
-  transform: translateY(24px);
-}
-
-.fade-in {
-  opacity: 0;
 }
 
 /* ─── CTA Button ─────────────────────────────────────────────────── */
 .btn-cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.625rem;
-  font-family: var(--font-condensed), sans-serif;
+  gap: 0.5rem;
+  font-family: var(--font-sans), sans-serif;
   font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.875rem 2rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 0.75rem 1.75rem;
   border: 1px solid currentColor;
+  border-radius: 6px;
   background: transparent;
-  cursor: none;
   text-decoration: none;
-  transition: background 0.25s ease, color 0.25s ease;
+  transition: background 0.2s ease, color 0.2s ease;
   position: relative;
   z-index: 1;
 }
 
 .btn-cta-light {
   color: white;
-  border-color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .btn-cta-light:hover {
@@ -251,12 +97,22 @@ body {
 
 .btn-cta-dark {
   color: var(--stone-black);
-  border-color: var(--stone-black);
+  border-color: rgba(8, 8, 7, 0.2);
 }
 
 .btn-cta-dark:hover {
   background: var(--stone-black);
   color: white;
+}
+
+.btn-cta-primary {
+  color: white;
+  background: var(--stone-black);
+  border-color: var(--stone-black);
+}
+
+.btn-cta-primary:hover {
+  background: var(--near-black);
 }
 
 /* ─── Scrollbar ──────────────────────────────────────────────────── */
@@ -265,7 +121,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--stone-black);
+  background: var(--near-white);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -274,12 +130,24 @@ body {
 
 /* ─── Selection ──────────────────────────────────────────────────── */
 ::selection {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(8, 8, 7, 0.1);
+}
+
+/* ─── Legacy classes (used by blog pages) ────────────────────────── */
+.type-serif {
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.grain,
+.grain-heavy {
+  position: relative;
+  background: var(--stone-black);
 }
 
 /* ─── Blog post prose ────────────────────────────────────────────── */
 .prose-shylock p {
-  font-family: var(--font-barlow), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-size: clamp(1rem, 1.5vw, 1.125rem);
   line-height: 1.85;
   color: #3d3b38;
@@ -287,21 +155,19 @@ body {
 }
 
 .prose-shylock h2 {
-  font-family: var(--font-barlow-condensed), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-weight: 700;
-  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-size: clamp(1.4rem, 3vw, 2rem);
   letter-spacing: -0.02em;
-  text-transform: uppercase;
   color: #0f0e0d;
   margin-top: 3em;
   margin-bottom: 0.8em;
-  line-height: 1.0;
+  line-height: 1.15;
 }
 
 .prose-shylock blockquote {
-  font-family: var(--font-playfair), Georgia, serif;
   font-style: italic;
-  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
   line-height: 1.55;
   color: #0f0e0d;
   border-left: 2px solid #0f0e0d;
@@ -310,7 +176,6 @@ body {
 }
 
 .prose-shylock blockquote p {
-  font-family: var(--font-playfair), Georgia, serif;
   font-style: italic;
   font-size: inherit;
   line-height: inherit;

@@ -9,7 +9,6 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Black and white only — no exceptions
         'stone-black': '#080807',
         'near-black': '#0f0e0d',
         'ancient': '#1a1816',
@@ -21,22 +20,17 @@ const config: Config = {
         'off-white': '#fafaf8',
       },
       fontFamily: {
-        condensed: ['var(--font-barlow-condensed)', 'sans-serif'],
-        serif: ['var(--font-playfair)', 'Georgia', 'serif'],
-        sans: ['var(--font-barlow)', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-space-mono)', 'monospace'],
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'monospace'],
       },
       letterSpacing: {
-        'display': '-0.03em',
-        'display-tight': '-0.05em',
+        'tight': '-0.025em',
+        'tighter': '-0.04em',
       },
       fontSize: {
-        'display-xl': ['clamp(3.5rem, 8vw, 9rem)', { lineHeight: '0.92', letterSpacing: '-0.03em' }],
-        'display-lg': ['clamp(2.5rem, 6vw, 7rem)', { lineHeight: '0.94', letterSpacing: '-0.03em' }],
-        'display-md': ['clamp(2rem, 4vw, 5rem)', { lineHeight: '0.96', letterSpacing: '-0.02em' }],
-      },
-      screens: {
-        xs: '375px',
+        'display-xl': ['clamp(3rem, 6vw, 5rem)', { lineHeight: '1.05', letterSpacing: '-0.03em' }],
+        'display-lg': ['clamp(2.25rem, 5vw, 3.75rem)', { lineHeight: '1.08', letterSpacing: '-0.025em' }],
+        'display-md': ['clamp(1.75rem, 3.5vw, 2.5rem)', { lineHeight: '1.12', letterSpacing: '-0.02em' }],
       },
     },
   },

@@ -23,59 +23,37 @@ export default function Nav() {
     <>
       <nav
         ref={navRef}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? 'bg-stone-black/95 backdrop-blur-sm border-b border-stone/30'
+            ? 'bg-white/90 backdrop-blur-md border-b border-stone/10'
             : 'bg-transparent'
         }`}
       >
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex items-center justify-between h-16 md:h-20">
+        <div className="max-w-[1200px] mx-auto px-6 md:px-10 flex items-center justify-between h-14 md:h-16">
           <Link
             href="/"
-            className={`type-brand text-lg md:text-xl tracking-normal hover:opacity-70 transition-all duration-500 ${
-              scrolled ? 'text-white' : 'text-stone-black'
-            }`}
+            className="type-brand text-stone-black text-lg tracking-tight hover:opacity-70 transition-opacity duration-200"
             aria-label="Shylock — home"
           >
             Shylock
           </Link>
 
-          <div className="hidden md:flex items-center gap-10">
-            <Link
-              href="/how-it-works"
-              className={`type-body text-sm transition-colors duration-500 tracking-wide ${
-                scrolled ? 'text-silver hover:text-white' : 'text-mid hover:text-stone-black'
-              }`}
-            >
-              How it works
-            </Link>
-            <Link
-              href="/results"
-              className={`type-body text-sm transition-colors duration-500 tracking-wide ${
-                scrolled ? 'text-silver hover:text-white' : 'text-mid hover:text-stone-black'
-              }`}
-            >
-              Results
-            </Link>
+          <div className="hidden md:flex items-center gap-8">
             <Link
               href="/blog"
-              className={`type-body text-sm transition-colors duration-500 tracking-wide ${
-                scrolled ? 'text-silver hover:text-white' : 'text-mid hover:text-stone-black'
-              }`}
+              className="type-body text-sm text-mid hover:text-stone-black transition-colors duration-200"
             >
               Blog
             </Link>
             <a
               href="https://app.shylock.ai"
-              className={`type-body text-sm transition-colors duration-500 tracking-wide ${
-                scrolled ? 'text-silver hover:text-white' : 'text-mid hover:text-stone-black'
-              }`}
+              className="type-body text-sm text-mid hover:text-stone-black transition-colors duration-200"
             >
               Sign in
             </a>
-            <Link href="/contact" className={`btn-cta text-xs ${scrolled ? 'btn-cta-light' : 'btn-cta-dark'}`}>
-              Talk to us →
-            </Link>
+            <a href="https://app.shylock.ai" className="btn-cta btn-cta-primary text-[13px] py-2 px-5">
+              Get started &rarr;
+            </a>
           </div>
 
           <button
@@ -85,18 +63,18 @@ export default function Nav() {
             aria-expanded={menuOpen}
           >
             <span
-              className={`block w-6 h-px transition-all duration-300 origin-center ${
-                menuOpen ? 'bg-white rotate-45 translate-y-[6px]' : scrolled ? 'bg-white' : 'bg-stone-black'
+              className={`block w-5 h-px transition-all duration-300 origin-center ${
+                menuOpen ? 'bg-white rotate-45 translate-y-[6px]' : 'bg-stone-black'
               }`}
             />
             <span
-              className={`block w-6 h-px transition-all duration-300 ${
-                menuOpen ? 'bg-white opacity-0' : scrolled ? 'bg-white' : 'bg-stone-black'
+              className={`block w-5 h-px transition-all duration-300 ${
+                menuOpen ? 'bg-white opacity-0' : 'bg-stone-black'
               }`}
             />
             <span
-              className={`block w-6 h-px transition-all duration-300 origin-center ${
-                menuOpen ? 'bg-white -rotate-45 -translate-y-[6px]' : scrolled ? 'bg-white' : 'bg-stone-black'
+              className={`block w-5 h-px transition-all duration-300 origin-center ${
+                menuOpen ? 'bg-white -rotate-45 -translate-y-[6px]' : 'bg-stone-black'
               }`}
             />
           </button>
@@ -104,49 +82,33 @@ export default function Nav() {
       </nav>
 
       <div
-        className={`fixed inset-0 z-40 bg-stone-black flex flex-col justify-center px-8 transition-all duration-500 md:hidden ${
-          menuOpen
-            ? 'opacity-100 pointer-events-auto'
-            : 'opacity-0 pointer-events-none'
+        className={`fixed inset-0 z-40 bg-stone-black flex flex-col justify-center px-8 transition-all duration-300 md:hidden ${
+          menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
         aria-hidden={!menuOpen}
       >
-        <div className="flex flex-col gap-10">
-          <Link
-            href="/how-it-works"
-            className="type-headline text-white text-3xl"
-            onClick={() => setMenuOpen(false)}
-          >
-            How it works
-          </Link>
-          <Link
-            href="/results"
-            className="type-headline text-white text-3xl"
-            onClick={() => setMenuOpen(false)}
-          >
-            Results
-          </Link>
+        <div className="flex flex-col gap-8">
           <Link
             href="/blog"
-            className="type-headline text-white text-3xl"
+            className="type-headline text-white text-2xl"
             onClick={() => setMenuOpen(false)}
           >
             Blog
           </Link>
           <a
             href="https://app.shylock.ai"
-            className="type-headline text-white text-3xl"
+            className="type-headline text-white text-2xl"
             onClick={() => setMenuOpen(false)}
           >
             Sign in
           </a>
-          <Link
-            href="/contact"
+          <a
+            href="https://app.shylock.ai"
             className="btn-cta btn-cta-light self-start mt-4"
             onClick={() => setMenuOpen(false)}
           >
-            Talk to us →
-          </Link>
+            Get started &rarr;
+          </a>
         </div>
       </div>
     </>
