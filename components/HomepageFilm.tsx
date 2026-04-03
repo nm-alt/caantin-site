@@ -228,41 +228,116 @@ export default function HomepageFilm() {
         </div>
       </section>
 
-      {/* ─── INFRASTRUCTURE ─── */}
-      <section className="bg-stone-black py-20 md:py-28" aria-label="Infrastructure">
+      {/* ─── DEVELOPERS ─── */}
+      <section className="bg-stone-black py-20 md:py-28" aria-label="Developers">
         <div className="max-w-[1200px] mx-auto px-6 md:px-10">
-          <p className="type-label text-accent mb-3">Infrastructure</p>
-          <h2 className="type-headline text-white text-display-lg mb-6 max-w-2xl">
-            We build the pipes. You build the party.
-          </h2>
-          <p className="type-body text-white/60 text-base mb-14 md:mb-20 max-w-xl">
-            Carrier integrations, WhatsApp Business API, AI model providers, number provisioning, compliance — all pre-wired so you can focus on what your agents say, not how they connect.
-          </p>
+          <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-start">
+            <div>
+              <p className="type-label text-accent mb-3">Developers</p>
+              <h2 className="type-headline text-white text-display-lg mb-6">
+                Sauti API
+              </h2>
+              <p className="type-body text-white/60 text-base mb-10 max-w-md">
+                Programmatic access to calls, messages, agents, and campaigns. RESTful endpoints, webhook events, full documentation.
+              </p>
 
-          <div className="grid md:grid-cols-3 gap-10 md:gap-12">
-            <div>
-              <h3 className="type-headline-lg text-white text-lg mb-3">Global carrier network</h3>
-              <p className="type-body text-white/50 text-sm leading-relaxed">
-                SIP routing direct to carriers in 40+ countries. Local presence, local quality. Not routed through a single US gateway.
-              </p>
+              <div className="space-y-6">
+                <div className="flex gap-4 items-start">
+                  <div className="w-8 h-8 rounded-lg bg-accent/15 text-accent flex items-center justify-center shrink-0 mt-0.5">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="type-headline-lg text-white text-sm mb-1">Calls</h3>
+                    <p className="type-body text-white/40 text-sm">Initiate, transfer, record. Real-time transcription via WebSocket.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4 items-start">
+                  <div className="w-8 h-8 rounded-lg bg-accent/15 text-accent flex items-center justify-center shrink-0 mt-0.5">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="type-headline-lg text-white text-sm mb-1">Messages</h3>
+                    <p className="type-body text-white/40 text-sm">WhatsApp, SMS, email. Send, receive, track delivery.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4 items-start">
+                  <div className="w-8 h-8 rounded-lg bg-accent/15 text-accent flex items-center justify-center shrink-0 mt-0.5">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                      <path d="M2 17l10 5 10-5" />
+                      <path d="M2 12l10 5 10-5" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="type-headline-lg text-white text-sm mb-1">Assistants</h3>
+                    <p className="type-body text-white/40 text-sm">Create, configure, version. Personality, voice, language, model.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4 items-start">
+                  <div className="w-8 h-8 rounded-lg bg-accent/15 text-accent flex items-center justify-center shrink-0 mt-0.5">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z" />
+                      <polyline points="13 2 13 9 20 9" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="type-headline-lg text-white text-sm mb-1">Webhooks</h3>
+                    <p className="type-body text-white/40 text-sm">Call completed, message delivered, payment promised. Real-time events to your backend.</p>
+                  </div>
+                </div>
+              </div>
+
+              <a
+                href="https://sauti.shylock.ai"
+                className="btn-cta btn-cta-accent mt-10 inline-flex"
+              >
+                Read the docs &rarr;
+              </a>
             </div>
-            <div>
-              <h3 className="type-headline-lg text-white text-lg mb-3">Every conversation logged</h3>
-              <p className="type-body text-white/50 text-sm leading-relaxed">
-                Full transcripts, recordings, and outcome tracking on every interaction. Built for teams that answer to regulators.
-              </p>
-            </div>
-            <div>
-              <h3 className="type-headline-lg text-white text-lg mb-3">Sauti API</h3>
-              <p className="type-body text-white/50 text-sm leading-relaxed">
-                For teams that want to build on top. Programmatic access to everything — calls, messages, agents, campaigns.{' '}
-                <a
-                  href="https://sauti.shylock.ai"
-                  className="text-accent hover:text-accent-hover transition-colors duration-200 underline underline-offset-4"
-                >
-                  Docs &rarr;
-                </a>
-              </p>
+
+            <div className="bg-near-black rounded-xl overflow-hidden">
+              <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+                <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
+                <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
+                <span className="type-mono text-white/30 text-[10px] ml-2">POST /v1/calls</span>
+              </div>
+              <pre className="p-5 text-[13px] leading-relaxed overflow-x-auto">
+                <code className="type-mono">
+{`curl -X POST https://sauti.shylock.ai/v1/calls \\
+  -H "Authorization: Bearer sk_live_..." \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "assistantId": "asst_jane_collections",
+    "phoneNumberId": "pn_jakarta_01",
+    "customer": {
+      "number": "+62812345678",
+      "name": "Rina Wijaya"
+    }
+  }'`}
+                </code>
+              </pre>
+              <div className="border-t border-white/10">
+                <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10">
+                  <span className="type-mono text-white/30 text-[10px]">Response 200</span>
+                </div>
+                <pre className="p-5 text-[13px] leading-relaxed overflow-x-auto">
+                  <code className="type-mono">
+{`{
+  "id": "call_8f3k2j",
+  "status": "ringing",
+  "assistant": "asst_jane_collections",
+  "from": "+62215551234",
+  "to": "+62812345678",
+  "created_at": "2026-04-02T10:30:00Z"
+}`}
+                  </code>
+                </pre>
+              </div>
             </div>
           </div>
         </div>

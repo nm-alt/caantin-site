@@ -144,6 +144,11 @@ body {
   background: rgba(8, 8, 7, 0.1);
 }
 
+/* ─── Code blocks ───────────────────────────────────────────────── */
+pre code.type-mono {
+  color: #e2e0dd;
+}
+
 /* ─── Legacy classes (used by blog pages) ────────────────────────── */
 .type-serif {
   font-style: italic;
