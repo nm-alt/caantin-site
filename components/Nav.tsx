@@ -40,6 +40,12 @@ export default function Nav() {
 
           <div className="hidden md:flex items-center gap-8">
             <Link
+              href="/docs"
+              className="type-body text-sm text-mid hover:text-stone-black transition-colors duration-200"
+            >
+              Docs
+            </Link>
+            <Link
               href="/blog"
               className="type-body text-sm text-mid hover:text-stone-black transition-colors duration-200"
             >
@@ -88,6 +94,13 @@ export default function Nav() {
         aria-hidden={!menuOpen}
       >
         <div className="flex flex-col gap-8">
+          <Link
+            href="/docs"
+            className="type-headline text-white text-2xl"
+            onClick={() => setMenuOpen(false)}
+          >
+            Docs
+          </Link>
           <Link
             href="/blog"
             className="type-headline text-white text-2xl"

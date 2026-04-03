@@ -292,7 +292,7 @@ export default function HomepageFilm() {
               </div>
 
               <a
-                href="https://sauti.shylock.ai"
+                href="/docs"
                 className="btn-cta btn-cta-accent mt-10 inline-flex"
               >
                 Read the docs &rarr;

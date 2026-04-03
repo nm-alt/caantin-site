@@ -23,12 +23,10 @@ function SpeakToMattForm({ variant = 'dark' }: { variant?: Variant }) {
     setErrorMsg('')
 
     try {
-      if (!executeRecaptcha) {
-        setStatus('error')
-        setErrorMsg('reCAPTCHA not ready. Please try again.')
-        return
+      let recaptchaToken: string | undefined
+      if (executeRecaptcha) {
+        recaptchaToken = await executeRecaptcha('demo_call')
       }
-      const recaptchaToken = await executeRecaptcha('demo_call')
 
       const res = await fetch('/api/demo-call', {
         method: 'POST',
@@ -190,22 +188,8 @@ export default function SpeakToMatt({ variant = 'dark' }: { variant?: Variant })
   const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
 
   if (!siteKey) {
-    const light = variant === 'light'
-    return (
-      <div className={`border rounded-lg p-6 md:p-8 ${light ? 'border-stone/15 bg-white' : 'border-white/15'}`}>
-        <p className={`type-body text-sm ${light ? 'text-mid' : 'text-white/75'}`}>
-          Call feature temporarily unavailable. Please email{' '}
-          <a
-            href="mailto:hello@shylock.ai"
-            className={`underline underline-offset-4 transition-colors duration-300 ${
-              light ? 'text-stone-black hover:text-mid' : 'hover:text-white'
-            }`}
-          >
-            hello@shylock.ai
-          </a>
-        </p>
-      </div>
-    )
+    // Render form without reCAPTCHA — server will skip verification
+    return <SpeakToMattForm variant={variant} />
   }
 
   return (

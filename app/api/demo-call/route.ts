@@ -61,19 +61,21 @@ export async function POST(req: Request) {
       )
     }
 
-    // Verify reCAPTCHA token — always enforced
-    if (!recaptchaToken) {
-      return NextResponse.json(
-        { error: 'reCAPTCHA verification required.' },
-        { status: 400 },
-      )
-    }
-    const isHuman = await verifyRecaptcha(recaptchaToken)
-    if (!isHuman) {
-      return NextResponse.json(
-        { error: 'reCAPTCHA verification failed. Please try again.' },
-        { status: 403 },
-      )
+    // Verify reCAPTCHA token if configured
+    if (RECAPTCHA_SECRET) {
+      if (!recaptchaToken) {
+        return NextResponse.json(
+          { error: 'reCAPTCHA verification required.' },
+          { status: 400 },
+        )
+      }
+      const isHuman = await verifyRecaptcha(recaptchaToken)
+      if (!isHuman) {
+        return NextResponse.json(
+          { error: 'reCAPTCHA verification failed. Please try again.' },
+          { status: 403 },
+        )
+      }
     }
 
     // Rate limit by IP
