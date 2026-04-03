@@ -51,8 +51,8 @@ export default function Nav() {
             >
               Sign in
             </a>
-            <a href="https://app.shylock.ai" className="btn-cta btn-cta-primary text-[13px] py-2 px-5">
-              Get started &rarr;
+            <a href="https://app.shylock.ai" className="btn-cta btn-cta-accent text-[13px] py-2 px-5">
+              Start building &rarr;
             </a>
           </div>
 
@@ -107,7 +107,7 @@ export default function Nav() {
             className="btn-cta btn-cta-light self-start mt-4"
             onClick={() => setMenuOpen(false)}
           >
-            Get started &rarr;
+            Start building &rarr;
           </a>
         </div>
       </div>

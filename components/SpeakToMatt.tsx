@@ -68,7 +68,7 @@ function SpeakToMattForm({ variant = 'dark' }: { variant?: Variant }) {
           </p>
         </div>
         <p className={`type-body text-sm mb-6 ${light ? 'text-mid' : 'text-white/75'}`}>
-          Check your phone — you should be getting a call now. You&apos;ll hear exactly how Shylock talks to borrowers.
+          Check your phone — you should be getting a call now. This is a live Shylock agent.
         </p>
         <button
           onClick={() => { setStatus('idle'); setPhone(''); setName('') }}

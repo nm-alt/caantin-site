@@ -18,6 +18,11 @@ const config: Config = {
         'silver': '#999795',
         'near-white': '#f4f2f0',
         'off-white': '#fafaf8',
+        'accent': '#EC4E02',
+        'accent-hover': '#d94500',
+        'accent-light': '#FFF4EE',
+        'peach': '#F5D5C0',
+        'warm-gray': '#F0EDEA',
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],

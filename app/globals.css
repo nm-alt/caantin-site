@@ -115,6 +115,17 @@ body {
   background: var(--near-black);
 }
 
+.btn-cta-accent {
+  color: white;
+  background: #EC4E02;
+  border-color: #EC4E02;
+}
+
+.btn-cta-accent:hover {
+  background: #d94500;
+  border-color: #d94500;
+}
+
 /* ─── Scrollbar ──────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 3px;
