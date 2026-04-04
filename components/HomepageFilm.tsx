@@ -319,15 +319,92 @@ export default function HomepageFilm() {
       {/* ─── TRY IT ─── */}
       <section className="bg-warm-gray py-20 md:py-28" aria-label="Try it">
         <div className="max-w-[1200px] mx-auto px-6 md:px-10">
-          <p className="type-label text-accent mb-3">Try it now</p>
-          <h2 className="type-headline text-stone-black text-display-lg mb-6 max-w-2xl">
-            Hear a live agent. Right now.
-          </h2>
-          <p className="type-body text-mid text-base mb-12 max-w-md">
-            Enter your number and a Shylock agent calls you in seconds. This is a real call — not a recording.
-          </p>
-          <div className="max-w-sm">
-            <SpeakToMatt variant="light" />
+          <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+            {/* Left: form */}
+            <div>
+              <p className="type-label text-accent mb-3">Try it now</p>
+              <h2 className="type-headline text-stone-black text-display-lg mb-6">
+                Hear a live agent. Right now.
+              </h2>
+              <p className="type-body text-mid text-base mb-10">
+                Enter your number and a Shylock agent calls you in seconds. This is a real call — not a recording.
+              </p>
+              <SpeakToMatt variant="light" />
+            </div>
+
+            {/* Right: sample transcript */}
+            <div className="bg-white rounded-2xl border border-stone/10 overflow-hidden shadow-sm">
+              {/* Header */}
+              <div className="flex items-center gap-3 px-5 py-4 border-b border-stone/8">
+                <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                <span className="type-mono text-[10px] text-stone/50 uppercase tracking-widest">Live call · In progress</span>
+              </div>
+              {/* Transcript */}
+              <div className="px-5 py-6 space-y-5 text-sm">
+                <div className="flex gap-3 items-start">
+                  <div className="w-6 h-6 rounded-full bg-accent/10 text-accent flex items-center justify-center shrink-0 mt-0.5">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="type-label text-[9px] text-stone/35 mb-1">Agent · Jane</p>
+                    <p className="text-stone-black/85 leading-relaxed">Hi Amara, this is Jane calling from Kopa. I'm reaching out about your account. Is now a good time?</p>
+                  </div>
+                </div>
+                <div className="flex gap-3 items-start justify-end">
+                  <div>
+                    <p className="type-label text-[9px] text-stone/35 mb-1 text-right">Customer</p>
+                    <p className="text-mid leading-relaxed text-right">Yes, I've been expecting your call.</p>
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-stone/8 flex items-center justify-center shrink-0 mt-0.5">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </div>
+                </div>
+                <div className="flex gap-3 items-start">
+                  <div className="w-6 h-6 rounded-full bg-accent/10 text-accent flex items-center justify-center shrink-0 mt-0.5">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="type-label text-[9px] text-stone/35 mb-1">Agent · Jane</p>
+                    <p className="text-stone-black/85 leading-relaxed">I can see a balance of $240 due. If we split that into two payments — one today and one in two weeks — would that work for you?</p>
+                  </div>
+                </div>
+                <div className="flex gap-3 items-start justify-end">
+                  <div>
+                    <p className="type-label text-[9px] text-stone/35 mb-1 text-right">Customer</p>
+                    <p className="text-mid leading-relaxed text-right">Yes, that works. Let's do it.</p>
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-stone/8 flex items-center justify-center shrink-0 mt-0.5">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </div>
+                </div>
+                {/* Typing indicator */}
+                <div className="flex gap-3 items-start">
+                  <div className="w-6 h-6 rounded-full bg-accent/10 text-accent flex items-center justify-center shrink-0">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                    </svg>
+                  </div>
+                  <div className="flex items-center gap-1.5 mt-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent/50 animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent/50 animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent/50 animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </div>
+                </div>
+              </div>
+              {/* Footer */}
+              <div className="px-5 py-3 border-t border-stone/8 flex items-center justify-between">
+                <span className="type-mono text-[9px] text-stone/30">Outcome: payment plan agreed</span>
+                <span className="type-mono text-[9px] text-accent">✓ Logged</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
