@@ -1,9 +1,9 @@
 'use client'
 
+import { useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
 import AgentPrompt from '@/components/AgentPrompt'
 import SpeakToMatt from '@/components/SpeakToMatt'
-import AudioPlayer from '@/components/AudioPlayer'
 
 const CHANNELS = [
   {
@@ -46,12 +46,176 @@ const CHANNELS = [
   },
 ]
 
-const MODELS = [
-  { name: 'ElevenLabs', desc: 'Voices — 30+ languages, custom cloning, accents and tonality' },
-  { name: 'OpenAI Whisper', desc: 'Speech-to-text — large v3, accurate across accents' },
-  { name: 'Google Gemini', desc: 'Reasoning — fast, multilingual, context-aware' },
-  { name: 'OpenAI GPT-4o', desc: 'Reasoning — advanced, tool use, structured output' },
+// Update this list as integrations expand — the globe layout adapts automatically
+const INTEGRATIONS = [
+  { name: 'ElevenLabs', sub: 'Voice AI',       deg: -90  },
+  { name: 'OpenAI',     sub: 'Models + STT',   deg: -45  },
+  { name: 'Google',     sub: 'AI + STT',       deg: 0    },
+  { name: 'Deepgram',   sub: 'Speech-to-Text', deg: 45   },
+  { name: 'Twilio',     sub: 'Telephony',      deg: 90   },
+  { name: 'WhatsApp',   sub: 'Messaging',      deg: 135  },
+  { name: 'Vonage',     sub: 'Telephony',      deg: 180  },
+  { name: 'Anthropic',  sub: 'AI Models',      deg: -135 },
 ]
+
+const CX = 290, CY = 290, GLOBE_R = 118, ORBIT_R = 222
+
+function IntegrationsViz() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0 })
+  const [hovered, setHovered] = useState<string | null>(null)
+  const [isOver, setIsOver] = useState(false)
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const el = containerRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const cx = rect.left + rect.width / 2
+    const cy = rect.top + rect.height / 2
+    const dx = (e.clientX - cx) / (rect.width / 2)   // -1 → 1
+    const dy = (e.clientY - cy) / (rect.height / 2)  // -1 → 1
+    setTilt({ rx: -dy * 12, ry: dx * 12 })
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    setTilt({ rx: 0, ry: 0 })
+    setIsOver(false)
+  }, [])
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative mx-auto select-none"
+      style={{ width: 580, height: 580, perspective: 800 }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsOver(true)}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* 3D tilt wrapper */}
+      <div
+        className="absolute inset-0"
+        style={{
+          transform: `rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg)`,
+          transformStyle: 'preserve-3d',
+          transition: isOver ? 'transform 0.08s ease-out' : 'transform 0.6s ease-out',
+        }}
+      >
+        {/* SVG layer: globe + orbit ring + dashed lines */}
+        <svg viewBox="0 0 580 580" fill="none" className="absolute inset-0 w-full h-full" aria-hidden="true">
+          <defs>
+            <clipPath id="ig-clip"><circle cx={CX} cy={CY} r={GLOBE_R} /></clipPath>
+            <radialGradient id="ig-bg" cx="38%" cy="32%" r="62%">
+              <stop offset="0%"   stopColor="rgba(255,130,70,0.18)" />
+              <stop offset="100%" stopColor="rgba(140,35,0,0.04)"   />
+            </radialGradient>
+            <radialGradient id="ig-bg-hover" cx="38%" cy="32%" r="62%">
+              <stop offset="0%"   stopColor="rgba(255,150,90,0.28)" />
+              <stop offset="100%" stopColor="rgba(180,50,0,0.08)"   />
+            </radialGradient>
+            <filter id="ig-glow" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="ig-line-glow" x="-200%" y="-200%" width="500%" height="500%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          {/* Globe fill — brightens on hover */}
+          <circle cx={CX} cy={CY} r={GLOBE_R} fill={isOver ? 'url(#ig-bg-hover)' : 'url(#ig-bg)'}
+            style={{ transition: 'fill 0.4s' }} />
+
+          {/* Latitude + meridian grid */}
+          <g clipPath="url(#ig-clip)" stroke="rgba(255,255,255,0.16)" strokeWidth="0.9">
+            <ellipse cx={CX} cy={CY}       rx={GLOBE_R}                   ry={Math.round(GLOBE_R*0.26)} />
+            <ellipse cx={CX} cy={CY - 60}  rx={Math.round(GLOBE_R*0.87)} ry={Math.round(GLOBE_R*0.22)} />
+            <ellipse cx={CX} cy={CY + 60}  rx={Math.round(GLOBE_R*0.87)} ry={Math.round(GLOBE_R*0.22)} />
+            <ellipse cx={CX} cy={CY - 102} rx={Math.round(GLOBE_R*0.5)}  ry={Math.round(GLOBE_R*0.13)} />
+            <ellipse cx={CX} cy={CY + 102} rx={Math.round(GLOBE_R*0.5)}  ry={Math.round(GLOBE_R*0.13)} />
+            <ellipse cx={CX} cy={CY} rx={Math.round(GLOBE_R*0.26)} ry={GLOBE_R} />
+            <ellipse cx={CX} cy={CY} rx={Math.round(GLOBE_R*0.72)} ry={GLOBE_R} />
+            <ellipse cx={CX} cy={CY} rx={GLOBE_R}                  ry={GLOBE_R} />
+          </g>
+
+          {/* Globe outline */}
+          <circle cx={CX} cy={CY} r={GLOBE_R} stroke="rgba(255,255,255,0.22)" strokeWidth="1" />
+
+          {/* City dots */}
+          <g filter="url(#ig-glow)">
+            <circle cx={CX - 20} cy={CY +  5} r="3"   fill="white" opacity="0.9" />
+            <circle cx={CX -  6} cy={CY - 53} r="3"   fill="white" opacity="0.9" />
+            <circle cx={CX + 29} cy={CY +  9} r="3"   fill="white" opacity="0.9" />
+            <circle cx={CX + 36} cy={CY - 37} r="2.5" fill="white" opacity="0.8" />
+            <circle cx={CX - 44} cy={CY + 44} r="2.5" fill="white" opacity="0.75"/>
+          </g>
+
+          {/* Pulsing rings */}
+          <circle cx={CX - 20} cy={CY + 5} r="5" stroke="rgba(255,255,255,0.4)" strokeWidth="1" fill="none">
+            <animate attributeName="r"       values="5;15;5"    dur="3.2s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.4;0;0.4" dur="3.2s" repeatCount="indefinite" />
+          </circle>
+          <circle cx={CX + 29} cy={CY + 9} r="5" stroke="rgba(255,255,255,0.35)" strokeWidth="1" fill="none">
+            <animate attributeName="r"       values="5;15;5"      dur="4.1s" repeatCount="indefinite" begin="1.4s" />
+            <animate attributeName="opacity" values="0.35;0;0.35" dur="4.1s" repeatCount="indefinite" begin="1.4s" />
+          </circle>
+
+          {/* Orbit ring */}
+          <circle cx={CX} cy={CY} r={ORBIT_R} stroke="rgba(255,255,255,0.06)" strokeWidth="1" fill="none" />
+
+          {/* Dashed connecting lines — orange + glow when badge is hovered */}
+          {INTEGRATIONS.map(({ name, deg }) => {
+            const rad = (deg * Math.PI) / 180
+            const active = hovered === name
+            return (
+              <line
+                key={name}
+                x1={CX + GLOBE_R * Math.cos(rad)}
+                y1={CY + GLOBE_R * Math.sin(rad)}
+                x2={CX + (ORBIT_R - 56) * Math.cos(rad)}
+                y2={CY + (ORBIT_R - 56) * Math.sin(rad)}
+                stroke={active ? '#EC4E02' : 'rgba(255,255,255,0.08)'}
+                strokeWidth={active ? 1.5 : 1}
+                strokeDasharray={active ? '4 3' : '3 4'}
+                filter={active ? 'url(#ig-line-glow)' : undefined}
+                style={{ transition: 'stroke 0.2s, stroke-width 0.2s' }}
+              />
+            )
+          })}
+        </svg>
+
+        {/* HTML badge layer */}
+        {INTEGRATIONS.map(({ name, sub, deg }) => {
+          const rad = (deg * Math.PI) / 180
+          const active = hovered === name
+          return (
+            <div
+              key={name}
+              className="absolute -translate-x-1/2 -translate-y-1/2"
+              style={{ left: CX + ORBIT_R * Math.cos(rad), top: CY + ORBIT_R * Math.sin(rad) }}
+              onMouseEnter={() => setHovered(name)}
+              onMouseLeave={() => setHovered(null)}
+            >
+              <div
+                className="rounded-lg px-3 py-2 text-center whitespace-nowrap cursor-default"
+                style={{
+                  background: active ? 'rgba(236,78,2,0.15)' : 'rgba(255,255,255,0.06)',
+                  border: `1px solid ${active ? 'rgba(236,78,2,0.6)' : 'rgba(255,255,255,0.12)'}`,
+                  boxShadow: active ? '0 0 16px rgba(236,78,2,0.25)' : 'none',
+                  transition: 'background 0.2s, border-color 0.2s, box-shadow 0.2s',
+                  transform: active ? 'scale(1.06)' : 'scale(1)',
+                }}
+              >
+                <p className="type-mono text-white text-[11px] font-semibold leading-tight">{name}</p>
+                <p className="type-body text-white/35 text-[9px] leading-tight mt-0.5">{sub}</p>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 
 export default function HomepageFilm() {
   return (
@@ -122,22 +286,30 @@ export default function HomepageFilm() {
         </div>
       </section>
 
-      {/* ─── AI MODELS ─── */}
-      <section className="bg-stone-black py-20 md:py-28" aria-label="Models">
+      {/* ─── INTEGRATIONS ─── */}
+      <section className="bg-stone-black py-20 md:py-28 overflow-hidden" aria-label="Integrations">
         <div className="max-w-[1200px] mx-auto px-6 md:px-10">
-          <p className="type-label text-accent mb-3">Choose your models</p>
-          <h2 className="type-headline text-white text-display-lg mb-6 max-w-2xl">
-            The best AI models. Pre-integrated.
-          </h2>
-          <p className="type-body text-white/60 text-base mb-14 md:mb-20 max-w-xl">
-            Pick from ElevenLabs, OpenAI, Google — voices, speech recognition, and reasoning. Mix and match. Switch anytime. We handle the integration.
-          </p>
+          <div className="text-center mb-4">
+            <p className="type-label text-accent mb-3">Integrations</p>
+            <h2 className="type-headline text-white text-display-lg mb-5 max-w-2xl mx-auto">
+              Works with the world&apos;s best.
+            </h2>
+            <p className="type-body text-white/50 text-base max-w-lg mx-auto">
+              Pre-integrated with leading voice AI, language models, telephony providers, and messaging platforms. As better models emerge, we add them.
+            </p>
+          </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {MODELS.map(({ name, desc }) => (
-              <div key={name} className="border border-white/10 rounded-xl p-6 hover:border-accent/40 transition-colors duration-200">
-                <h3 className="type-headline-lg text-white text-lg mb-2">{name}</h3>
-                <p className="type-body text-white/50 text-sm leading-relaxed">{desc}</p>
+          {/* Globe orbit — desktop */}
+          <div className="hidden md:flex justify-center mt-2">
+            <IntegrationsViz />
+          </div>
+
+          {/* Badge grid — mobile fallback */}
+          <div className="flex flex-wrap justify-center gap-3 mt-10 md:hidden">
+            {INTEGRATIONS.map(({ name, sub }) => (
+              <div key={name} className="bg-white/[0.06] border border-white/[0.12] rounded-lg px-3 py-2 text-center">
+                <p className="type-mono text-white text-xs font-semibold">{name}</p>
+                <p className="type-body text-white/35 text-[10px] mt-0.5">{sub}</p>
               </div>
             ))}
           </div>
@@ -148,48 +320,14 @@ export default function HomepageFilm() {
       <section className="bg-warm-gray py-20 md:py-28" aria-label="Try it">
         <div className="max-w-[1200px] mx-auto px-6 md:px-10">
           <p className="type-label text-accent mb-3">Try it now</p>
-          <h2 className="type-headline text-stone-black text-display-lg mb-14 md:mb-20 max-w-2xl">
-            Hear it. Or experience it yourself.
+          <h2 className="type-headline text-stone-black text-display-lg mb-6 max-w-2xl">
+            Hear a live agent. Right now.
           </h2>
-
-          <div className="grid md:grid-cols-2 gap-10 md:gap-14">
-            <div>
-              <p className="type-label text-mid mb-4">Get a call from Shylock</p>
-              <SpeakToMatt variant="light" />
-            </div>
-            <div>
-              <p className="type-label text-mid mb-4">Listen to a real call</p>
-              <AudioPlayer />
-              <div className="border border-stone/10 bg-white rounded-xl p-5 mt-4">
-                <p className="type-label text-stone/40 text-[10px] mb-4">Transcript</p>
-                <div className="space-y-3 text-sm">
-                  <div>
-                    <p className="type-label text-stone/40 text-[9px] mb-1">Agent</p>
-                    <p className="text-stone-black/80">
-                      Hi Ama, this is a call regarding your loan with Kopa. We&apos;d like to help you stay current. Can we look at a plan that works for you?
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="type-label text-stone/40 text-[9px] mb-1">Customer</p>
-                    <p className="text-mid">
-                      I lost my job last month. I can&apos;t pay everything now.
-                    </p>
-                  </div>
-                  <div>
-                    <p className="type-label text-stone/40 text-[9px] mb-1">Agent</p>
-                    <p className="text-stone-black/80">
-                      Understood. If we split the balance over three payments, your first instalment would be on the 5th. Does that work?
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="type-label text-stone/40 text-[9px] mb-1">Customer</p>
-                    <p className="text-mid">
-                      Yes, that works. I can do that.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <p className="type-body text-mid text-base mb-12 max-w-md">
+            Enter your number and a Shylock agent calls you in seconds. This is a real call — not a recording.
+          </p>
+          <div className="max-w-sm">
+            <SpeakToMatt variant="light" />
           </div>
         </div>
       </section>
