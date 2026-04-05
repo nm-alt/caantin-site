@@ -349,13 +349,13 @@ export default function HomepageFilm() {
                   </div>
                   <div>
                     <p className="type-label text-[9px] text-stone/35 mb-1">Agent · Jane</p>
-                    <p className="text-stone-black/85 leading-relaxed">Hi Amara, this is Jane calling from Kopa. I'm reaching out about your account. Is now a good time?</p>
+                    <p className="text-stone-black/85 leading-relaxed">Hi Amara, this is Jane calling from Kopa. I&apos;m reaching out about your account. Is now a good time?</p>
                   </div>
                 </div>
                 <div className="flex gap-3 items-start justify-end">
                   <div>
                     <p className="type-label text-[9px] text-stone/35 mb-1 text-right">Customer</p>
-                    <p className="text-mid leading-relaxed text-right">Yes, I've been expecting your call.</p>
+                    <p className="text-mid leading-relaxed text-right">Yes, I&apos;ve been expecting your call.</p>
                   </div>
                   <div className="w-6 h-6 rounded-full bg-stone/8 flex items-center justify-center shrink-0 mt-0.5">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -377,7 +377,7 @@ export default function HomepageFilm() {
                 <div className="flex gap-3 items-start justify-end">
                   <div>
                     <p className="type-label text-[9px] text-stone/35 mb-1 text-right">Customer</p>
-                    <p className="text-mid leading-relaxed text-right">Yes, that works. Let's do it.</p>
+                    <p className="text-mid leading-relaxed text-right">Yes, that works. Let&apos;s do it.</p>
                   </div>
                   <div className="w-6 h-6 rounded-full bg-stone/8 flex items-center justify-center shrink-0 mt-0.5">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
