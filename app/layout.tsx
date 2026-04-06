@@ -94,10 +94,10 @@ export default function RootLayout({
                     operatingSystem: 'Web',
                     url: 'https://app.shylock.ai',
                     description:
-                      'AI voice and messaging platform. Build agents, launch campaigns, and manage conversations across voice, WhatsApp, SMS, and email.',
+                      'AI voice and messaging platform. Build agents and manage conversations across voice, WhatsApp, SMS, and email.',
                     featureList: [
                       'AI agent studio',
-                      'Multi-channel campaigns (voice, WhatsApp, SMS, email)',
+                      'Multi-channel outreach (voice, WhatsApp, SMS, email)',
                       'Real-time transcripts and recordings',
                       'Automated contact strategies',
                       'Outcome tracking and dashboards',

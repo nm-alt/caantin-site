@@ -5,7 +5,7 @@ import Footer from '@/components/Footer'
 export const metadata: Metadata = {
   title: 'Docs — Shylock',
   description:
-    'Sauti API documentation. Programmatic access to calls, messages, agents, and campaigns.',
+    'Sauti API documentation. Programmatic access to calls, messages, and agents.',
   alternates: { canonical: 'https://shylock.ai/docs' },
 }
 
@@ -134,7 +134,7 @@ export default function DocsPage() {
               Sauti API
             </h1>
             <p className="type-body text-mid text-lg max-w-xl mb-8">
-              Programmatic access to calls, messages, agents, and campaigns. RESTful endpoints, webhook events, full control.
+              Programmatic access to calls, messages, and agents. RESTful endpoints, webhook events, full control.
             </p>
             <div className="flex flex-wrap gap-3 items-center">
               <span className="type-mono text-sm text-stone-mid bg-white border border-stone/10 rounded-lg px-4 py-2">

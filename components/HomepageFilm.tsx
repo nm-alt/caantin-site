@@ -2,8 +2,7 @@
 
 import { useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
-import AgentPrompt from '@/components/AgentPrompt'
-import SpeakToMatt from '@/components/SpeakToMatt'
+import CallbackWidget from '@/components/CallbackWidget'
 
 const CHANNELS = [
   {
@@ -241,7 +240,7 @@ export default function HomepageFilm() {
               </div>
             </div>
 
-            <AgentPrompt />
+            <CallbackWidget variant="light" />
           </div>
         </div>
       </section>
@@ -316,20 +315,20 @@ export default function HomepageFilm() {
         </div>
       </section>
 
-      {/* ─── TRY IT ─── */}
-      <section className="bg-warm-gray py-20 md:py-28" aria-label="Try it">
+      {/* ─── TALK TO US ─── */}
+      <section className="bg-warm-gray py-20 md:py-28" aria-label="Talk to us">
         <div className="max-w-[1200px] mx-auto px-6 md:px-10">
           <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
             {/* Left: form */}
             <div>
-              <p className="type-label text-accent mb-3">Try it now</p>
+              <p className="type-label text-accent mb-3">Talk to us</p>
               <h2 className="type-headline text-stone-black text-display-lg mb-6">
-                Hear a live agent. Right now.
+                Speak to Matt. Right now.
               </h2>
               <p className="type-body text-mid text-base mb-10">
-                Enter your number and a Shylock agent calls you in seconds. This is a real call — not a recording.
+                Enter your number and Matt calls you in under a minute. No forms, no waiting.
               </p>
-              <SpeakToMatt variant="light" />
+              <CallbackWidget variant="light" />
             </div>
 
             {/* Right: sample transcript */}
@@ -434,9 +433,9 @@ export default function HomepageFilm() {
             </div>
             <div className="relative">
               <div className="w-12 h-12 rounded-xl bg-accent text-white flex items-center justify-center type-headline text-xl mb-5">3</div>
-              <h3 className="type-headline-lg text-stone-black text-xl mb-3">Launch a campaign</h3>
+              <h3 className="type-headline-lg text-stone-black text-xl mb-3">Start reaching customers</h3>
               <p className="type-body text-mid text-sm leading-relaxed">
-                Upload a CSV or connect your CRM. Pick a strategy. Your agent starts reaching customers immediately. Every outcome logged.
+                Upload a CSV or connect your CRM. Pick a strategy. Your agent starts conversations immediately. Every outcome logged.
               </p>
             </div>
           </div>
@@ -453,7 +452,7 @@ export default function HomepageFilm() {
                 Sauti API
               </h2>
               <p className="type-body text-white/60 text-base mb-10 max-w-md">
-                Programmatic access to calls, messages, agents, and campaigns. RESTful endpoints, webhook events, full documentation.
+                Programmatic access to calls, messages, and agents. RESTful endpoints, webhook events, full documentation.
               </p>
 
               <div className="space-y-6">
@@ -565,7 +564,7 @@ export default function HomepageFilm() {
             Build your first agent.
           </h2>
           <p className="type-body text-mid text-lg md:text-xl max-w-lg mx-auto mb-8">
-            Connect a channel. Launch a campaign. Start reaching customers today.
+            Connect a channel. Start reaching customers today.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <a href="https://app.shylock.ai" className="btn-cta btn-cta-accent">
