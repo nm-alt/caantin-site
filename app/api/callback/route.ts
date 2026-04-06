@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 
-const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID ?? ''
-const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN ?? ''
-const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER ?? ''
-const MATT_PHONE_NUMBER = process.env.MATT_PHONE_NUMBER ?? ''
+const SAUTI_API_KEY = process.env.SAUTI_API_KEY ?? ''
+const CALLBACK_ASSISTANT_ID = process.env.CALLBACK_ASSISTANT_ID ?? ''
+const DEMO_PHONE_ID = process.env.DEMO_PHONE_NUMBER_ID ?? ''
+const SAUTI_URL = 'https://sauti.shylock.ai/api/v1/calls'
 
 // Simple rate limiter: max 3 calls per IP per hour
 const callLog = new Map<string, number[]>()
@@ -38,14 +38,6 @@ export async function POST(req: Request) {
       )
     }
 
-    if (!TWILIO_ACCOUNT_SID || !TWILIO_AUTH_TOKEN || !TWILIO_PHONE_NUMBER || !MATT_PHONE_NUMBER) {
-      console.error('Missing Twilio environment variables')
-      return NextResponse.json(
-        { error: 'Callback is temporarily unavailable. Please email hello@shylock.ai.' },
-        { status: 503 },
-      )
-    }
-
     // Rate limit by IP
     const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
     if (isRateLimited(ip)) {
@@ -55,35 +47,24 @@ export async function POST(req: Request) {
       )
     }
 
-    const visitorNumber = phoneNumber.replace(/\s/g, '')
-
-    // TwiML: when Matt picks up, announce the visitor and bridge the call
-    const twiml = `<Response><Say voice="alice">Incoming callback from the Shylock website. Connecting you now.</Say><Dial callerId="${TWILIO_PHONE_NUMBER}" timeout="30" action="/api/callback/fallback"><Number>${visitorNumber}</Number></Dial></Response>`
-
-    // Call Matt first. When he picks up, TwiML bridges to the visitor.
-    const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Calls.json`
-
-    const body = new URLSearchParams({
-      To: MATT_PHONE_NUMBER,
-      From: TWILIO_PHONE_NUMBER,
-      Twiml: twiml,
-      Timeout: '25',
-      StatusCallback: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://shylock.ai'}/api/callback/status`,
-      StatusCallbackEvent: 'completed',
-    })
-
-    const res = await fetch(twilioUrl, {
+    // Call visitor via Sauti — the assistant is configured to bridge to Matt
+    const res = await fetch(SAUTI_URL, {
       method: 'POST',
       headers: {
-        Authorization: 'Basic ' + btoa(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`),
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-API-Key': SAUTI_API_KEY,
+        'Content-Type': 'application/json',
       },
-      body: body.toString(),
+      body: JSON.stringify({
+        assistantId: CALLBACK_ASSISTANT_ID,
+        phoneNumberId: DEMO_PHONE_ID,
+        customer: { number: phoneNumber.replace(/\s/g, '') },
+        metadata: { source: 'website-callback' },
+      }),
     })
 
     if (!res.ok) {
       const text = await res.text()
-      console.error('Twilio error:', res.status, text)
+      console.error('Sauti error:', res.status, text)
       return NextResponse.json(
         { error: 'Something went wrong. Please try again or email hello@shylock.ai.' },
         { status: 502 },
