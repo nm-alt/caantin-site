@@ -5,59 +5,61 @@ import './globals.css'
 import { PostHogProvider } from './providers'
 import PostHogPageView from './PostHogPageView'
 
+// V2 — Inter replaces DM Sans. Heavy weights (700–900) carry the brand.
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '900'],
+  weight: ['400', '500', '600', '700', '800', '900'],
   variable: '--font-inter',
   display: 'swap',
 })
 
-const jetbrainsMono = JetBrains_Mono({
+// V2 — JetBrains Mono replaces Space Mono. Sharper utility.
+const jetbrains = JetBrains_Mono({
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '700'],
   variable: '--font-mono',
   display: 'swap',
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://shylock.ai'),
-  title: 'Shylock — AI voice and messaging platform',
+  metadataBase: new URL('https://caantin.ai'),
+  title: 'AirDial — A call center in your pocket.',
   description:
-    'Build AI agents that call, message, and collect across voice, WhatsApp, SMS, and email. One platform, every conversation.',
+    'Live in 3 minutes. Priced from $0.02/min. AI agents that take every call and message — in Lagos, Nairobi, Mexico City, Johannesburg, Kampala, Dar es Salaam, Kigali, and Accra.',
   keywords: [
     'AI voice agents',
-    'voice AI platform',
+    'AI call center',
     'AI calling platform',
-    'AI WhatsApp agents',
+    'WhatsApp AI agents',
     'conversational AI',
-    'voice agent builder',
-    'AI outbound calls',
-    'AI collections',
-    'AI sales calls',
-    'Shylock AI',
+    'AI agents Nigeria',
+    'AI agents Kenya',
+    'AI agents Mexico',
+    'AI agents South Africa',
+    'AirDial',
   ],
   openGraph: {
-    title: 'Shylock — AI voice and messaging platform',
+    title: 'AirDial — A call center in your pocket.',
     description:
-      'Build AI agents that call, message, and collect across voice, WhatsApp, SMS, and email. One platform, every conversation.',
+      'Every call, every customer, handled. Live in 3 minutes. Live in 8 countries.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Shylock — AI voice and messaging platform',
+        alt: 'AirDial — A call center in your pocket.',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Shylock — AI voice and messaging platform',
+    title: 'AirDial — A call center in your pocket.',
     description:
-      'Build AI agents that call, message, and collect across voice, WhatsApp, SMS, and email. One platform, every conversation.',
+      'Live in 3 minutes. Priced from $0.02/min. AI agents across voice, WhatsApp, SMS, and email.',
   },
   alternates: {
-    canonical: 'https://shylock.ai',
+    canonical: 'https://caantin.ai',
   },
 }
 
@@ -67,8 +69,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="bg-near-white text-stone-black antialiased overflow-x-hidden">
+    <html lang="en" className={`${inter.variable} ${jetbrains.variable}`}>
+      <body className="bg-pink text-pink-ink antialiased overflow-x-hidden">
         <PostHogProvider>
           <PostHogPageView />
           <script
@@ -79,37 +81,47 @@ export default function RootLayout({
                 '@graph': [
                   {
                     '@type': 'Organization',
-                    '@id': 'https://shylock.ai/#organization',
-                    name: 'Shylock',
-                    url: 'https://shylock.ai',
+                    '@id': 'https://caantin.ai/#organization',
+                    name: 'AirDial',
+                    url: 'https://caantin.ai',
                     description:
-                      'AI voice and messaging platform. Build agents that call, message, and collect across every channel.',
+                      'Communication infrastructure for every business on earth. A call center in your pocket.',
                     email: 'hello@shylock.ai',
+                    areaServed: [
+                      'Mexico',
+                      'South Africa',
+                      'Nigeria',
+                      'Kenya',
+                      'Uganda',
+                      'Tanzania',
+                      'Rwanda',
+                      'Ghana',
+                    ],
                   },
                   {
                     '@type': 'SoftwareApplication',
-                    '@id': 'https://shylock.ai/#product',
-                    name: 'Shylock',
+                    '@id': 'https://caantin.ai/#product',
+                    name: 'AirDial',
                     applicationCategory: 'BusinessApplication',
                     operatingSystem: 'Web',
                     url: 'https://app.shylock.ai',
                     description:
-                      'AI voice and messaging platform. Build agents and manage conversations across voice, WhatsApp, SMS, and email.',
+                      'A call center in your pocket. AI agents that call, message, and respond across voice, WhatsApp, SMS, and email. Live in 8 countries.',
                     featureList: [
                       'AI agent studio',
-                      'Multi-channel outreach (voice, WhatsApp, SMS, email)',
+                      'Multi-channel campaigns (voice, WhatsApp, SMS, email)',
                       'Real-time transcripts and recordings',
                       'Automated contact strategies',
                       'Outcome tracking and dashboards',
                     ],
-                    provider: { '@id': 'https://shylock.ai/#organization' },
+                    provider: { '@id': 'https://caantin.ai/#organization' },
                   },
                   {
                     '@type': 'WebSite',
-                    '@id': 'https://shylock.ai/#website',
-                    url: 'https://shylock.ai',
-                    name: 'Shylock',
-                    publisher: { '@id': 'https://shylock.ai/#organization' },
+                    '@id': 'https://caantin.ai/#website',
+                    url: 'https://caantin.ai',
+                    name: 'AirDial',
+                    publisher: { '@id': 'https://caantin.ai/#organization' },
                   },
                 ],
               }),

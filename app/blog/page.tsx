@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { posts } from '@/lib/posts'
 
 export const metadata: Metadata = {
-  title: 'Blog — Shylock',
+  title: 'Blog — AirDial',
   description:
-    'Perspectives on AI communication infrastructure, collections, compliance, and the economics of customer engagement at scale.',
-  alternates: { canonical: 'https://shylock.ai/blog' },
+    'Notes on calls, collections, compliance, and the numbers behind customer conversations at scale.',
+  alternates: { canonical: 'https://caantin.ai/blog' },
 }
 
 export default function Blog() {
@@ -16,41 +16,41 @@ export default function Blog() {
     <>
       <Nav />
       <main>
-        <section className="bg-near-white pt-32 pb-16 md:pt-36 md:pb-20">
-          <div className="max-w-[1200px] mx-auto px-6 md:px-10">
-            <p className="type-label text-accent mb-3">Blog</p>
-            <h1 className="type-headline text-stone-black text-display-lg mb-4">
-              Intelligence
+        <section className="bg-pink pt-32 pb-16 md:pt-40 md:pb-24 border-b-2 border-pink-ink">
+          <div className="max-w-[1280px] mx-auto px-6 md:px-10">
+            <p className="type-label text-pink-ink/70 mb-5">Blog</p>
+            <h1 className="type-display-xl text-pink-ink mb-6">
+              Intelligence.
             </h1>
-            <p className="type-body text-mid text-lg max-w-xl">
-              Perspectives on collections, compliance, and the unit economics of customer engagement at scale.
+            <p className="type-body-lg text-pink-ink/80 max-w-2xl font-semibold">
+              Notes on calls, collections, compliance, and the numbers behind customer conversations at scale. From Lagos, Nairobi, Kigali, and everywhere in between.
             </p>
           </div>
         </section>
 
-        <section className="bg-white py-12 md:py-16">
-          <div className="max-w-[1200px] mx-auto px-6 md:px-10">
-            <div className="divide-y divide-stone/10">
+        <section className="bg-pink py-16 md:py-20">
+          <div className="max-w-[1280px] mx-auto px-6 md:px-10">
+            <div className="divide-y-2 divide-pink-ink">
               {posts.map((post) => (
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group flex flex-col md:flex-row md:items-start md:justify-between gap-4 md:gap-12 py-10 md:py-12"
+                  className="group flex flex-col md:flex-row md:items-start md:justify-between gap-4 md:gap-16 py-10 md:py-14"
                 >
-                  <div className="flex-1 max-w-2xl">
-                    <h2 className="type-headline-lg text-stone-black text-xl md:text-2xl mb-3 group-hover:text-accent transition-colors duration-200 leading-snug">
+                  <div className="flex-1 max-w-3xl">
+                    <h2 className="type-headline text-pink-ink text-2xl md:text-4xl mb-4 leading-none">
                       {post.title}
                     </h2>
-                    <p className="type-body text-mid text-sm md:text-base leading-relaxed">
+                    <p className="type-body text-pink-ink/80 text-base md:text-lg font-medium leading-snug">
                       {post.description}
                     </p>
                   </div>
 
                   <div className="flex md:flex-col items-center md:items-end justify-between md:justify-start gap-4 md:gap-6 flex-shrink-0">
-                    <span className="type-label text-silver text-xs tracking-widest whitespace-nowrap">
+                    <span className="type-mono text-pink-ink/60 text-xs font-bold tracking-widest whitespace-nowrap uppercase">
                       {post.dateFormatted}
                     </span>
-                    <span className="type-label text-accent text-xs tracking-widest group-hover:gap-3 transition-all duration-300">
+                    <span className="type-mono text-pink-ink font-bold text-xs tracking-widest uppercase group-hover:underline">
                       Read &rarr;
                     </span>
                   </div>

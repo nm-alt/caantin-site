@@ -24,17 +24,11 @@ const nextConfig: NextConfig = {
       { source: '/use-cases/:slug', destination: '/', permanent: true },
       { source: '/for/:slug', destination: '/', permanent: true },
       { source: '/caantin', destination: '/', permanent: true },
-      // Redirect www variants
+      // Redirect www.caantin.ai → caantin.ai
       {
         source: '/:path*',
         has: [{ type: 'host', value: 'www.caantin.ai' }],
         destination: 'https://caantin.ai/:path*',
-        permanent: true,
-      },
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.caantin.com' }],
-        destination: 'https://caantin.com/:path*',
         permanent: true,
       },
     ]

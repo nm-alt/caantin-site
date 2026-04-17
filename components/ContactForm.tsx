@@ -44,30 +44,33 @@ export default function ContactForm() {
 
   if (submitted) {
     return (
-      <div className="py-4">
-        <p className="text-white text-lg">
-          We&apos;ll be in touch shortly.
+      <div className="py-4 border-2 border-pink-ink p-6 bg-white">
+        <p className="type-headline text-pink-ink text-2xl mb-2">
+          Thanks.
+        </p>
+        <p className="type-body text-pink-ink/70 font-medium">
+          We&apos;ll be in touch within one business day.
         </p>
       </div>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6">
+    <form onSubmit={handleSubmit} className="w-full space-y-6">
       {[
         { name: 'name', label: 'Name', placeholder: 'Your name', required: true },
         { name: 'company', label: 'Company', placeholder: 'Your company', required: true },
         {
           name: 'bookSize',
           label: 'What are you building?',
-          placeholder: 'e.g. collections, sales outreach, customer engagement',
+          placeholder: 'e.g. collections, outbound sales, customer support',
           required: false,
         },
       ].map(({ name, label, placeholder, required }) => (
         <div key={name} className="flex flex-col gap-2">
           <label
             htmlFor={name}
-            className="type-label text-white/40 text-xs"
+            className="type-label text-pink-ink/70"
           >
             {label}
           </label>
@@ -80,7 +83,7 @@ export default function ContactForm() {
             value={form[name as keyof typeof form]}
             onChange={handleChange}
             autoComplete="off"
-            className="bg-transparent border-b border-white/20 text-white text-sm md:text-base py-3 focus:outline-none focus:border-white/60 transition-colors duration-200 placeholder:text-white/20"
+            className="bg-transparent border-b-2 border-pink-ink/30 text-pink-ink text-sm md:text-base py-3 focus:outline-none focus:border-pink-ink transition-colors duration-200 placeholder:text-pink-ink/40 font-semibold"
           />
         </div>
       ))}
@@ -89,13 +92,13 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={submitting}
-          className="btn-cta btn-cta-light disabled:opacity-50"
+          className="btn-cta btn-cta-dark disabled:opacity-50"
         >
           {submitting ? 'Sending...' : "Let's talk \u2192"}
         </button>
       </div>
 
-      <p className="type-label text-white/20 text-xs pt-2">
+      <p className="type-label text-pink-ink/50 pt-2">
         We respond within one business day.
       </p>
     </form>

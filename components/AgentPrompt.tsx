@@ -151,30 +151,30 @@ function AgentConfigDisplay({ config, onHearAgent }: { config: AgentConfig; onHe
 
   return (
     <div className="mt-4">
-      <div className="bg-stone-black rounded-lg overflow-hidden">
-        <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/10">
-          <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-          <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-          <span className="w-2.5 h-2.5 rounded-full bg-green-500/70" />
-          <span className="type-mono text-white/30 text-[10px] ml-2">agent.config</span>
+      <div className="bg-pink-ink border-2 border-pink-ink overflow-hidden">
+        <div className="flex items-center gap-2 px-4 py-2.5 border-b border-white/15">
+          <span className="w-2.5 h-2.5 rounded-full bg-pink" />
+          <span className="w-2.5 h-2.5 rounded-full bg-amber" />
+          <span className="w-2.5 h-2.5 rounded-full bg-live-green" />
+          <span className="type-mono text-white/50 text-[10px] ml-2 font-bold">AGENT.CONFIG</span>
         </div>
         <div className="p-4 space-y-1.5 type-mono text-[13px]">
-          {rows.slice(0, showRows).map(({ label, value }, i) => (
+          {rows.slice(0, showRows).map(({ label, value }) => (
             <div key={label} className="flex">
-              <span className="text-white/35 w-24 shrink-0">{label}</span>
-              <span className="text-green-400">
+              <span className="text-white/45 w-24 shrink-0 font-bold">{label}</span>
+              <span className="text-pink font-bold">
                 <TypewriterText text={value} delay={0} />
               </span>
             </div>
           ))}
           {showRows > rows.length - 1 && (
             <div className="flex items-center gap-2 mt-1">
-              <span className="text-white/35 w-24 shrink-0">Status</span>
+              <span className="text-white/45 w-24 shrink-0 font-bold">Status</span>
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-live-green opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-live-green" />
               </span>
-              <span className="text-green-400">Ready to deploy</span>
+              <span className="text-live-green font-bold">READY TO DEPLOY</span>
             </div>
           )}
         </div>
@@ -184,13 +184,13 @@ function AgentConfigDisplay({ config, onHearAgent }: { config: AgentConfig; onHe
         <div className="flex gap-3 mt-4">
           <button
             onClick={onHearAgent}
-            className="btn-cta btn-cta-accent flex-1 justify-center"
+            className="btn-cta btn-cta-dark flex-1 justify-center"
           >
             Hear {config.name} call you &rarr;
           </button>
           <a
             href={`https://app.shylock.ai/studio?agent=${encodeURIComponent(config.name)}&country=${encodeURIComponent(config.country)}`}
-            className="btn-cta btn-cta-dark flex-1 justify-center"
+            className="btn-cta btn-cta-outline flex-1 justify-center"
           >
             Deploy {config.name} &rarr;
           </a>
@@ -232,16 +232,16 @@ export default function AgentPrompt() {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div className="bg-white border border-stone/12 rounded-lg shadow-sm overflow-hidden">
+        <div className="bg-white border-2 border-pink-ink overflow-hidden">
           <textarea
             ref={textareaRef}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder={EXAMPLES[placeholderIdx]}
             rows={3}
-            className="w-full bg-transparent text-stone-black text-sm md:text-base resize-none focus:outline-none placeholder:text-stone/30 leading-relaxed p-5 pb-2"
+            className="w-full bg-transparent text-pink-ink text-sm md:text-base font-medium resize-none focus:outline-none placeholder:text-pink-ink/40 leading-relaxed p-5 pb-2"
           />
-          <div className="flex items-center justify-between px-5 pb-4">
+          <div className="flex items-center justify-between px-5 pb-4 gap-3">
             <div className="flex flex-wrap gap-1.5">
               {['Collections', 'Sales', 'Support', 'Reminders'].map((chip) => (
                 <button
@@ -253,18 +253,18 @@ export default function AgentPrompt() {
                     : chip === 'Support' ? EXAMPLES[2]
                     : EXAMPLES[3]
                   )}
-                  className="text-[11px] type-mono text-stone-mid border border-stone/10 rounded px-2 py-0.5 hover:border-accent hover:text-accent transition-all duration-200"
+                  className="text-[11px] type-mono font-bold text-pink-ink border-2 border-pink-ink px-2 py-0.5 hover:bg-pink-ink hover:text-pink transition-colors duration-150"
                 >
-                  {chip}
+                  {chip.toUpperCase()}
                 </button>
               ))}
             </div>
             <button
               type="submit"
-              className="w-9 h-9 rounded-lg bg-accent text-white flex items-center justify-center hover:bg-accent-hover transition-colors duration-200 shrink-0"
+              className="w-10 h-10 bg-pink-ink text-pink flex items-center justify-center hover:bg-black transition-colors duration-150 shrink-0"
               aria-label="Build agent"
             >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M1 7h12M8 2l5 5-5 5" />
               </svg>
             </button>
@@ -280,14 +280,13 @@ export default function AgentPrompt() {
       )}
 
       {showCallForm && config && (
-        <div className="mt-4 bg-stone-black rounded-lg p-5">
-          <p className="type-mono text-green-400 text-sm mb-4">
+        <div className="mt-4 bg-pink-ink border-2 border-pink-ink p-5">
+          <p className="type-mono text-pink text-sm mb-4 font-bold">
             Enter your number. {config.name} calls you in 10 seconds.
           </p>
           <form
             onSubmit={(e) => {
               e.preventDefault()
-              // Reuse SpeakToMatt's API — redirect to call form
               const q = encodeURIComponent(phone)
               window.location.hash = `demo-call:${q}`
             }}
@@ -296,19 +295,18 @@ export default function AgentPrompt() {
             <input
               type="tel"
               required
-              placeholder="+62 812 345 6789"
+              placeholder="+234 801 234 5678"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="flex-1 bg-transparent border-b border-white/20 text-white text-sm py-2 focus:outline-none focus:border-green-400 placeholder:text-white/20 type-mono"
+              className="flex-1 bg-transparent border-b-2 border-white/25 text-white text-sm py-2 focus:outline-none focus:border-pink placeholder:text-white/30 type-mono font-bold"
             />
             <button
               type="button"
               onClick={() => {
-                // Scroll to the SpeakToMatt section and pre-fill
                 const trySection = document.querySelector('[aria-label="Try it"]')
                 if (trySection) trySection.scrollIntoView({ behavior: 'smooth' })
               }}
-              className="btn-cta btn-cta-accent text-sm py-2 px-5"
+              className="btn-cta btn-cta-pink text-sm py-2 px-5"
             >
               Call me &rarr;
             </button>

@@ -18,7 +18,7 @@ export async function POST(req: Request) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Shylock Website <hello@shylock.ai>',
+        from: 'AirDial Website <hello@shylock.ai>',
         to: [NOTIFY_EMAIL],
         subject: `New inquiry from ${name} at ${company}`,
         html: `
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
             <p><strong>Company:</strong> ${company}</p>
             <p><strong>Delinquent book size:</strong> ${bookSize}</p>
             <hr style="margin: 24px 0; border: none; border-top: 1px solid #e5e5e5;" />
-            <p style="color: #666; font-size: 13px;">Submitted from shylock.ai/contact</p>
+            <p style="color: #666; font-size: 13px;">Submitted from caantin.ai/contact</p>
           </div>
         `,
       }),

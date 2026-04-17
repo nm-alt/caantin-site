@@ -7,9 +7,9 @@ const WHATSAPP_PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID ?? ''
 const WHATSAPP_APP_SECRET = process.env.WHATSAPP_APP_SECRET ?? ''
 
 // Matt Lawler's personality for text conversations
-const MATT_SYSTEM_PROMPT = `You are Matt Lawler, an AI sales agent for Shylock (shylock.ai). You're friendly, direct, and knowledgeable about debt collections technology.
+const MATT_SYSTEM_PROMPT = `You are Matt Lawler, an AI sales agent for AirDial (caantin.ai). You're friendly, direct, and knowledgeable about debt collections technology.
 
-Key facts about Shylock:
+Key facts about AirDial:
 - AI voice agents that call borrowers in their language to collect overdue debt
 - 8 languages including Nigerian Pidgin, Yoruba, Igbo, Swahili, French, Zulu, Afrikaans, English
 - 17 presets for different collection scenarios
@@ -129,7 +129,7 @@ async function generateMattReply(from: string, text: string): Promise<string> {
     const openaiKey = process.env.OPENAI_API_KEY
     if (!openaiKey) {
       conversations.set(from, history)
-      return "Hey! Thanks for reaching out. I'm Matt from Shylock — we help lenders recover overdue loans with AI voice agents. Want me to give you a quick call to walk you through it? Just share your number and I'll ring you in 10 seconds."
+      return "Hey! Thanks for reaching out. I'm Matt from AirDial — we help lenders recover overdue loans with AI voice agents. Want me to give you a quick call to walk you through it? Just share your number and I'll ring you in 10 seconds."
     }
 
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -151,7 +151,7 @@ async function generateMattReply(from: string, text: string): Promise<string> {
 
     if (!res.ok) {
       console.error('OpenAI error:', res.status, await res.text())
-      return "Thanks for reaching out! I'm Matt from Shylock. We help lenders recover overdue loans with AI voice agents that speak 8 languages. Want to try a free pilot with 100 accounts?"
+      return "Thanks for reaching out! I'm Matt from AirDial. We help lenders recover overdue loans with AI voice agents that speak 8 languages. Want to try a free pilot with 100 accounts?"
     }
 
     const data = await res.json()
@@ -163,7 +163,7 @@ async function generateMattReply(from: string, text: string): Promise<string> {
     return reply
   } catch (err) {
     console.error('Matt reply error:', err)
-    return "Thanks for reaching out! I'm Matt from Shylock. We help lenders recover overdue loans with AI voice agents. Tell me about your collections challenge and I'll show you how we can help."
+    return "Thanks for reaching out! I'm Matt from AirDial. We help lenders recover overdue loans with AI voice agents. Tell me about your collections challenge and I'll show you how we can help."
   }
 }
 

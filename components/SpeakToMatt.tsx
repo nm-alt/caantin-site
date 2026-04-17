@@ -55,23 +55,23 @@ function SpeakToMattForm({ variant = 'dark' }: { variant?: Variant }) {
 
   if (status === 'success') {
     return (
-      <div className={`border rounded-lg p-6 md:p-8 ${light ? 'border-stone/15 bg-white' : 'border-white/15'}`}>
+      <div className={`border-2 p-6 md:p-8 ${light ? 'border-pink-ink bg-white' : 'border-white/20 bg-pink-ink'}`}>
         <div className="flex items-center gap-3 mb-4">
           <span className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-live-green opacity-75" />
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-live-green" />
           </span>
-          <p className={`type-headline-lg text-lg ${light ? 'text-stone-black' : 'text-white'}`}>
-            SHYLOCK IS CALLING YOU
+          <p className={`type-headline text-xl ${light ? 'text-pink-ink' : 'text-pink'}`}>
+            AIRDIAL IS CALLING YOU
           </p>
         </div>
-        <p className={`type-body text-sm mb-6 ${light ? 'text-mid' : 'text-white/75'}`}>
-          Check your phone — you should be getting a call now. This is a live Shylock agent.
+        <p className={`type-body text-sm mb-6 font-medium ${light ? 'text-pink-ink/70' : 'text-white/75'}`}>
+          Check your phone. A live AirDial agent is ringing you right now.
         </p>
         <button
           onClick={() => { setStatus('idle'); setPhone(''); setName('') }}
-          className={`type-label text-xs transition-colors duration-300 ${
-            light ? 'text-mid hover:text-stone-black' : 'text-white/40 hover:text-white/70'
+          className={`type-label text-xs transition-colors duration-200 ${
+            light ? 'text-pink-ink/60 hover:text-pink-ink' : 'text-white/50 hover:text-pink'
           }`}
         >
           Try another number &rarr;
@@ -81,19 +81,19 @@ function SpeakToMattForm({ variant = 'dark' }: { variant?: Variant }) {
   }
 
   return (
-    <div className={`border rounded-lg p-6 md:p-8 ${light ? 'border-stone/15 bg-white' : 'border-white/15'}`}>
-      <p className={`type-label text-[10px] tracking-[0.18em] mb-2 ${light ? 'text-mid' : 'text-white/40'}`}>
+    <div className={`border-2 p-6 md:p-8 ${light ? 'border-pink-ink bg-white' : 'border-white/20 bg-pink-ink'}`}>
+      <p className={`type-label mb-2 ${light ? 'text-pink-ink/60' : 'text-pink'}`}>
         TRY IT NOW
       </p>
-      <p className={`type-body text-sm mb-6 ${light ? 'text-stone-mid' : 'text-white/75'}`}>
-        Enter your number. Shylock calls you in 10 seconds.
+      <p className={`type-body text-sm mb-6 font-medium ${light ? 'text-pink-ink/80' : 'text-white/80'}`}>
+        Enter your number. An AirDial agent calls you in 10 seconds.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="flex flex-col gap-2">
           <label
             htmlFor="demo-phone"
-            className={`type-label text-xs tracking-[0.12em] ${light ? 'text-mid' : 'text-white/40'}`}
+            className={`type-label ${light ? 'text-pink-ink/60' : 'text-white/50'}`}
           >
             Phone number
           </label>
@@ -106,10 +106,10 @@ function SpeakToMattForm({ variant = 'dark' }: { variant?: Variant }) {
             onChange={(e) => setPhone(e.target.value)}
             disabled={status === 'calling'}
             autoComplete="tel"
-            className={`bg-transparent border-b text-sm md:text-base py-3 focus:outline-none transition-colors duration-300 ${
+            className={`bg-transparent border-b-2 text-sm md:text-base py-3 focus:outline-none transition-colors duration-200 font-semibold ${
               light
-                ? 'border-stone/20 text-stone-black focus:border-stone-black placeholder:text-stone/25'
-                : 'border-white/20 text-white focus:border-white/60 placeholder:text-white/20'
+                ? 'border-pink-ink/25 text-pink-ink focus:border-pink-ink placeholder:text-pink-ink/30'
+                : 'border-white/25 text-white focus:border-pink placeholder:text-white/25'
             }`}
             style={{ fontFamily: 'var(--font-inter)' }}
           />
@@ -118,10 +118,10 @@ function SpeakToMattForm({ variant = 'dark' }: { variant?: Variant }) {
         <div className="flex flex-col gap-2">
           <label
             htmlFor="demo-name"
-            className={`type-label text-xs tracking-[0.12em] ${light ? 'text-mid' : 'text-white/40'}`}
+            className={`type-label ${light ? 'text-pink-ink/60' : 'text-white/50'}`}
           >
             Your name{' '}
-            <span className={light ? 'text-silver' : 'text-white/20'}>(optional)</span>
+            <span className={light ? 'text-pink-ink/40' : 'text-white/30'}>(optional)</span>
           </label>
           <input
             id="demo-name"
@@ -131,10 +131,10 @@ function SpeakToMattForm({ variant = 'dark' }: { variant?: Variant }) {
             onChange={(e) => setName(e.target.value)}
             disabled={status === 'calling'}
             autoComplete="name"
-            className={`bg-transparent border-b text-sm md:text-base py-3 focus:outline-none transition-colors duration-300 ${
+            className={`bg-transparent border-b-2 text-sm md:text-base py-3 focus:outline-none transition-colors duration-200 font-semibold ${
               light
-                ? 'border-stone/20 text-stone-black focus:border-stone-black placeholder:text-stone/25'
-                : 'border-white/20 text-white focus:border-white/60 placeholder:text-white/20'
+                ? 'border-pink-ink/25 text-pink-ink focus:border-pink-ink placeholder:text-pink-ink/30'
+                : 'border-white/25 text-white focus:border-pink placeholder:text-white/25'
             }`}
             style={{ fontFamily: 'var(--font-inter)' }}
           />
@@ -148,16 +148,16 @@ function SpeakToMattForm({ variant = 'dark' }: { variant?: Variant }) {
           <button
             type="submit"
             disabled={status === 'calling'}
-            className={`btn-cta disabled:opacity-50 w-full justify-center ${light ? 'btn-cta-dark' : 'btn-cta-light'}`}
+            className={`btn-cta disabled:opacity-50 w-full justify-center ${light ? 'btn-cta-dark' : 'btn-cta-pink'}`}
           >
             {status === 'calling' ? (
               <span className="flex items-center gap-3">
                 <span className="relative flex h-2.5 w-2.5">
                   <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                    light ? 'bg-stone-black' : 'bg-white'
+                    light ? 'bg-white' : 'bg-white'
                   }`} />
                   <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
-                    light ? 'bg-stone-black' : 'bg-white'
+                    light ? 'bg-white' : 'bg-white'
                   }`} />
                 </span>
                 Calling you now...
@@ -168,12 +168,12 @@ function SpeakToMattForm({ variant = 'dark' }: { variant?: Variant }) {
           </button>
         </div>
 
-        <p className={`type-label text-xs tracking-widest pt-1 ${light ? 'text-silver' : 'text-white/25'}`}>
+        <p className={`type-label pt-1 ${light ? 'text-pink-ink/50' : 'text-white/40'}`}>
           Or sign up at{' '}
           <a
             href="https://app.shylock.ai"
-            className={`underline underline-offset-4 transition-colors duration-300 ${
-              light ? 'text-mid hover:text-stone-black' : 'text-white/40 hover:text-white/70'
+            className={`underline underline-offset-4 transition-colors duration-200 ${
+              light ? 'text-pink-ink hover:opacity-70' : 'text-pink hover:opacity-70'
             }`}
           >
             app.shylock.ai

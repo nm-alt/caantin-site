@@ -4,11 +4,11 @@ import HomepageFilm from '@/components/HomepageFilm'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
-  title: 'Shylock — Communication infrastructure for AI',
+  title: 'AirDial — A call center in your pocket.',
   description:
-    'Build and deploy AI agents that communicate with millions of your customers in minutes, not months. Voice, WhatsApp, SMS, email — one platform.',
+    'Live in 3 minutes. Priced from $0.02/min. AI agents that answer every call and message — in Lagos, Nairobi, Mexico City, Johannesburg, Kampala, Dar es Salaam, Kigali, and Accra.',
   alternates: {
-    canonical: 'https://shylock.ai',
+    canonical: 'https://caantin.ai',
   },
 }
 

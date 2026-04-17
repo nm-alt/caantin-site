@@ -2,13 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ─── CSS Custom Properties ─────────────────────────────────────── */
+/* ─── V2 CSS Custom Properties ──────────────────────────────────── */
 :root {
-  --stone-black: #080807;
-  --near-black: #0f0e0d;
-  --ancient: #1a1816;
-  --stone: #2a2826;
-  --near-white: #f4f2f0;
+  /* Pink leads */
+  --pink: #E8266D;
+  --pink-hot: #FF1F78;
+  --pink-deep: #C41E5C;
+  --pink-soft: #FFEEF5;
+  --pink-ink: #1A0610;
+  --accent: #E8266D;
+
+  /* Dark supports */
+  --stone-black: #0D0D0D;
+  --near-black: #1a1a1a;
+  --ancient: #1f1f1f;
+  --stone: #2D2D3F;
+  --near-white: #F3F4F6;
   --white: #ffffff;
 
   --font-sans: var(--font-inter);
@@ -22,69 +31,152 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: var(--font-sans), system-ui, sans-serif;
-  line-height: 1.6;
+html {
+  background: var(--pink);
 }
 
-/* ─── Typography ────────────────────────────────────────────────── */
-.type-brand {
+body {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 500;
+  line-height: 1.5;
+  /* V2 — pink is the default surface, dark is a mode, not the default */
+  background: var(--pink);
+  color: var(--pink-ink);
+}
+
+/* ─── V2 Typography ─────────────────────────────────────────────── */
+/* Inter heavy weights — 700 to 900 for display. Never below 400. */
+
+.type-display-xl {
   font-family: var(--font-sans), sans-serif;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  font-weight: 900;
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+}
+
+.type-display {
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
 }
 
 .type-headline {
   font-family: var(--font-sans), sans-serif;
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.025em;
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.035em;
 }
 
 .type-headline-lg {
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.type-h2 {
   font-family: var(--font-sans), sans-serif;
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.02em;
 }
 
+.type-brand {
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.0;
+}
+
 .type-body {
   font-family: var(--font-sans), sans-serif;
-  font-weight: 400;
-  line-height: 1.7;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.type-body-lg {
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 500;
+  line-height: 1.45;
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
 }
 
 .type-mono {
-  font-family: var(--font-code), monospace;
+  font-family: var(--font-code), ui-monospace, monospace;
+  font-weight: 400;
 }
 
 .type-label {
-  font-family: var(--font-code), monospace;
+  font-family: var(--font-code), ui-monospace, monospace;
   font-size: 0.7rem;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-/* ─── CTA Button ─────────────────────────────────────────────────── */
+/* ─── V2 Buttons ────────────────────────────────────────────────── */
+/* Pink is the primary surface, so the default button is dark-on-pink. */
 .btn-cta {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   font-family: var(--font-sans), sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  padding: 0.75rem 1.75rem;
-  border: 1px solid currentColor;
-  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding: 0.9rem 1.6rem;
+  border: 2px solid currentColor;
+  border-radius: 2px;
   background: transparent;
   text-decoration: none;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
   position: relative;
   z-index: 1;
 }
 
+.btn-cta:hover {
+  transform: translate(-1px, -1px);
+}
+
+/* On pink surface — dark button is the default */
+.btn-cta-dark {
+  color: white;
+  background: var(--pink-ink);
+  border-color: var(--pink-ink);
+}
+
+.btn-cta-dark:hover {
+  background: black;
+  border-color: black;
+}
+
+/* On pink surface — outline dark */
+.btn-cta-outline {
+  color: var(--pink-ink);
+  border-color: var(--pink-ink);
+}
+
+.btn-cta-outline:hover {
+  background: var(--pink-ink);
+  color: var(--pink);
+}
+
+/* On dark surface — pink primary */
+.btn-cta-pink {
+  color: white;
+  background: var(--pink);
+  border-color: var(--pink);
+}
+
+.btn-cta-pink:hover {
+  background: var(--pink-hot);
+  border-color: var(--pink-hot);
+}
+
+/* On dark surface — outline light */
 .btn-cta-light {
   color: white;
   border-color: rgba(255, 255, 255, 0.5);
@@ -92,56 +184,48 @@ body {
 
 .btn-cta-light:hover {
   background: white;
-  color: var(--stone-black);
+  color: var(--pink-ink);
 }
 
-.btn-cta-dark {
-  color: var(--stone-black);
-  border-color: rgba(8, 8, 7, 0.2);
-}
-
-.btn-cta-dark:hover {
-  background: var(--stone-black);
-  color: white;
-}
-
+/* Legacy aliases so existing pages keep compiling */
 .btn-cta-primary {
   color: white;
-  background: var(--stone-black);
-  border-color: var(--stone-black);
+  background: var(--pink-ink);
+  border-color: var(--pink-ink);
 }
 
 .btn-cta-primary:hover {
-  background: var(--near-black);
+  background: black;
 }
 
 .btn-cta-accent {
   color: white;
-  background: #EC4E02;
-  border-color: #EC4E02;
+  background: var(--pink);
+  border-color: var(--pink);
 }
 
 .btn-cta-accent:hover {
-  background: #d94500;
-  border-color: #d94500;
+  background: var(--pink-hot);
+  border-color: var(--pink-hot);
 }
 
 /* ─── Scrollbar ──────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 3px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--near-white);
+  background: var(--pink);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--stone);
+  background: var(--pink-ink);
 }
 
-/* ─── Selection ──────────────────────────────────────────────────── */
+/* ─── Selection — loud on purpose ───────────────────────────────── */
 ::selection {
-  background: rgba(8, 8, 7, 0.1);
+  background: var(--pink-ink);
+  color: var(--pink);
 }
 
 /* ─── Code blocks ───────────────────────────────────────────────── */
@@ -149,7 +233,7 @@ pre code.type-mono {
   color: #e2e0dd;
 }
 
-/* ─── Legacy classes (used by blog pages) ────────────────────────── */
+/* ─── Legacy compatibility ──────────────────────────────────────── */
 .type-serif {
   font-style: italic;
   line-height: 1.4;
@@ -161,40 +245,45 @@ pre code.type-mono {
   background: var(--stone-black);
 }
 
-/* ─── Blog post prose ────────────────────────────────────────────── */
-.prose-shylock p {
+/* ─── Blog prose ────────────────────────────────────────────────── */
+.prose-airdial p {
   font-family: var(--font-sans), sans-serif;
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
-  line-height: 1.85;
-  color: #3d3b38;
+  font-weight: 500;
+  font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
+  line-height: 1.75;
+  color: var(--pink-ink);
   margin-bottom: 1.6em;
 }
 
-.prose-shylock h2 {
+.prose-airdial h2 {
   font-family: var(--font-sans), sans-serif;
-  font-weight: 700;
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  letter-spacing: -0.02em;
-  color: #0f0e0d;
-  margin-top: 3em;
-  margin-bottom: 0.8em;
-  line-height: 1.15;
+  font-weight: 900;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  letter-spacing: -0.035em;
+  color: var(--pink-ink);
+  margin-top: 2.2em;
+  margin-bottom: 0.6em;
+  line-height: 1.0;
 }
 
-.prose-shylock blockquote {
-  font-style: italic;
-  font-size: clamp(1.1rem, 2vw, 1.35rem);
-  line-height: 1.55;
-  color: #0f0e0d;
-  border-left: 2px solid #0f0e0d;
+.prose-airdial blockquote {
+  font-weight: 800;
+  font-style: normal;
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--pink-ink);
+  border-left: 4px solid var(--pink-ink);
   padding-left: 1.5rem;
   margin: 2.5em 0;
 }
 
-.prose-shylock blockquote p {
-  font-style: italic;
+.prose-airdial blockquote p {
+  font-weight: inherit;
+  font-style: inherit;
   font-size: inherit;
   line-height: inherit;
+  letter-spacing: inherit;
   color: inherit;
   margin-bottom: 0;
 }
